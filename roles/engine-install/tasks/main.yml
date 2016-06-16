@@ -1,0 +1,18 @@
+---
+# tasks file for rhevm-engine
+
+  #copy answer file
+  - name: copy answerfile
+    template: src=answerfile_{{engine_answer_file_type}}.txt.j2 dest=/root/answer_file.txt mode=644 owner=root group=root
+
+  - name: check ovirt-engine service
+    service: name=ovirt-engine state=started
+    register: engine_status
+
+  - name: install {{engine_type}} engine
+    yum: name={{engine_type}} state=installed update_cache=yes
+    when: engine_status|failed
+
+  - name: run engine-setup with answerfile
+    shell: 'engine-setup --config-append=/root/answer_file.txt'
+    when: engine_status|failed
