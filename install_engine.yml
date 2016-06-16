@@ -1,5 +1,5 @@
 ---
-  - hosts: engine
+  - hosts: engine-el6
     remote_user: root
     vars:
       engine_type: 'ovirt'
@@ -7,6 +7,7 @@
       ovirt_dependency_repo: 'fill me'
      #ovirt_rpm_repo: ''
 
+      engine_dwh: False
       engine_answer_file_type: '3.6_basic'
       engine_hostname: 'fill me'
       engine_organization: 'fill me'

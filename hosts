@@ -1,3 +1,5 @@
-[engine]
+[engine-el6]
 fill me - engine host
 
+[engine-el7]
+can be deleted
