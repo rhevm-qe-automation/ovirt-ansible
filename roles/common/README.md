@@ -11,9 +11,9 @@ Preinstalled clean environment
 Role Variables
 --------------
 
-    ovirt_repo: Main repository file 
-    ovirt_dependency_repo: Dependency repository file
-    ovirt_rpm_repo: Install repository files from RPM 
+    ovirt_repo: URL for main repository file 
+    ovirt_dependency_repo: URL for dependency repository file
+    ovirt_rpm_repo: URL for RPM package with repository files
     
     Use either ovirt_rpm_repo or ovirt_dependency_repo, ovirt_rpm_repo
     

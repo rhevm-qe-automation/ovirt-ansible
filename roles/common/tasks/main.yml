@@ -25,5 +25,5 @@
     when: ovirt_dependency_repo is defined
 
   - name: install {{engine_type}} repository package
-    yum: name={{ovirt_rpm_repo}} state=latest
+    yum: name={{ovirt_rpm_repo}} state=present
     when: ovirt_rpm_repo is defined

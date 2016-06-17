@@ -13,7 +13,7 @@ Role Variables
 
     ovirt_repo: URL for main repository file 
     ovirt_dependency_repo: URL for dependency repository file
-    ovirt_rpm_repo: URL package for RPM package with repository files
+    ovirt_rpm_repo: URL for RPM package with repository files
     
     Use either ovirt_rpm_repo or ovirt_dependency_repo, ovirt_rpm_repo
     
