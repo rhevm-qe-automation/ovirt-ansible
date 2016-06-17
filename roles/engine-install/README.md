@@ -41,8 +41,7 @@ Example Playbook
          #ovirt_dependency_repo: ''
          #ovirt_repo: ''
          ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'
-         engine_version
-         engine_answer_file_type: 'basic'
+         engine_answer_file_type: '3.6_basic'
          engine_dwh: False
          engine_hostname: 'engine.ovirt.org'
          engine_organization: 'ovirt.org'
