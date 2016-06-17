@@ -34,22 +34,23 @@ Run common role first (for repositories)
 Example Playbook
 ----------------
 
-  hosts: engine
-    remote_user: root
-    vars:
-      engine_type: 'ovirt'
-      #ovirt_dependency_repo: ''
-      #ovirt_repo: ''
-      ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'
-      engine_answer_file_type: '3.6_basic'
-      engine_dwh: False
-      engine_hostname: 'engine.ovirt.org'
-      engine_organization: 'ovirt.org'
-      engine_admin_password: '123456'
-
-    roles:
-      - { role: common }
-      - { role: engine-install }
+     hosts: engine
+       remote_user: root
+       vars:
+         engine_type: 'ovirt'
+         #ovirt_dependency_repo: ''
+         #ovirt_repo: ''
+         ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'
+         engine_version
+         engine_answer_file_type: 'basic'
+         engine_dwh: False
+         engine_hostname: 'engine.ovirt.org'
+         engine_organization: 'ovirt.org'
+         engine_admin_password: '123456'
+    
+       roles:
+         - { role: common }
+         - { role: engine-install }
 
 
 Author Information

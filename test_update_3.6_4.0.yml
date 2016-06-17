@@ -1,0 +1,40 @@
+---
+  #TODO parallel processing
+  # a) maybe run as separated plays
+  #       (two+ commands - ansible-playbook engine36.yml, ansible-playbook engine40.yml..etc)
+  # b) break role into smaller roles
+  #       some of them can be runned parallel (engine-setup, install packages) -> many plays in playbook
+  #       serial: copy different repositories, different answerfiles
+  - hosts: engine-el6
+    remote_user: root
+    vars:
+      engine_type: 'ovirt'
+      ovirt_repo: 'fill me'
+      ovirt_dependency_repo: 'fill me'
+     #ovirt_rpm_repo: ''
+      engine_dwh: False
+      engine_answer_file_type: '3.6_basic'
+      engine_hostname: 'fill me'
+      engine_organization: 'fill me'
+      engine_admin_password: '123456'
+    roles:
+      - { role: common }
+      - { role: engine-install }
+
+
+  - hosts: engine-el7
+    remote_user: root
+    vars:
+      engine_type: 'rhevm'
+      #ovirt_repo: ''
+      #ovirt_dependency_repo: ''
+      ovirt_rpm_repo: 'fill me'
+
+      engine_dwh: False
+      engine_answer_file_type: '4.0_basic'
+      engine_hostname: 'fill me'
+      engine_organization: 'fill me'
+      engine_admin_password: '123456'
+    roles:
+      - { role: common }
+      - { role: engine-install }
