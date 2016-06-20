@@ -1,0 +1,52 @@
+[engine:vars]
+
+#### Product type ####
+# Choose engine type (upstream or downstream)
+#  Allowed options:
+#    ovirt - for installing oVirt (ovirt.org)
+#    rhevm - for installing RHEVM
+#
+engine_type=ovirt
+
+#### Engine Repositories ####
+# Set repositories for installing engine
+# Use either ovirt_rpm_repo or ovirt_dependency_repo, ovirt_rpm_repo
+#   ovirt_repo - URL of main repository file
+#   ovirt_dependency_repo - URL of dependency repository file
+#   ovirt_rpm_repo - URL of RPM package which contains repository files
+#
+#  Example:
+#    ovirt_repo=http://to.somewhere
+#    ovirt_dependency_repo=http://to.somewhere
+#  OR
+#    ovirt_rpm_repo=http://to.somewhere.rpm
+#
+ovirt_repo=fill me
+ovirt_dependency_repo=fill me
+#ovirt_rpm_repo=fill me
+
+#### Data Warehouse DWH ####
+# Install DWH together with engine as a local installation
+#   engine_dwh - set if DWH should be installed
+#
+engine_dwh=True
+
+#### Engine setting ####
+# Main setting of engine installation
+# engine_answer_file_type - choose type of installation
+#   '3.6_basic'  -   basic installation of engine 3.6 with default options
+#   '4.0_basic'  -   basic installation of engine 4.0 with default options
+# engine_hostname - resolvable engine fqdn
+# engine_organization - organisation (same as domain)
+# engine_admin_password - admin@internal password
+#
+engine_answer_file_type=4.0_basic
+engine_hostname=engine.host.fqdn.com
+engine_organization=fqdn.com
+engine_admin_password=123456
+
+[engine]
+#### Hosts for engine installation ####
+# Add ip or hostname of machines
+xx.xx.xx.xx
+yy.yy.yy.yy
