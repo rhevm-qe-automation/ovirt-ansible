@@ -1,3 +1,5 @@
+[![Build Status][travisimg]][travis]
+
 # rhevm-ansible
 Ansible playbooks for ovirt management
 
@@ -16,3 +18,5 @@ command for run playbook:
 
         ansible-playbook -i hosts install_engine.yml
 
+[travisimg]: https://travis-ci.org/StLuke/rhevm-ansible.svg?branch=master
+[travis]: https://travis-ci.org/StLuke/rhevm-ansible

@@ -1,6 +1,8 @@
 ---
-  - hosts: engine
-    remote_user: root
-    roles:
-      - { role: common }
-      - { role: engine-install }
+# example playbook for installing engines
+# use with install_engine.inv
+- hosts: engine
+  remote_user: root
+  roles:
+    - {role: common}
+    - {role: engine-install}
