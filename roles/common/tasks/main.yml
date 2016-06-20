@@ -1,29 +1,29 @@
 ---
-  # common tasks
-  - name: upgrading all packages
-    yum: name=* state=latest
+# common tasks
+- name: upgrading all packages
+  yum: name=* state=latest
 
-  #install libselinux-python on machine - selinux policy
-  #allow to install engine TODO
-  - name: install libselinux-python for ansible
-    yum: name=libselinux-python state=latest
+# install libselinux-python on machine - selinux policy
+# allow to install engine TODO
+- name: install libselinux-python for ansible
+  yum: name=libselinux-python state=latest
 
-  #backup repos
-  - name: creating directory repo-backup in yum.repos.d
-    file: path=/tmp/repo-backup state=directory
+# backup repos
+- name: creating directory repo-backup in yum.repos.d
+  file: path=/tmp/repo-backup state=directory
 
-  - name: copy repository files
-    shell: 'cp /etc/yum.repos.d/*.repo /tmp/repo-backup'
+- name: copy repository files
+  shell: 'cp /etc/yum.repos.d/*.repo /tmp/repo-backup'
 
-  #get repository files
-  - name: copy {{engine_type}} repository file
-    get_url: url={{ovirt_repo}} dest=/etc/yum.repos.d/ansible_ovirt_main.repo force_basic_auth=yes
-    when: ovirt_repo is defined
+# get repository files
+- name: copy {{engine_type}} repository file
+  get_url: url={{ovirt_repo}} dest=/etc/yum.repos.d/ansible_ovirt_main.repo force_basic_auth=yes
+  when: ovirt_repo is defined
 
-  - name: copy {{engine_type}} dependency repository file
-    get_url: url={{ovirt_dependency_repo}} dest=/etc/yum.repos.d/ansible_ovirt_dependency.repo force_basic_auth=yes
-    when: ovirt_dependency_repo is defined
+- name: copy {{engine_type}} dependency repository file
+  get_url: url={{ovirt_dependency_repo}} dest=/etc/yum.repos.d/ansible_ovirt_dependency.repo force_basic_auth=yes
+  when: ovirt_dependency_repo is defined
 
-  - name: install {{engine_type}} repository package
-    yum: name={{ovirt_rpm_repo}} state=present
-    when: ovirt_rpm_repo is defined
+- name: install {{engine_type}} repository package
+  yum: name={{ovirt_rpm_repo}} state=present
+  when: ovirt_rpm_repo is defined
