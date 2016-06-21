@@ -27,11 +27,11 @@ Example Playbook
        remote_user: root
        vars:
          ovirt_engine_type: 'ovirt'
-         engine_answer_file_type: '3.6_basic'
-         engine_dwh: False
-         engine_hostname: 'engine.ovirt.org'
-         engine_organization: 'ovirt.org'
-         engine_admin_password: '123456'
+         ovirt_engine_answer_file_type: '3.6_basic'
+         ovirt_engine_dwh: False
+         ovirt_engine_hostname: 'engine.ovirt.org'
+         ovirt_engine_organization: 'ovirt.org'
+         ovirt_engine_admin_password: '123456'
     
        roles:
          - { role: common }
