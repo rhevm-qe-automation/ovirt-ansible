@@ -2,11 +2,21 @@
 # tasks file for rhevm-engine
 # copy answer file
 - name: copy answerfile
-  template: src=answerfile_{{engine_answer_file_type}}.txt.j2 dest=/tmp/answer_file.txt mode=0644 owner=root group=root
+  template:
+    src: "answerfile_{{ engine_answer_file_type }}.txt.j2"
+    dest: "/tmp/answer_file.txt"
+    mode: "0644"
+    owner: "root"
+    group: "root"
   when: engine_dwh == False
 
 - name: copy answerfile with dwh
-  template: src=answerfile_{{engine_answer_file_type}}_dwh.txt.j2 dest=/tmp/answer_file.txt mode=0644 owner=root group=root
+  template:
+    src: "answerfile_{{ engine_answer_file_type }}_dwh.txt.j2"
+    dest: "/tmp/answer_file.txt"
+    mode: "0644"
+    owner: "root"
+    group: "root"
   when: engine_dwh == True
 
 # cannot use module service, when service doesn't exists, it fail
@@ -14,16 +24,23 @@
 # in both cases, it will fail -> stderr message -> need ignore_errors
 # need refactoring TODO - other way how to check ovirt-engine service
 - name: check ovirt-engine service
-  service: name=ovirt-engine state=running
+  service:
+    name: "ovirt-engine"
+    state: "running"
   register: engine_status
   ignore_errors: True
 
-- name: install {{engine_type}} engine
-  yum: name={{engine_type}} state=installed update_cache=yes
+- name: install {{ engine_type }} engine
+  yum:
+    name: "{{ engine_type }}
+    state: "installed"
+    update_cache: "yes"
   when: engine_status|failed
 
 - name: install {{engine_type}} dwh
-  yum: name={{engine_type}}-dwh state=present
+  yum:
+    name: "{{ engine_type }}-dwh"
+    state: "present"
   when: (engine_dwh == True) and (engine_status|failed) and (engine_answer_file_type[0] < '4')
 
 - name: run engine-setup with answerfile
