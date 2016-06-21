@@ -16,7 +16,7 @@
   when: postgresql_status|failed
 
 - name: run PostgreSQL initdb
-  shell: 'service postgresql initdb'
+  shell: '/usr/bin/initdb -D /var/lib/pgsql/data'
   when: postgresql_status|failed
 
 - name: start PostgreSQL service
@@ -28,7 +28,7 @@
 - name: copy SQL scripts
   template:
     src: "{{item}}.j2"
-    dest: "/tmp/ansible-sql/{{item}}"
+    dest: "/tmp/{{item}}"
     mode: 0644
     owner: postgres
     group: postgres
@@ -40,7 +40,7 @@
 
 - name: create engine DB and user
   become_user: postgres
-  command: psql -a -f /tmp/ansible-sql/'{{item}}'
+  command: psql -a -f /tmp/'{{item}}'
   with_items:
     - "ovirt-engine-db-user-create.sql"
     - "ovirt-engine-db-create.sql"
