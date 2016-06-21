@@ -6,7 +6,6 @@
     state: "latest"
 
 # install libselinux-python on machine - selinux policy
-# allow to install engine TODO
 - name: install libselinux-python for ansible
   yum:
     name: libselinux-python
