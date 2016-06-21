@@ -1,0 +1,93 @@
+---
+# main file for remote DB task
+#
+- name: check PostgreSQL service
+  service:
+    name: postgresql
+    state: running
+  register: postgresql_status
+  ignore_errors: True
+
+- name: yum install PostgreSQL
+  yum:
+    name: "postgresql-server"
+    state: installed
+    update_cache: yes
+  when: postgresql_status|failed
+
+- name: run PostgreSQL initdb
+  shell: 'service postgresql initdb'
+  when: postgresql_status|failed
+
+- name: start PostgreSQL service
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: copy SQL scripts
+  template:
+    src: "{{item}}.j2"
+    dest: "/tmp/ansible-sql/{{item}}"
+    mode: 0644
+    owner: postgres
+    group: postgres
+  with_items:
+    - "ovirt-engine-db-create.sql"
+    - "ovirt-engine-db-user-create.sql"
+    - "ovirt-engine-dwh-db-create.sql"
+    - "ovirt-engine-dwh-db-user-create.sql"
+
+- name: create engine DB and user
+  become_user: postgres
+  command: psql -a -f /tmp/ansible-sql/'{{item}}'
+  with_items:
+    - "ovirt-engine-db-user-create.sql"
+    - "ovirt-engine-db-create.sql"
+  when: ovirt_engine_remote_db is defined
+
+- name: Create engine DWH DB and user
+  become_user: postgres
+  command: psql -a -f /tmp/ansible-sql/'{{item}}'
+  with_items:
+    - "ovirt-engine-dwh-db-user-create.sql"
+    - "ovirt-engine-dwh-db-create.sql"
+  when: ovirt_engine_dwh_remote_db is defined
+
+- name: update postgres conf and hba templates
+  lineinfile: dest=/var/lib/pgsql/data/pg_hba.conf insertafter=EOF line="host all all 0.0.0.0/0 md5"
+  when: postgresql_status|failed
+
+- name: check iptables service
+  service:
+    name: iptables
+    state: running
+  register: iptables_status
+  ignore_errors: True
+
+- name: open port for database in iptables
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ovirt_engine_remote_db_port|int}}"
+    jump: ACCEPT
+  when: postgresql_status|failed and not iptables_status|failed
+
+- name: check firewalld service
+  service:
+    name: firewalld
+    state: running
+  register: firewalld_status
+  ignore_errors: True
+
+- name: open port for database in firewalld
+  firewalld:
+    port: "{{ovirt_engine_remote_db_port|int}}/tcp"
+    permanent: True
+    state: enabled
+  when: postgresql_status|failed and not firewalld_status|failed
+
+- name: postgresql reload configuration
+  service:
+    name: postgresql
+    state: restarted

@@ -1,0 +1,5 @@
+---
+- hosts: database
+  remote_user: root
+  roles:
+    - {role: ovirt-engine-remote-db}
