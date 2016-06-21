@@ -1,7 +1,5 @@
 ---
 - hosts: database
   remote_user: root
-  become: yes
   roles:
-    - {role: ovirt-common}
     - {role: ovirt-engine-remote-db}
