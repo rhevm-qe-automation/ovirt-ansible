@@ -1,7 +1,7 @@
 Role Name
 =========
 
-Install clean engine
+install all necessary packages for engine (optional for DWH)
 
 Requirements
 ------------
@@ -23,19 +23,22 @@ Run common role first (for repositories)
 Example Playbook
 ----------------
 
-     hosts: engine
-       remote_user: root
-       vars:
-         ovirt_engine_type: 'ovirt'
-         ovirt_engine_answer_file_type: '3.6_basic'
-         ovirt_engine_dwh: False
-         ovirt_engine_hostname: 'engine.ovirt.org'
-         ovirt_engine_organization: 'ovirt.org'
-         ovirt_engine_admin_password: '123456'
+    hosts: engine
+      remote_user: root
+      vars:
+        # role-vars: ovirt-common 
+          # ovirt_dependency_repo: ''
+          # ovirt_repo: ''
+        ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'
+        
+        # role-vars: ovirt-engine-install-packages 
+        ovirt_engine_type: 'ovirt-engine'
+        ovirt_engine_dwh: True
+        ovirt_engine_version: 3.6.7
     
-       roles:
-         - { role: common }
-         - { role: engine-install }
+      roles:
+        - { role: common }
+        - { role: engine-install }
 
 
 Author Information
