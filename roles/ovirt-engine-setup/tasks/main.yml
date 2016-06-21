@@ -23,3 +23,27 @@
 - name: run engine-setup with answerfile
   shell: 'engine-setup --config-append=/tmp/answer_file.txt'
   when: ovirt_engine_status|failed
+
+- name: check state of database
+  service:
+    name: postgresql
+    state: running
+
+- name: check state of engine
+  service:
+    name: ovirt-engine
+    state: running
+
+- name: restart of ovirt-engine service
+  service:
+    name: ovirt-engine
+    state: restarted
+
+- name: check health status of page
+  uri:
+    url: "http://{{ovirt_engine_hostname}}/ovirt-engine/services/health"
+    status_code: 200
+  register: health_page
+  retries: 12
+  delay: 10
+  until: health_page|success
