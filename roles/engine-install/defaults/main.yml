@@ -1,3 +1,0 @@
----
-# default vars for engine-install role
-engine_dwh: False
