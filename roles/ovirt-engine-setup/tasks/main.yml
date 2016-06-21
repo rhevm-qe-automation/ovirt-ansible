@@ -26,7 +26,7 @@
 
 - name: check state of database
   service:
-    name: ovirt-engine
+    name: postgresql
     state: running
 
 - name: check state of engine
