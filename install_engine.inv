@@ -48,5 +48,7 @@ engine_admin_password=123456
 [engine]
 #### Hosts for engine installation ####
 # Add ip or hostname of machines
-xx.xx.xx.xx
-yy.yy.yy.yy
+192.168.1.1
+192.168.1.2
+# Password for SSH connection
+ansible_ssh_pass=fillme
