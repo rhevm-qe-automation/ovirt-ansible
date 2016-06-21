@@ -18,10 +18,10 @@
     path: /tmp/repo-backup
     state: directory
 
-- name: copy repository files
+- name: create repository backup
   shell: 'cp /etc/yum.repos.d/*.repo /tmp/repo-backup'
 
-# get repository files
+# get repository templates
 - name: copy {{ovirt_engine_type}} repository file
   get_url:
     url: "{{ovirt_repo}}"
