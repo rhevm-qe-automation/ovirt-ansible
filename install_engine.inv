@@ -3,10 +3,11 @@
 #### Product type ####
 # Choose engine type (upstream or downstream)
 #  Allowed options:
-#    ovirt - for installing oVirt (ovirt.org)
+#    ovirt-engine - for installing oVirt (ovirt.org)
 #    rhevm - for installing RHEVM
 #
-engine_type=ovirt
+ovirt_engine_type=ovirt-engine
+ovirt_engine_version: 4.0
 
 #### Engine Repositories ####
 # Set repositories for installing engine
@@ -29,26 +30,26 @@ ovirt_dependency_repo=fill me
 # Install DWH together with engine as a local installation
 #   engine_dwh - set if DWH should be installed
 #
-engine_dwh=True
+ovirt_engine_dwh=True
 
 #### Engine setting ####
 # Main setting of engine installation
-# engine_answer_file_type - choose type of installation
+# ovirt_engine_answer_file_type - choose type of installation
 #   '3.6_basic'  -   basic installation of engine 3.6 with default options
 #   '4.0_basic'  -   basic installation of engine 4.0 with default options
-# engine_hostname - resolvable engine fqdn
-# engine_organization - organisation (same as domain)
-# engine_admin_password - admin@internal password
+# ovirt_engine_hostname - resolvable engine fqdn
+# ovirt_engine_organization - organisation (same as domain)
+# ovirt_engine_admin_password - admin@internal password
 #
-engine_answer_file_type=4.0_basic
-engine_hostname=engine.host.fqdn.com
-engine_organization=fqdn.com
-engine_admin_password=123456
+ovirt_engine_answer_file_type=4.0_basic
+ovirt_engine_hostname=engine.host.fqdn.com
+ovirt_engine_organization=fqdn.com
+ovirt_engine_admin_password=123456
 
 [engine]
 #### Hosts for engine installation ####
 # Add ip or hostname of machines
 192.168.1.1
-192.168.1.2
+host.example.com
 # Password for SSH connection
 ansible_ssh_pass=fillme

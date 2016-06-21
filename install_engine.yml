@@ -4,5 +4,6 @@
 - hosts: engine
   remote_user: root
   roles:
-    - {role: common}
-    - {role: engine-install}
+    - {role: ovirt-common}
+    - {role: ovirt-engine-install-packages}
+    - {role: ovirt-engine-setup}
