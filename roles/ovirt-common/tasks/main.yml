@@ -4,13 +4,15 @@
   yum:
     name: '*'
     state: "latest"
+  tags:
+    -skip_ansible_lint
 
 # install libselinux-python on machine - selinux policy
 # allow to install engine TODO
 - name: install libselinux-python for ansible
   yum:
     name: libselinux-python
-    state: "latest"
+    state: "present"
 
 # backup repos
 - name: creating directory repo-backup in yum.repos.d
@@ -20,6 +22,8 @@
 
 - name: create repository backup
   shell: 'cp /etc/yum.repos.d/*.repo /tmp/repo-backup'
+  tags:
+    -skip_ansible_lint
 
 # get repository templates
 - name: copy {{ovirt_engine_type}} repository file
