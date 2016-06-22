@@ -37,6 +37,7 @@ Example Playbook
         ovirt_engine_type: 'ovirt-engine'
         ovirt_engine_dwh: True
         ovirt_engine_version: '3.6.7'
+        ovirt_engine_version: 3.6.7
     
       roles:
         - { role: common }
