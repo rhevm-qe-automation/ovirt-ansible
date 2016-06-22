@@ -1,27 +1,26 @@
 ---
-# cannot use module service, when service doesn't exists, it fail
-# cannot use shell service & systemctl - service can be disabled, stopped -> many cases & different return codes
-# in both cases, it will fail -> stderr message -> need ignore_errors
-# need refactoring TODO - other way how to check ovirt-engine service
-- name: check ovirt-engine service
-  service:
-    name: ovirt-engine
-    state: running
+# health page
+- name: check if ovirt-engine running (health page)
+  uri:
+    url: "http://{{ovirt_engine_hostname}}/ovirt-engine/services/health"
+    status_code: 200
   register: ovirt_engine_status
+  retries: 2
+  delay: 5
+  until: ovirt_engine_status|success
   ignore_errors: True
 
 # copy answer file
 - name: copy answerfile
   template:
     src: answerfile_{{ovirt_engine_answer_file_type}}.txt.j2
-    dest: /tmp/answer_file.txt
+    dest: /tmp/answerfile.txt
     mode: 0644
     owner: root
     group: root
-  when: ovirt_engine_dwh == False
 
 - name: run engine-setup with answerfile
-  shell: 'engine-setup --config-append=/tmp/answer_file.txt'
+  shell: 'engine-setup --config-append=/tmp/answerfile.txt'
   when: ovirt_engine_status|failed
 
 - name: check state of database
