@@ -31,7 +31,9 @@ Example Playbook
     hosts: engine
       remote_user: root
       vars:
-        ovirt_engine_type: 'ovirt-engine'
+         #ovirt_dependency_repo: ''
+         #ovirt_repo: ''
+         ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'
 
     roles:
       - { role: common }
