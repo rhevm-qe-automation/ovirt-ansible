@@ -11,7 +11,9 @@ Preinstalled clean environment with configured repositories
 Role Variables
 --------------
     
-    ovirt_engine_type: Allowed options are only 'ovirt-engine' or 'rhevm'
+    ovirt_engine_type: Type of product
+        'ovirt-engine' - for installing oVirt product
+        'rhevm' - for installing RHEVM
     ovirt_engine_version: Allowed version: [3.6.x, 4.0.x]
     ovirt_engine_dwh: Bool value for installing DWH (local - not need special answerfile)   
     
@@ -34,7 +36,7 @@ Example Playbook
         # role-vars: ovirt-engine-install-packages 
         ovirt_engine_type: 'ovirt-engine'
         ovirt_engine_dwh: True
-        ovirt_engine_version: 3.6.7
+        ovirt_engine_version: '3.6.7'
     
       roles:
         - { role: common }
