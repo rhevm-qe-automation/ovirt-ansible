@@ -1,12 +1,12 @@
 ---
 # tasks file for ovirt-engine-install-packages
-- name: yum install {{ovirt_engine_type}} engine
+- name: yum install engine
   yum:
     name: "{{ovirt_engine_type}}"
     state: installed
     update_cache: yes
 
-- name: yum install install {{ovirt_engine_type}} dwh
+- name: yum install dwh
   yum:
     name: "{{ovirt_engine_type}}-dwh"
     state: present
