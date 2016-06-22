@@ -23,6 +23,8 @@
 - name: run engine-setup with answerfile
   shell: 'engine-setup --config-append=/tmp/answer_file.txt'
   when: ovirt_engine_status|failed
+  tags:
+    -skip_ansible_lint
 
 - name: check state of database
   service:
