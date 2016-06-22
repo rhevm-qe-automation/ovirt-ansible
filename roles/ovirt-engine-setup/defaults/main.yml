@@ -1,3 +1,6 @@
 ---
 ovirt_engine_dwh: False
+ovirt_engine_type: ovirt
 ovirt_engine_version: 4.0
+ovirt_engine_answer_file_type: 4.0_basic
+ovirt_engine_admin_password: 123456
