@@ -14,9 +14,6 @@ Supported system are listed on
 Role Variables
 --------------
 
-    ovirt_engine_type: Type of product
-        'ovirt-engine' - for installing oVirt product
-        'rhevm' - for installing RHEVM
     ovirt_repo: URL of main repository file 
     ovirt_dependency_repo: URL of dependency repository file
     ovirt_rpm_repo: URL of RPM package with repository files
@@ -34,7 +31,6 @@ Example Playbook
     hosts: engine
       remote_user: root
       vars:
-        ovirt_engine_type: 'ovirt'
         #ovirt_dependency_repo: ''
         #ovirt_repo: ''
         ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'

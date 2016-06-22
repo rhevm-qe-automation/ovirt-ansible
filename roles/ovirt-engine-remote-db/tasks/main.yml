@@ -16,8 +16,10 @@
   when: postgresql_status|failed
 
 - name: run PostgreSQL initdb
-  shell: 'service postgresql initdb'
+  shell: '/usr/bin/initdb -D /var/lib/pgsql/data'
   when: postgresql_status|failed
+  tags:
+    -skip_ansible_lint
 
 - name: start PostgreSQL service
   service:
