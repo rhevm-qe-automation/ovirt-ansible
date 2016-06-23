@@ -1,7 +1,9 @@
 ---
-ovirt_engine_dwh: False
-ovirt_engine_type: ovirt
-ovirt_engine_version: 4.0
+ovirt_engine_dwh: True
+ovirt_engine_type: 'ovirt-engine'
+ovirt_engine_version: '4.0'
+ovirt_engine_answer_file_type: '4.0_basic'
+ovirt_engine_admin_password: '123456'
 
 ovirt_engine_db_host: 'localhost'
 ovirt_engine_db_port: 5432
@@ -14,6 +16,3 @@ ovirt_engine_dwh_db_port: 5432
 ovirt_engine_dwh_db_name: 'ovirt_engine_history'
 ovirt_engine_dwh_db_user: 'ovirt_engine_history'
 ovirt_engine_dwh_db_password: '37xmBKECANQGm0z3SfylMp'
-
-ovirt_engine_answer_file_type: 4.0_basic
-ovirt_engine_admin_password: 123456

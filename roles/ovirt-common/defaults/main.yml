@@ -1,2 +1,2 @@
 ---
-ovirt_engine_type: ovirt
+ovirt_engine_type: 'ovirt-engine'

@@ -13,7 +13,6 @@ Role Variables
     
     ovirt_engine_type: Type of product
         'ovirt-engine' - for installing oVirt product
-        'rhevm' - for installing RHEVM
     ovirt_engine_version: Allowed version: [3.6.x, 4.0.x]
     ovirt_engine_dwh: Bool value for installing DWH (local - not need special answerfile)   
     
@@ -42,7 +41,6 @@ Example Playbook
       roles:
         - { role: common }
         - { role: engine-install }
-
 
 Author Information
 ------------------

@@ -24,12 +24,13 @@
   shell: 'engine-setup --config-append=/tmp/answerfile.txt'
   when: ovirt_engine_status|failed
   tags:
-    -skip_ansible_lint
+    - skip_ansible_lint
 
 - name: check state of database
   service:
     name: postgresql
     state: running
+  when: (ovirt_engine_dwh_db_host == 'localhost' and ovirt_engine_dwh == True) or ovirt_engine_db_host == 'localhost'
 
 - name: check state of engine
   service:
@@ -49,3 +50,8 @@
   retries: 12
   delay: 10
   until: health_page|success
+
+- name: clean tmp files
+  file:
+    path: '/tmp/answerfile.txt'
+    state: 'absent'
