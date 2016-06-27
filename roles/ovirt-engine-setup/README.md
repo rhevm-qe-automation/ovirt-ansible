@@ -16,6 +16,18 @@ Role Variables
     ovirt_engine_version: Allowed version: [3.6.x, 4.0.x]
     ovirt_engine_dwh: Bool value for installing local DWH
     
+    ovirt_engine_db_host: IP or hostname of PostgreSQL server for engine database (default: 'localhost')
+    ovirt_engine_db_port: Server listening port (default 5432)
+    ovirt_engine_db_name: DB name for ovirt-engine (default: 'engine')
+    ovirt_engine_db_user: DB user which can access ovirt-engine DB (default: 'engine')
+    ovirt_engine_db_password: password for user of ovirt-engine DB
+    ovirt_engine_dwh_db_host: IP or hostname of PostgreSQL server for DWH database (default: 'localhost')
+    ovirt_engine_dwh_db_port: Server listening port (default 5432)
+    ovirt_engine_dwh_db_name: DB name for ovirt-engine-dwh (default: 'ovirt_engine_history')
+    ovirt_engine_dwh_db_user: DB user which can access ovirt-engine-dwh DB (default: 'ovirt_engine_history')
+    ovirt_engine_dwh_db_password: password for user of ovirt-engine DB
+    
+   
 Dependencies
 ------------
 
@@ -35,7 +47,7 @@ Example Playbook
         # role-vars: ovirt-engine-install-packages 
         ovirt_engine_type: 'ovirt-engine'
         ovirt_engine_dwh: True
-        ovirt_engine_version: 3.6.x
+        ovirt_engine_version: 3.6
         
         # role-vars: ovirt-engine-setup
         ovirt_engine_answer_file_type: '3.6_basic'
