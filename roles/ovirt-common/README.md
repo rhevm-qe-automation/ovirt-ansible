@@ -2,7 +2,7 @@ Role Name
 =========
 
 Repository setup
-Role install necessary repositories
+Role install necessary repositories and update system
 
 Requirements
 ------------
@@ -37,7 +37,6 @@ Example Playbook
 
     roles:
       - { role: common }
-
 
 Author Information
 ------------------

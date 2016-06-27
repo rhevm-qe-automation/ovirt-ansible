@@ -5,7 +5,7 @@
     name: '*'
     state: "latest"
   tags:
-    -skip_ansible_lint
+    - skip_ansible_lint
 
 # install libselinux-python on machine - selinux policy
 - name: install libselinux-python for ansible
@@ -22,7 +22,7 @@
 - name: create repository backup
   shell: 'cp /etc/yum.repos.d/*.repo /tmp/repo-backup'
   tags:
-    -skip_ansible_lint
+    - skip_ansible_lint
 
 # get repository templates
 - name: copy repository file

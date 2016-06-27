@@ -1,12 +1,27 @@
 ---
 # main file for remote DB task
-#
+# based on https://fedoraproject.org/wiki/PostgreSQL
+
 - name: check PostgreSQL service
   service:
     name: postgresql
     state: running
   register: postgresql_status
   ignore_errors: True
+
+# install libselinux-python on machine - selinux policy
+- name: install libselinux-python for ansible
+  yum:
+    name: libselinux-python
+    state: "present"
+  when: postgresql_status|failed
+
+# for semanage utility
+- name: install policycoreutils-python for changing selinux port
+  yum:
+    name: policycoreutils-python
+    state: "present"
+  when: postgresql_status|failed
 
 - name: yum install PostgreSQL
   yum:
@@ -16,16 +31,142 @@
   when: postgresql_status|failed
 
 - name: run PostgreSQL initdb
+  become_user: postgres
+  become: yes
   shell: '/usr/bin/initdb -D /var/lib/pgsql/data'
   when: postgresql_status|failed
   tags:
-    -skip_ansible_lint
+    - skip_ansible_lint
 
 - name: start PostgreSQL service
   service:
     name: postgresql
     state: started
     enabled: yes
+
+# allow access engine database access from outside
+- name: update pg_hba.conf -> host ovirt_engine_db_name ovirt_engine_db_user 0.0.0.0/0 md5
+  lineinfile:
+    dest: '/var/lib/pgsql/data/pg_hba.conf'
+    insertafter: EOF
+    line: "host {{ovirt_engine_db_name}} {{ovirt_engine_db_user}} 0.0.0.0/0 md5"
+  when: ovirt_engine_remote_db == True
+
+# allow access dwh database access from outside
+- name: update pg_hba.conf -> host ovirt_engine_db_dwh_name ovirt_engine_db_dwh_user 0.0.0.0/0 md5
+  lineinfile:
+    dest: '/var/lib/pgsql/data/pg_hba.conf'
+    insertafter: EOF
+    line: "host {{ovirt_engine_dwh_db_name}} {{ovirt_engine_dwh_db_user}} 0.0.0.0/0 md5"
+  when: ovirt_engine_dwh_remote_db == True
+
+# listen on specific address
+- name: update postgresql.conf -> listen_addresses='*'
+  lineinfile:
+    dest: '/var/lib/pgsql/data/postgresql.conf'
+    insertafter: EOF
+    line: "listen_addresses='{{ovirt_engine_remote_db_listen_address}}'"
+  when: postgresql_status|failed
+
+# listen on specific port
+- name: update postgresql.conf -> port number
+  lineinfile:
+    dest: '/var/lib/pgsql/data/postgresql.conf'
+    insertafter: EOF
+    line: "port={{ovirt_engine_remote_db_port}}"
+  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432
+
+# postgresql.conf: (el7)
+# Note: In RHEL/Fedora installations, you can't set the port number here;
+#   adjust it in the service file instead.
+#   /usr/lib/systemd/system/postgresql.service
+#    - Environment=PGPORT=5432
+- name: update postgresql.conf -> port number in service file (Fedora & RHEL)
+  lineinfile:
+    dest: '/usr/lib/systemd/system/postgresql.service'
+    backrefs: yes
+    regexp: "Environment=PGPORT=5432"
+    line: "Environment=PGPORT={{ovirt_engine_remote_db_port}}"
+  register: port_update
+  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432
+  ignore_errors: True
+
+# daemon reload - service file was changed
+- name: systemctl daemon-reload (el7)
+  shell: 'systemctl daemon-reload'
+  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432 and port_update|success
+  tags:
+    - skip_ansible_lint
+
+# el6 use only service (systemctl not present)
+- name: update postgresql.conf -> port number in service file (el6)
+  lineinfile:
+    dest: '/etc/init.d/postgresql'
+    backrefs: yes
+    regexp: "PGPORT=5432"
+    line: "PGPORT={{ovirt_engine_remote_db_port}}"
+  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432 and port_update|failed
+  ignore_errors: True
+
+# allow selinux for postgresql non-standard port
+- name: allow selinux for non-standard port
+  shell: 'semanage port -a -t postgresql_port_t -p tcp {{ovirt_engine_remote_db_port}}'
+  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432
+  ignore_errors: True
+  tags:
+    - skip_ansible_lint
+
+# first check of PostgreSQL - if fail, setup
+- name: PostgreSQL reload configuration
+  service:
+    name: postgresql
+    state: restarted
+
+- name: check iptables service
+  service:
+    name: iptables
+    state: running
+  register: iptables_status
+  when: postgresql_status|failed
+  ignore_errors: True
+
+- name: open port for PostgreSQL in iptables
+  shell: "iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport {{ovirt_engine_remote_db_port}} -j ACCEPT"
+  when: postgresql_status|failed and not iptables_status|failed
+  tags:
+    - skip_ansible_lint
+
+- name: save iptables rules
+  shell: "/sbin/iptables-save"
+  when: postgresql_status|failed and not iptables_status|failed
+  tags:
+    - skip_ansible_lint
+
+- name: check firewalld service
+  service:
+    name: firewalld
+    state: running
+  register: firewalld_status
+  when: postgresql_status|failed
+  ignore_errors: True
+
+- name: open port for PostgreSQL in firewalld
+  firewalld:
+    port: "{{ovirt_engine_remote_db_port|int}}/tcp"
+    permanent: True
+    state: enabled
+  when: postgresql_status|failed and not firewalld_status|failed
+
+- name: reload firewalld
+  shell: "firewall-cmd --reload"
+  when: postgresql_status|failed and not firewalld_status|failed
+  tags:
+    - skip_ansible_lint
+
+- name: creating directory for sql scripts in /tmp/ansible-sql
+  file:
+    path: /tmp/ansible-sql
+    state: directory
 
 - name: copy SQL scripts
   template:
@@ -42,54 +183,29 @@
 
 - name: create engine DB and user
   become_user: postgres
-  command: psql -a -f /tmp/ansible-sql/'{{item}}'
+  become: yes
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -f /tmp/ansible-sql/'{{item}}'
   with_items:
     - "ovirt-engine-db-user-create.sql"
     - "ovirt-engine-db-create.sql"
-  when: ovirt_engine_remote_db is defined
+  when: ovirt_engine_remote_db == True
 
-- name: Create engine DWH DB and user
+- name: create engine DWH DB and user
   become_user: postgres
-  command: psql -a -f /tmp/ansible-sql/'{{item}}'
+  become: yes
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -f /tmp/ansible-sql/'{{item}}'
   with_items:
     - "ovirt-engine-dwh-db-user-create.sql"
     - "ovirt-engine-dwh-db-create.sql"
-  when: ovirt_engine_dwh_remote_db is defined
+  when: ovirt_engine_dwh_remote_db == True
 
-- name: update postgres conf and hba templates
-  lineinfile: dest=/var/lib/pgsql/data/pg_hba.conf insertafter=EOF line="host all all 0.0.0.0/0 md5"
-  when: postgresql_status|failed
-
-- name: check iptables service
-  service:
-    name: iptables
-    state: running
-  register: iptables_status
-  ignore_errors: True
-
-- name: open port for database in iptables
-  iptables:
-    chain: INPUT
-    protocol: tcp
-    destination_port: "{{ovirt_engine_remote_db_port|int}}"
-    jump: ACCEPT
-  when: postgresql_status|failed and not iptables_status|failed
-
-- name: check firewalld service
-  service:
-    name: firewalld
-    state: running
-  register: firewalld_status
-  ignore_errors: True
-
-- name: open port for database in firewalld
-  firewalld:
-    port: "{{ovirt_engine_remote_db_port|int}}/tcp"
-    permanent: True
-    state: enabled
-  when: postgresql_status|failed and not firewalld_status|failed
-
-- name: postgresql reload configuration
+- name: check PostgreSQL service
   service:
     name: postgresql
-    state: restarted
+    state: started
+    enabled: yes
+
+- name: clean tmp files
+  file:
+    path: '/tmp/ansible-sql'
+    state: 'absent'
