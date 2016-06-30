@@ -4,4 +4,4 @@
 - hosts: engine
   remote_user: root
   roles:
-   - {role: ovirt-engine-backup}
+    - {role: ovirt-engine-backup}

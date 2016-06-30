@@ -23,7 +23,7 @@ README for this file can be found in role engine-install readme
 
 command for run playbook:
 
-        ansible-playbook -i hosts install_engine.yml
+        ansible-playbook -i example/inventory/install_engine.inv example/playbooks/install_engine.yml
 
 [travisimg]: https://travis-ci.org/StLuke/ovirt-ansible.svg?branch=master
 [travis]: https://travis-ci.org/StLuke/ovirt-ansible

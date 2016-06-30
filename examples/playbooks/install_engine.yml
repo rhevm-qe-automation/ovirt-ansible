@@ -1,6 +1,6 @@
 ---
 # example playbook for installing engines
-# use with install_engine.inv
+# use with examples/inventory/install_engine.inv
 - hosts: engine
   remote_user: root
   roles:

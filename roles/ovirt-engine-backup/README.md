@@ -2,7 +2,7 @@ Role Name
 =========
 
 Engine bakcup
-Backup engine to archive file and fownload to client node
+Backup engine to archive file and download to client node
 
 Requirements
 ------------
