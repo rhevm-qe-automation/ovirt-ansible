@@ -24,11 +24,11 @@ Role Variables
     ovirt_engine_dwh_remote_db: [yes, no] Create DWH database
     
     # vars for databases and roles
-    ovirt_engine_db_name: DB name for ovirt-engine
-    ovirt_engine_db_user: DB user which can access ovirt-engine DB
+    ovirt_engine_db_name: DB name for ovirt-engine (default: 'engine')
+    ovirt_engine_db_user: DB user which can access ovirt-engine DB (default: 'engine')
     ovirt_engine_db_password: password for user of ovirt-engine DB
-    ovirt_engine_dwh_db_name: DB name for ovirt-engine-dwh
-    ovirt_engine_dwh_db_user: DB user which can access ovirt-engine-dwh DB
+    ovirt_engine_dwh_db_name: DB name for ovirt-engine-dwh (default: 'ovirt_engine_history')
+    ovirt_engine_dwh_db_user: DB user which can access ovirt-engine-dwh DB (default: 'ovirt_engine_history')
     ovirt_engine_dwh_db_password: password for user of ovirt-engine DB
     
 Dependencies

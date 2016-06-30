@@ -13,7 +13,7 @@ Role Variables
     
     ovirt_engine_type: Type of product
         'ovirt-engine' - for installing oVirt product
-    ovirt_engine_version: Allowed version: [3.6.x, 4.0.x]
+    ovirt_engine_version: Allowed version: [3.6, 4.x]
     ovirt_engine_dwh: Bool value for installing DWH (local - not need special answerfile)   
     
 Dependencies
@@ -35,8 +35,7 @@ Example Playbook
         # role-vars: ovirt-engine-install-packages 
         ovirt_engine_type: 'ovirt-engine'
         ovirt_engine_dwh: True
-        ovirt_engine_version: '3.6.7'
-        ovirt_engine_version: 3.6.7
+        ovirt_engine_version: '3.6'
     
       roles:
         - { role: common }
