@@ -1,0 +1,7 @@
+---
+# Example playbook for backup of engine
+# use with backup_engine.inv
+- hosts: engine
+  remote_user: root
+  roles:
+    - {role: ovirt-engine-backup}

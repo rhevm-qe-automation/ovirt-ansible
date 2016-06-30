@@ -1,0 +1,6 @@
+---
+ovirt_engine_type: 'ovirt-engine'
+ovirt_backup_mode: 'backup'
+ovirt_backup_archive: '/tmp/engine-backup.gzip'
+ovirt_backup_log_file: '/tmp/engine-backup.log'
+ovirt_backup_scope: 'all'
