@@ -1,0 +1,39 @@
+[engine:vars]
+
+#### Backup mode ####
+# Set backup mode for engine-type utility
+#  Allowed options:
+#    backup | restore
+#
+  ovirt_backup_mode: 'backup'
+
+#### Backup archive file ####
+# Set backup archive file path
+#
+  ovirt_backup_archive: '/tmp/engine-backup.gzip'
+
+#### Backup log file ####
+# Set backup log file path
+# This file will be fetched only in case of error during engine-backup
+
+  ovirt_backup_log_file: '/tmp/engine-backup.log'
+
+#### Backup scope ####
+# Set backup archive file path
+# SCOPE is one of the following:
+#   all            If MODE=backup: backup everything below.
+#                  If MODE=restore: restore everything found in FILE.
+#    files         Product files only
+#    db            Engine database only
+#    dwhdb         Data Warehouse database only
+#    reportsdb     Reports database only
+  ovirt_backup_scope: 'all'
+
+[engine]
+
+#### Hosts for engine bakcup ####
+# Add ip or hostname of machines
+192.168.1.1
+host.example.com
+# Password for SSH connection
+ansible_ssh_pass=fillme
