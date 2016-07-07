@@ -38,7 +38,7 @@ if __name__ == '__main__':
         default=False, help='New instance for remote dwh db'
     )
     parser.add_argument(
-        '--file', '-f', default='/tmp/hot.yaml',
+        '--file', '-f', required=True,
         help='Specify path and file name to hot template'
     )
     parser.add_argument(
@@ -175,9 +175,8 @@ if __name__ == '__main__':
         with open(args.file, 'w') as f:
             yaml.dump(hot_template, f, default_flow_style=False)
         exit(1)
-    for i, s in enumerate(instances):
-        instances[i] = s+suffix
 
+    instances = [s + suffix for s in instances]
     for name in instances:
         # add spawned instance
         vm = dict()
