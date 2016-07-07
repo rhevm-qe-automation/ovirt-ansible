@@ -87,7 +87,7 @@ if __name__ == '__main__':
         hot = dict()
 
         # add description
-        hot['description'] = 'HOT template for rhevm jobs'
+        hot['description'] = 'HOT template for ovirt jobs'
 
         # add template version
         hot['heat_template_version'] = datetime.date.today()
@@ -101,15 +101,15 @@ if __name__ == '__main__':
         param_flavor['description'] = 'Flavor to use for servers'
         param_flavor['type'] = 'string'
 
-        param_img_el6 = dict()
-        params['image_rhel6'] = param_img_el6
-        param_img_el6['description'] = 'Name of image to use for rhevm3.6'
-        param_img_el6['type'] = 'string'
+        param_img36 = dict()
+        params['image_36'] = param_img36
+        param_img36['description'] = 'Name of image to use for engine-36'
+        param_img36['type'] = 'string'
 
-        param_img_el7 = dict()
-        params['image_rhel7'] = param_img_el7
-        param_img_el7['description'] = 'Name of image to use for rhevm4'
-        param_img_el7['type'] = 'string'
+        param_img40 = dict()
+        params['image_40'] = param_img40
+        param_img40['description'] = 'Name of image to use for ovirt-40'
+        param_img40['type'] = 'string'
 
         param_key_name = dict()
         params['key_name'] = param_key_name
@@ -161,7 +161,7 @@ if __name__ == '__main__':
         instances.append(args.prefix + "_remote_dwh_db")
 
     # remove old template instances with same prefix
-    suffix = "_el6" if args.engine36 else "_el7"
+    suffix = "_36" if args.engine36 else "_40"
     for i in [
         args.prefix + suffix,
         args.prefix + "_dwh" + suffix,
@@ -193,7 +193,7 @@ if __name__ == '__main__':
 
         vm_image = dict()
         vm_properties['image'] = vm_image
-        vm_image['get_param'] = 'image_el6' if args.engine36 else 'image_el7'
+        vm_image['get_param'] = 'image_36' if args.engine36 else 'image_40'
 
         vm_keyname = dict()
         vm_properties['key_name'] = vm_keyname
