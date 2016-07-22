@@ -4,7 +4,6 @@ import argparse
 import sys
 import os.path
 import yaml
-import datetime
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -67,8 +66,8 @@ if __name__ == '__main__':
         print '\tpublic_net: \t\tNetwork interface to connect within the stack'
         print '\tkey_name: \t\tSsh key added to open stack instance'
         print '\tflavor: \t\tFlavor of instance specified within open stack.'
-        print '\timage_engine36: \timage name for engine36'
-        print '\timage_engine40: \timage name for engine40'
+        print '\timage_36: \timage name for engine36'
+        print '\timage_40: \timage name for engine40'
         sys.exit(0)
     if args.dwh not in ["local", "remote", "none"]:
         sys.stderr.write(
@@ -94,7 +93,7 @@ if __name__ == '__main__':
         hot['description'] = 'HOT template for ovirt jobs'
 
         # add template version
-        hot['heat_template_version'] = datetime.date.today()
+        hot['heat_template_version'] = '2013-05-23'
 
         # add parameters
         params = dict()
@@ -121,7 +120,7 @@ if __name__ == '__main__':
         param_key_name['type'] = 'string'
 
         param_public_net = dict()
-        params['public_name'] = param_public_net
+        params['public_net'] = param_public_net
         param_public_net['description'] = 'ID or name of public network for ' \
                                           'which floating addresses will be ' \
                                           'allocated'
@@ -138,19 +137,9 @@ if __name__ == '__main__':
             disable_requiretty['properties'] = dis_properties
             disable_requiretty['type'] = 'OS::Heat::SoftwareConfig'
 
-            dis_properties['config'] = "#!/bin/sh\nsed -i -e 's/^Defaults" \
-                                       "\\s\\+requiretty" \
-                                       "/# \\0/' /etc/sudoers\n"
-            dis_properties['group'] = 'ungrouped'
-        else:
-            floating_ip = dict()
-            resources['floating_ip'] = floating_ip
-            floating_ip['type'] = 'OS::Nova::FloatingIP'
             floating_ip['properties'] = dict()
             floating_ip['properties']['pool'] = 'external'
 
-        # add outputs
-        hot['outputs'] = dict()
         if not args.delete:
             with open(args.file, 'w') as f:
                 f.write(yaml.dump(hot, default_flow_style=False))
@@ -181,7 +170,6 @@ if __name__ == '__main__':
     ]:
         if i in hot_template['resources']:
             hot_template['resources'].pop(i)
-            hot_template['outputs'].pop(i+'_public_ip')
     if args.delete:
         with open(args.file, 'w') as f:
             yaml.dump(hot_template, f, default_flow_style=False)
@@ -226,14 +214,31 @@ if __name__ == '__main__':
 
             vm_properties['user_data_format'] = 'SOFTWARE_CONFIG'
         else:
+            #add association of floating ip
             association = dict()
             hot_template['resources'][name+'_association'] = association
             association['type'] = 'OS::Neutron::FloatingIPAssociation'
             assoc_properties = dict()
             association['properties'] = assoc_properties
             assoc_properties['floatingip_id'] = dict()
-            assoc_properties['floatingip_id']['get_resource'] = 'floating_ip'
+            assoc_properties['floatingip_id']['get_resource'] = name+"_ip"
             assoc_properties['port_id'] = dict()
             port_list = list()
             assoc_properties['port_id']['get_attr'] = port_list
             port_list.append(name)
+            port_list.append('addresses')
+            network_dict = dict()
+            network_dict['get_param'] = 'public_net'
+            port_list.append(network_dict)
+            port_list.append(0)
+            port_list.append('port')
+
+            #add floating ip
+            float_ip = dict()
+            hot_template['resources'][name+"_ip"] = float_ip
+            float_ip['type'] = 'OS::Nova::FloatingIP'
+            float_ip['properties'] = dict()
+            float_ip['properties']['pool'] = 'external'
+
+    with open(args.file, 'w') as f:
+        yaml.dump(hot_template, f, default_flow_style=False)
