@@ -138,8 +138,9 @@ if __name__ == '__main__':
             disable_requiretty['properties'] = dis_properties
             disable_requiretty['type'] = 'OS::Heat::SoftwareConfig'
 
-            dis_properties['config'] = "#!/bin/sh\nsed -i -e 's/^Defaults\\s\\+" \
-                                       "requiretty/# \\0/' /etc/sudoers\n"
+            dis_properties['config'] = "#!/bin/sh\nsed -i -e 's/^Defaults" \
+                                       "\\s\\+requiretty" \
+                                       "/# \\0/' /etc/sudoers\n"
             dis_properties['group'] = 'ungrouped'
         else:
             floating_ip = dict()
@@ -236,19 +237,3 @@ if __name__ == '__main__':
             port_list = list()
             assoc_properties['port_id']['get_attr'] = port_list
             port_list.append(name)
-            port_list.append('addresses')
-            network_dict = dict()
-            network_dict['get_param'] = 'public_net'
-            port_list.append(network_dict)
-            port_list.append(0)
-            # add outputs
-        outputs = hot_template['outputs']
-        # add ip address as output
-        output = dict()
-        outputs[name + '_public_ip'] = output
-        output['description'] = 'Floating IP address of instance ' + name
-        network = dict()
-        network['get_param'] = 'public_net'
-        output['value'] = {'get_attr': [name, 'networks', network, 0]}
-    with open(args.file, 'w') as f:
-        yaml.dump(hot_template, f, default_flow_style=False)
