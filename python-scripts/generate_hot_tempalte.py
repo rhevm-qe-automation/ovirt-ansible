@@ -53,6 +53,10 @@ if __name__ == '__main__':
         '--delete', '-D', help='Remove this machine from template',
         action='store_true', default=False
     )
+    parser.add_argument(
+        '--oslab', help='workaround for Openstack lab to get ssh root login',
+        action='store_true', default=False
+    )
     args = parser.parse_args()
 
     # Check conflicting arguements
@@ -126,17 +130,23 @@ if __name__ == '__main__':
         # add resources
         resources = dict()
         hot['resources'] = resources
+        if not args.oslab:
+            disable_requiretty = dict()
+            resources['disable_requiretty'] = disable_requiretty
 
-        disable_requiretty = dict()
-        resources['disable_requiretty'] = disable_requiretty
+            dis_properties = dict()
+            disable_requiretty['properties'] = dis_properties
+            disable_requiretty['type'] = 'OS::Heat::SoftwareConfig'
 
-        dis_properties = dict()
-        disable_requiretty['properties'] = dis_properties
-        disable_requiretty['type'] = 'OS::Heat::SoftwareConfig'
-
-        dis_properties['config'] = "#!/bin/sh\nsed -i -e 's/^Defaults\\s\\+" \
-                                   "requiretty/# \\0/' /etc/sudoers\n"
-        dis_properties['group'] = 'ungrouped'
+            dis_properties['config'] = "#!/bin/sh\nsed -i -e 's/^Defaults\\s\\+" \
+                                       "requiretty/# \\0/' /etc/sudoers\n"
+            dis_properties['group'] = 'ungrouped'
+        else:
+            floating_ip = dict()
+            resources['floating_ip'] = floating_ip
+            floating_ip['type'] = 'OS::Nova::FloatingIP'
+            floating_ip['properties'] = dict()
+            floating_ip['properties']['pool'] = 'external'
 
         # add outputs
         hot['outputs'] = dict()
@@ -208,18 +218,37 @@ if __name__ == '__main__':
         vm_network['network'] = vm_network_param
         vm_network_param['get_param'] = 'public_net'
 
-        vm_user_data = dict()
-        vm_properties['user_data'] = vm_user_data
-        vm_user_data['get_resource'] = 'disable_requiretty'
+        if not args.oslab:
+            vm_user_data = dict()
+            vm_properties['user_data'] = vm_user_data
+            vm_user_data['get_resource'] = 'disable_requiretty'
 
-        vm_properties['user_data_format'] = 'SOFTWARE_CONFIG'
-
-        # add outputs
+            vm_properties['user_data_format'] = 'SOFTWARE_CONFIG'
+        else:
+            association = dict()
+            hot_template['resources'][name+'_association'] = association
+            association['type'] = 'OS::Neutron::FloatingIPAssociation'
+            assoc_properties = dict()
+            association['properties'] = assoc_properties
+            assoc_properties['floatingip_id'] = dict()
+            assoc_properties['floatingip_id']['get_resource'] = 'floating_ip'
+            assoc_properties['port_id'] = dict()
+            port_list = list()
+            assoc_properties['port_id']['get_attr'] = port_list
+            port_list.append(name)
+            port_list.append('addresses')
+            network_dict = dict()
+            network_dict['get_param'] = 'public_net'
+            port_list.append(network_dict)
+            port_list.append(0)
+            # add outputs
         outputs = hot_template['outputs']
         # add ip address as output
         output = dict()
         outputs[name + '_public_ip'] = output
         output['description'] = 'Floating IP address of instance ' + name
-        output['value'] = {'get_attr': [name, 'first_address']}
+        network = dict()
+        network['get_param'] = 'public_net'
+        output['value'] = {'get_attr': [name, 'networks', network, 0]}
     with open(args.file, 'w') as f:
         yaml.dump(hot_template, f, default_flow_style=False)
