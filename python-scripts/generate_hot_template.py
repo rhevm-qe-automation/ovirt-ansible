@@ -137,6 +137,14 @@ if __name__ == '__main__':
             disable_requiretty['properties'] = dis_properties
             disable_requiretty['type'] = 'OS::Heat::SoftwareConfig'
 
+            dis_properties['config'] = "#!/bin/sh\nsed -i -e 's/^Defaults" \
+                                       "\\s\\+requiretty/# \\0/' " \
+                                       "/etc/sudoers\n"
+            dis_properties['group'] = 'ungrouped'
+        else:
+            floating_ip = dict()
+            resources['floating_ip'] = floating_ip
+            floating_ip['type'] = 'OS::Nova::FloatingIP'
             floating_ip['properties'] = dict()
             floating_ip['properties']['pool'] = 'external'
 
@@ -214,7 +222,7 @@ if __name__ == '__main__':
 
             vm_properties['user_data_format'] = 'SOFTWARE_CONFIG'
         else:
-            #add association of floating ip
+            # add association of floating ip
             association = dict()
             hot_template['resources'][name+'_association'] = association
             association['type'] = 'OS::Neutron::FloatingIPAssociation'
@@ -233,7 +241,7 @@ if __name__ == '__main__':
             port_list.append(0)
             port_list.append('port')
 
-            #add floating ip
+            # add floating ip
             float_ip = dict()
             hot_template['resources'][name+"_ip"] = float_ip
             float_ip['type'] = 'OS::Nova::FloatingIP'
