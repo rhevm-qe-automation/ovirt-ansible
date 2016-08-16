@@ -1,0 +1,97 @@
+---
+
+- include_vars: "{{ ovirt_collect_logs_from_system }}.yml"
+
+- name: Ensure required archive tools
+  yum:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - gzip
+    - tar
+
+# Prepare place to store data
+
+- name: Clean temporary directory and previous archive
+  file:
+    path: "{{ item }}"
+    state: "absent"
+  with_items:
+    - "{{ ovirt_collect_logs_tmp_dir }}"
+    - "{{ ovirt_collect_logs_archive }}"
+
+- name: Create temporary directory
+  file:
+    path: "{{ ovirt_collect_logs_tmp_dir }}"
+    state: "directory"
+    mode: "0777"
+
+# Collect common stuff
+
+- name: Dump all rpms
+  shell: "rpm -qa | sort -f > {{ ovirt_collect_logs_tmp_dir }}/rpm-list.txt"
+  ignore_errors: true
+
+- name: Dump yum list installed
+  shell: "yum list installed
+            > {{ ovirt_collect_logs_tmp_dir }}/yum-list.txt"
+  ignore_errors: true
+
+- name: Dump logs from all failed services
+  shell: "systemctl -t service --failed --no-legend | awk '{print $1}'
+            | xargs -r -n1 journalctl -u
+            > {{ ovirt_collect_logs_tmp_dir }}/services.txt 2>&1"
+  ignore_errors: true
+
+- name: Dump iptables rules
+  shell: "iptables -L > {{ ovirt_collect_logs_tmp_dir }}/iptables.txt"
+  ignore_errors: true
+
+- name: Dump lsof -P
+  shell: "lsof -P &> {{ ovirt_collect_logs_tmp_dir }}/lsof.txt"
+  ignore_errors: true
+
+- name: Dump pstree -p
+  shell: "pstree -p &> {{ ovirt_collect_logs_tmp_dir }}/pstree.txt"
+  ignore_errors: true
+
+- name: Dump sysctl -a
+  shell: "sysctl -a &> {{ ovirt_collect_logs_tmp_dir }}/sysctl.txt"
+  ignore_errors: true
+
+- name: Dump netstat -lnp
+  shell: "netstat -lnp &> {{ ovirt_collect_logs_tmp_dir }}/netstat.txt"
+  ignore_errors: true
+
+- name: Dump lsmod
+  shell: "lsmod &> {{ ovirt_collect_logs_tmp_dir }}/lsmod.txt"
+  ignore_errors: true
+
+- name: Dump lspci
+  shell: "lspci &> {{ ovirt_collect_logs_tmp_dir }}/lspci.txt"
+  ignore_errors: true
+
+- name: Link common logs
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item.dest }}"
+    state: link
+  with_items:
+    - { src: "/var/log/messages", dest: "messages" }
+
+# Collect system specific stuff
+
+- include: "{{ ovirt_collect_logs_from_system }}.yml"
+
+# Fetch stuff to local system
+- name: Archive logs
+  shell: "tar {{ ovirt_collect_logs_tar_optional_params}}
+            -hczf {{ ovirt_collect_logs_archive }}
+            {{ ovirt_collect_logs_tmp_dir }}"
+  ignore_errors: true
+
+- name: Fetch logs
+  fetch:
+    src: "{{ ovirt_collect_logs_archive }}"
+    dest: "logs/{{ ovirt_collect_logs_from_system }}-{{ ansible_hostname }}/ovirt-engine-logs.tar.gz"
+    flat: yes

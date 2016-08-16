@@ -1,0 +1,2 @@
+---
+ovirt_collect_logs_tar_optional_params: "--exclude '*/jboss_runtime/*' --exclude '*/branding/*'"

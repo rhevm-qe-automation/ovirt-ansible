@@ -1,0 +1,4 @@
+---
+- name: Dump engine database
+  shell: "su - postgres -c 'pg_dump engine > {{ ovirt_collect_logs_tmp_dir }}/engine_db.sql'"
+  ignore_errors: true
