@@ -1,0 +1,3 @@
+---
+ovirt_collect_logs_tmp_dir: "/var/tmp/ovirt-logs"
+ovirt_collect_logs_archive: "/var/tmp/ovirt-logs.tar.gz"

@@ -1,0 +1,44 @@
+---
+
+- name: Prepare directory structure
+  file:
+    src: "{{ item }}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item }}"
+    state: directory
+  with_items:
+    - "etc"
+
+- name: Link vdsm and libfirt logs
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item.dest }}"
+    state: link
+  with_items:
+    -
+      src: "/var/log/vdsm"
+      dest: "vdsm-logs"
+    -
+      src: "/var/log/libvirt"
+      dest: "libvirt-logs"
+    -
+      src: "/etc/ovirt-vmconsole"
+      dest: "etc/ovirt-vmconsole"
+    -
+      src: "/etc/vdsm"
+      dest: "etc/vdsm"
+    -
+      src: "/etc/libvirt"
+      dest: "etc/libvirt"
+  ignore_errors: true
+
+- name: Dump mount
+  shell: "mount &> {{ ovirt_collect_logs_tmp_dir }}/mount.txt"
+  ignore_errors: true
+
+- name: Dump multipath
+  shell: "multipath -ll &> {{ ovirt_collect_logs_tmp_dir }}/multipath.txt"
+  ignore_errors: true
+
+- name: Dump lvm
+  shell: "(vgs; pvs; lvs) &> {{ ovirt_collect_logs_tmp_dir }}/lvm.txt"
+  ignore_errors: true

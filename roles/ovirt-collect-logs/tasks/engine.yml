@@ -1,0 +1,35 @@
+---
+
+- name: Prepare directory structure
+  file:
+    src: "{{ item }}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item }}"
+    state: directory
+  with_items:
+    - "etc"
+
+- name: Link ovirt-engine logs
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item.dest }}"
+    state: link
+  with_items:
+    -
+      src: "/var/log/ovirt-engine"
+      dest: "ovirt-engine-logs"
+    -
+      src: "/var/lib/ovirt-engine"
+      dest: "ovirt-engine-data"
+    -
+      src: "/etc/ovirt-engine"
+      dest: "etc/ovirt-engine"
+    -
+      src: "/etc/ovirt-engine-setup.conf.d"
+      dest: "etc/ovirt-engine-setup.conf.d"
+    -
+      src: "/etc/ovirt-host-deploy.conf.d"
+      dest: "etc/ovirt-host-deploy.conf.d"
+    -
+      src: "/etc/ovirt-vmconsole"
+      dest: "etc/ovirt-vmconsole"
+  ignore_errors: true

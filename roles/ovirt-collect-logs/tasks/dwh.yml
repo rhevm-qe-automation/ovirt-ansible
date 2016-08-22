@@ -1,0 +1,14 @@
+---
+- name: Link DWH logs
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item.dest }}"
+    state: link
+  with_items:
+    - { src: "/var/log/ovirt-engine-dwh", dest: "ovirt-engine-dwh-logs" }
+    - { src: "/var/lib/ovirt-engine-dwh", dest: "ovirt-engine-dwh-data" }
+    - { src: "/etc/ovirt-engine-dwh", dest: "ovirt-engine-dwh-etc" }
+
+- name: Dump DWH database
+  shell: "su - postgres -c 'pg_dump ovirt_engine_history > {{ ovirt_collect_logs_tmp_dir }}/dwh_db.sql'"
+  ignore_errors: true
