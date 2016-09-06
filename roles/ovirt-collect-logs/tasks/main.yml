@@ -71,6 +71,10 @@
   shell: "lspci &> {{ ovirt_collect_logs_tmp_dir }}/lspci.txt"
   ignore_errors: true
 
+- name: Dump memory usage of processes
+  shell: "ps -e -orss=,args= | sort  -b -k1,1n | tac &> {{ ovirt_collect_logs_tmp_dir }}/memory_usage.txt"
+  ignore_errors: true
+
 - name: Link common logs
   file:
     src: "{{ item.src }}"
