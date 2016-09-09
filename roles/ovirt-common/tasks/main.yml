@@ -25,22 +25,26 @@
     - skip_ansible_lint
 
 # get repository templates
-- name: copy repository file
-  get_url:
-    url: "{{ovirt_repo}}"
-    dest: "/etc/yum.repos.d/ansible_ovirt_main.repo"
-    force_basic_auth: yes
+- name: deploy repository file
+  yum_repository:
+    name: "ovirt-main"
+    file: "ovirt"
+    description: "oVirt main repo"
+    baseurl: "{{ ovirt_repo }}"
+    gpgcheck: no
   when: ovirt_repo is defined
 
 - name: copy dependency repository file
-  get_url:
-    url: "{{ovirt_dependency_repo}}"
-    dest: "/etc/yum.repos.d/ansible_ovirt_dependency.repo"
-    force_basic_auth: yes
+  yum_repository:
+    name: "ovirt-dependency"
+    file: "ovirt"
+    description: "oVirt dependency repo"
+    baseurl: "{{ ovirt_dependency_repo }}"
+    gpgcheck: no
   when: ovirt_dependency_repo is defined
 
 - name: install rpm repository package
   yum:
-    name: "{{ovirt_rpm_repo}}"
+    name: "{{ ovirt_rpm_repo }}"
     state: present
   when: ovirt_rpm_repo is defined
