@@ -1,0 +1,32 @@
+---
+## This file allows pass yaml variables to playbooks
+# defining variables in inventory is not prefered practise
+#   - http://docs.ansible.com/ansible/intro_inventory.html#splitting-out-host-and-group-specific-data
+# you can specify yaml variables in following files:
+# 1) ./host_vars/{host_name}      - for specific host
+# 2) ./group_vars/{group_name}    - for specific group
+# 3) ./group_vars/all             - for all hosts
+# where './foo.inv' is direction to your inventory
+
+# this file has classic YAML structure
+
+# download repo file
+ovirt_repo_file:
+  -
+    url: http://example.com/repository1.repo
+    name: example.repo # default same as remote
+    force: yes # default no
+    # If force=yes, download the file and replace local file if the contents change.
+    # If force=no, the file will only be downloaded if the destination does not exist.
+  -
+    url: http://example.com/repository2.repo
+
+# create repo file
+ovirt_repo:
+  -
+    name: repo1
+    url: http://example.com/path/to/packages
+    enabled: yes # defualt yes
+
+# install from rpm
+ovirt_rpm_repo: http://example.com/ovirt.rpm

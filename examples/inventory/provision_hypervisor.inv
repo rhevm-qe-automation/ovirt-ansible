@@ -7,19 +7,8 @@ ansible_ssh_pass=fillme
 ## Hypervisor Repositories ##
 # Set repositories for installing hypervisors
 # Use either ovirt_rpm_repo or ovirt_dependency_repo, ovirt_rpm_repo
-#   ovirt_repo - URL of main repository file
-#   ovirt_dependency_repo - URL of dependency repository file
-#   ovirt_rpm_repo - URL of RPM package which contains repository files
-#
-#  Example:
-#    ovirt_repo=http://to.somewhere
-#    ovirt_dependency_repo=http://to.somewhere
-#  OR
-#    ovirt_rpm_repo=http://to.somewhere.rpm
-#
-ovirt_repo=fill me
-ovirt_dependency_repo=fill me
-#ovirt_rpm_repo=fill me
+#   for more information see:
+#     'ovirt-ansible/examples/inventory/group_vars/all.yml'
 
 [hypervisors]
 # Add ip or hostname of machines
