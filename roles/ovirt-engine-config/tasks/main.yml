@@ -3,11 +3,13 @@
   shell: "engine-config -s {{ item.key }}='{{ item.value }}' --cver={{ item.version }}"
   with_items: "{{ ovirt_engine_config | list }}"
   when: ovirt_engine_config is defined and item.version != "general"
+  register: conf1
 
 - name: Tune oVirt engine with engine-config, regardless version
   shell: "engine-config -s {{ item.key }}='{{ item.value }}'"
   with_items: "{{ ovirt_engine_config | list }}"
   when: ovirt_engine_config is defined and item.version == "general"
+  register: conf2
 
 - name: Copy property file to engine
   copy:
@@ -18,12 +20,14 @@
 - name: Tune oVirt engine with engine-config; from property file
   shell: "engine-config --properties=/tmp/ovirt_engine_config.properties"
   when: ovirt_engine_config_property_file is defined
+  register: conf3
 
-# oVirt engine restart is required
+# oVirt engine restart is required if configuration changed
 - name: restart of ovirt-engine service
   service:
     name: ovirt-engine
     state: restarted
+  when: conf1.changed or conf2.changed or conf3.changed
 
 - name: check health status of page
   uri:
@@ -33,3 +37,4 @@
   retries: 12
   delay: 10
   until: health_page|success
+  when: conf1.changed or conf2.changed or conf3.changed
