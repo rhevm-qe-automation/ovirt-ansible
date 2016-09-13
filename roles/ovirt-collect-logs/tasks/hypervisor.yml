@@ -29,6 +29,12 @@
     -
       src: "/etc/libvirt"
       dest: "etc/libvirt"
+    -
+      src: "/var/log/ovirt-hosted-engine-setup"
+      dest: "hosted-engine-setup-logs"
+    -
+      src: "/var/log/ovirt-hosted-engine-ha"
+      dest: "hosted-engine-logs"
   ignore_errors: true
 
 - name: Dump mount
