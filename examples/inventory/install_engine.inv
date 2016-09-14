@@ -14,19 +14,8 @@ ovirt_engine_version=4.0
 ## Engine Repositories ##
 # Set repositories for installing engine
 # Use either ovirt_rpm_repo or ovirt_dependency_repo, ovirt_rpm_repo
-#   ovirt_repo - URL of main repository file
-#   ovirt_dependency_repo - URL of dependency repository file
-#   ovirt_rpm_repo - URL of RPM package which contains repository files
-#
-#  Example:
-#    ovirt_repo=http://to.somewhere
-#    ovirt_dependency_repo=http://to.somewhere
-#  OR
-#    ovirt_rpm_repo=http://to.somewhere.rpm
-#
-ovirt_repo=fill me
-ovirt_dependency_repo=fill me
-#ovirt_rpm_repo=fill me
+#   for more information see:
+#     'ovirt-ansible/examples/inventory/group_vars/all.yml'
 
 ## Data Warehouse DWH ##
 # Install DWH together with engine as a local installation
@@ -117,5 +106,3 @@ ovirt_engine_db_password=fill me
 ovirt_engine_dwh_db_name=ovirt_engine_history
 ovirt_engine_dwh_db_user=ovirt_engine_history
 ovirt_engine_dwh_db_password=fill me
-
-
