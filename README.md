@@ -35,12 +35,12 @@ command for run playbook:
 * [ovirt-engine-setup]
 
 
-[travisimg]: https://travis-ci.org/StLuke/ovirt-ansible.svg?branch=master
-[travis]: https://travis-ci.org/StLuke/ovirt-ansible
-[ovirt-collect-logs]: https://github.com/StLuke/ovirt-ansible/blob/master/roles/ovirt-collect-logs/README.md
-[ovirt-common]: https://github.com/StLuke/ovirt-ansible/blob/master/roles/ovirt-common/README.md
-[ovirt-engine-backup]: https://github.com/StLuke/ovirt-ansible/blob/master/roles/ovirt-engine-backup/README.md
-[ovirt-engine-dwh-remote]: https://github.com/StLuke/ovirt-ansible/blob/master/roles/ovirt-engine-dwh-remote/README.md
-[ovirt-engine-install-packages]: https://github.com/StLuke/ovirt-ansible/blob/master/roles/ovirt-engine-install-packages/README.md
-[ovirt-engine-remote-db]: https://github.com/StLuke/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md
-[ovirt-engine-setup]: https://github.com/StLuke/ovirt-ansible/blob/master/roles/ovirt-engine-setup/README.md
+[travisimg]: https://travis-ci.org/rhevm-qe-automation/ovirt-ansible.svg?branch=master
+[travis]: https://travis-ci.org/rhevm-qe-automation/ovirt-ansible
+[ovirt-collect-logs]: https://github.com//ovirt-ansible/blob/master/roles/ovirt-collect-logs/README.md
+[ovirt-common]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-common/README.md
+[ovirt-engine-backup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-backup/README.md
+[ovirt-engine-dwh-remote]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-dwh-remote/README.md
+[ovirt-engine-install-packages]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-install-packages/README.md
+[ovirt-engine-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md
+[ovirt-engine-setup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-setup/README.md
