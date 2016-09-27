@@ -1,6 +1,6 @@
 ---
-
-- include_vars: "{{ ovirt_collect_logs_from_system }}.yml"
+- name: Include correct variables based on system
+  include_vars: "{{ ovirt_collect_logs_from_system }}.yml"
 
 - name: Ensure required archive tools
   yum:
@@ -27,53 +27,13 @@
     mode: "0777"
 
 # Collect common stuff
-
-- name: Dump all rpms
-  shell: "rpm -qa | sort -f > {{ ovirt_collect_logs_tmp_dir }}/rpm-list.txt"
+- name: Dump system information using shell commands
+  shell: "{{ item.value }} &> {{ ovirt_collect_logs_tmp_dir }}/{{ item.key }}.txt"
+  with_dict: "{{ ovirt_collect_logs_shell_commands }}"
   ignore_errors: true
+  tags:
+    - skip_ansible_lint # check for shell module is not working correctly in Lint
 
-- name: Dump yum list installed
-  shell: "yum list installed
-            > {{ ovirt_collect_logs_tmp_dir }}/yum-list.txt"
-  ignore_errors: true
-
-- name: Dump logs from all failed services
-  shell: "systemctl -t service --failed --no-legend | awk '{print $1}'
-            | xargs -r -n1 journalctl -u
-            > {{ ovirt_collect_logs_tmp_dir }}/services.txt 2>&1"
-  ignore_errors: true
-
-- name: Dump iptables rules
-  shell: "iptables -L > {{ ovirt_collect_logs_tmp_dir }}/iptables.txt"
-  ignore_errors: true
-
-- name: Dump lsof -P
-  shell: "lsof -P &> {{ ovirt_collect_logs_tmp_dir }}/lsof.txt"
-  ignore_errors: true
-
-- name: Dump pstree -p
-  shell: "pstree -p &> {{ ovirt_collect_logs_tmp_dir }}/pstree.txt"
-  ignore_errors: true
-
-- name: Dump sysctl -a
-  shell: "sysctl -a &> {{ ovirt_collect_logs_tmp_dir }}/sysctl.txt"
-  ignore_errors: true
-
-- name: Dump netstat -lnp
-  shell: "netstat -lnp &> {{ ovirt_collect_logs_tmp_dir }}/netstat.txt"
-  ignore_errors: true
-
-- name: Dump lsmod
-  shell: "lsmod &> {{ ovirt_collect_logs_tmp_dir }}/lsmod.txt"
-  ignore_errors: true
-
-- name: Dump lspci
-  shell: "lspci &> {{ ovirt_collect_logs_tmp_dir }}/lspci.txt"
-  ignore_errors: true
-
-- name: Dump memory usage of processes
-  shell: "ps -e -orss=,args= | sort  -b -k1,1n | tac &> {{ ovirt_collect_logs_tmp_dir }}/memory_usage.txt"
-  ignore_errors: true
 
 - name: Link common logs
   file:
@@ -93,6 +53,8 @@
             -hczf {{ ovirt_collect_logs_archive }}
             {{ ovirt_collect_logs_tmp_dir }}"
   ignore_errors: true
+  tags:
+    - skip_ansible_lint # achive module has insufficient functionality
 
 - name: Fetch logs
   fetch:
