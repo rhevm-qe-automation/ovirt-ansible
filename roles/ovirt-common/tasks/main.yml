@@ -33,14 +33,14 @@
     force_basic_auth: yes
     force: "{{item.force | default('no')}}"
   with_items: "{{ovirt_repo_file}}"
-  when: ovirt_repo_file is defined
+  when: ovirt_repo_file
 
 # 2) install from rpm
 - name: install rpm repository package
   yum:
     name: "{{ovirt_rpm_repo}}"
     state: present
-  when: ovirt_rpm_repo is defined
+  when: ovirt_rpm_repo
 
 # 3) create repository files
 - name: create repository files
@@ -50,4 +50,4 @@
     baseurl: "{{item.url}}"
     enabled: "{{item.enabled | default('yes')}}"
   with_items: "{{ovirt_repo}}"
-  when: ovirt_repo is defined
+  when: ovirt_repo
