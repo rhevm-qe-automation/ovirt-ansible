@@ -1,4 +1,11 @@
 ---
+# check variables setting ovirt source
+- name: raise error if no ovirt source is specified
+  fail:
+    msg: "At least one of: 'ovirt_repo_file', 'ovirt_rpm_repo' or 'ovirt_repo'
+      must be specified. More information in the README"
+  when: not ovirt_repo_file and not ovirt_rpm_repo and not ovirt_repo
+
 # ovirt-common tasks
 - name: upgrading all packages
   yum:
