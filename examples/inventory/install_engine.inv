@@ -25,14 +25,13 @@ ovirt_engine_dwh=True
 
 ## Engine setting ##
 # Main setting of engine installation
-# ovirt_engine_answer_file_type - choose type of installation
-#   '3.6_basic'  -   basic installation of engine 3.6 with default options
-#   '4.0_basic'  -   basic installation of engine 4.0 with default options
+# ovirt_engine_answer_file_path - local path to custom answerfile
+#   if not specified there is a default for every `ovirt_engine_version`
 # ovirt_engine_hostname - resolvable engine fqdn
 # ovirt_engine_organization - organisation (same as domain)
 # ovirt_engine_admin_password - admin@internal password
 #
-ovirt_engine_answer_file_type=4.0_basic
+ovirt_engine_answer_file_path=/local/path/to/ovirt.answer
 ovirt_engine_hostname=engine.host.fqdn.com
 ovirt_engine_organization=fqdn.com
 ovirt_engine_admin_password=123456
