@@ -1,17 +1,21 @@
 ---
 - name: Tune oVirt engine with engine-config, version specific
   shell: "engine-config -s {{ item.key }}='{{ item.value }}' --cver={{ item.version }}"
-  with_items: "{{ ovirt_engine_config | list }}"
+  with_items: "{{ ovirt_engine_config | default([]) }}"
+  notify:
+    - restart of ovirt-engine service
+    - check health status of page
   when: ovirt_engine_config is defined and item.version != "general"
-  register: conf1
   tags:
     - skip_ansible_lint
 
 - name: Tune oVirt engine with engine-config, regardless version
   shell: "engine-config -s {{ item.key }}='{{ item.value }}'"
-  with_items: "{{ ovirt_engine_config | list }}"
+  notify:
+    - restart of ovirt-engine service
+    - check health status of page
+  with_items: "{{ ovirt_engine_config | default([]) }}"
   when: ovirt_engine_config is defined and item.version == "general"
-  register: conf2
   tags:
     - skip_ansible_lint
 
@@ -23,24 +27,9 @@
 
 - name: Tune oVirt engine with engine-config; from property file
   shell: "engine-config --properties=/tmp/ovirt_engine_config.properties"
+  notify:
+    - restart of ovirt-engine service
+    - check health status of page
   when: ovirt_engine_config_property_file is defined
-  register: conf3
   tags:
     - skip_ansible_lint
-
-# oVirt engine restart is required if configuration changed
-- name: restart of ovirt-engine service
-  service:
-    name: ovirt-engine
-    state: restarted
-  when: conf1.changed or conf2.changed or conf3.changed
-
-- name: check health status of page
-  uri:
-    url: "http://localhost/ovirt-engine/services/health"
-    status_code: 200
-  register: health_page
-  retries: 12
-  delay: 10
-  until: health_page|success
-  when: conf1.changed or conf2.changed or conf3.changed
