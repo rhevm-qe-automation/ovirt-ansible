@@ -1,0 +1,15 @@
+---
+# oVirt engine restart is required if configuration changed
+- name: restart of ovirt-engine service
+  service:
+    name: ovirt-engine
+    state: restarted
+
+- name: check health status of page
+  uri:
+    url: "http://localhost/ovirt-engine/services/health"
+    status_code: 200
+  register: health_page
+  retries: 12
+  delay: 10
+  until: health_page|success
