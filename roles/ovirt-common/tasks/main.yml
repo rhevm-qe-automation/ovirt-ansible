@@ -6,14 +6,6 @@
       must be specified. More information in the README"
   when: not ovirt_repo_file and not ovirt_rpm_repo and not ovirt_repo
 
-# ovirt-common tasks
-- name: upgrading all packages
-  yum:
-    name: '*'
-    state: "latest"
-  tags:
-    - skip_ansible_lint
-
 # install libselinux-python on machine - selinux policy
 - name: install libselinux-python for ansible
   yum:
