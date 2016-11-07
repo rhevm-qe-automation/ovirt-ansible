@@ -2,7 +2,7 @@ Role Name
 =========
 
 Repository setup
-Role install necessary repositories and update system
+Role install necessary repositories
 
 Requirements
 ------------
