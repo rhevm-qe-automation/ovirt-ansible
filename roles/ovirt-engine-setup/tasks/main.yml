@@ -10,15 +10,25 @@
   until: ovirt_engine_status|success
   ignore_errors: True
 
-# copy answer file
-- name: copy answerfile
+# copy default answer file
+- name: copy default answerfile
   template:
-    # TODO generate this varialbe from ovirt_engine_version and ovirt_engine_dwh
-    src: answerfile_{{ovirt_engine_answer_file_type}}.txt.j2
+    src: answerfile_{{ovirt_engine_version}}_basic.txt.j2
     dest: /tmp/answerfile.txt
     mode: 0644
     owner: root
     group: root
+  when: not ovirt_engine_answer_file_path
+
+# copy custom answer file
+- name: copy custom answer file
+  copy:
+    src: "{{ovirt_engine_answer_file_path}}"
+    dest: /tmp/answerfile.txt
+    mode: 0644
+    owner: root
+    group: root
+  when: ovirt_engine_answer_file_path != ""
 
 - name: run engine-setup with answerfile
   shell: 'engine-setup --config-append=/tmp/answerfile.txt'
