@@ -8,6 +8,7 @@
     - { src: "/var/log/ovirt-engine-dwh", dest: "ovirt-engine-dwh-logs" }
     - { src: "/var/lib/ovirt-engine-dwh", dest: "ovirt-engine-dwh-data" }
     - { src: "/etc/ovirt-engine-dwh", dest: "ovirt-engine-dwh-etc" }
+  ignore_errors: true
 
 - name: Dump DWH database
   shell: "su - postgres -c 'pg_dump ovirt_engine_history > {{ ovirt_collect_logs_tmp_dir }}/dwh_db.sql'"
