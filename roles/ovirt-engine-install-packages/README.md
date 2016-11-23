@@ -1,45 +1,38 @@
-Role Name
-=========
+oVirt Engine Install Packages
+=============================
 
-install all necessary packages for engine (optional for DWH)
+This role installs all necessary packages for oVirt engine deployment.
+
+Target Systems
+--------------
+
+* engine
+
 
 Requirements
 ------------
 
-Preinstalled clean environment with configured repositories
+Preinstalled clean environment with configured repositories.
 
 Role Variables
 --------------
 
-    ovirt_engine_type: Type of product
-        'ovirt-engine' - for installing oVirt product
-    ovirt_engine_version: Allowed version: [3.6, 4.0, 4.1]
-    ovirt_engine_dwh: Bool value for installing DWH (local - not need special answerfile)   
+None
 
 Dependencies
 ------------
 
-Run common role first (for repositories)
+* ovirt-common
 
 Example Playbook
 ----------------
 
-    hosts: engine
-      remote_user: root
-      vars:
-        # role-vars: ovirt-common
-          # ovirt_dependency_repo: ''
-          # ovirt_repo: ''
-        ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'
-
-        # role-vars: ovirt-engine-install-packages
-        ovirt_engine_type: 'ovirt-engine'
-        ovirt_engine_dwh: True
-        ovirt_engine_version: '3.6'
-
-      roles:
-        - { role: common }
-        - { role: engine-install }
+```yaml
+---
+- hosts: engine
+  roles:
+    - ovirt-engine-install-packages
+```
 
 Author Information
 ------------------

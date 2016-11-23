@@ -1,24 +1,28 @@
-Role Name
-=========
+oVirt Common
+============
 
-Repository setup
-Role install necessary repositories
+This role installs relevant repositories on target system.
+This role is meant to be used on all systems which are members of
+oVirt deployment.
 
-Requirements
-------------
+Target Systems
+--------------
 
-Preinstalled clean operating system.
-Supported system are listed on
-
+* engine
+* hypervisors
+* dwh
 
 Role Variables
 --------------
 
-    ovirt_repo_file: list of repository files URL
-    ovirt_repo: list of repository URL
-    ovirt_rpm_repo: URL of RPM package with repository files
+```yaml
+---
+ovirt_repo_file: list of repository files URL
+ovirt_repo: list of repository URL
+ovirt_rpm_repo: URL of RPM package with repository files
+```
 
-    Use any combination of ovirt_rpm_repo, ovirt_repo and ovirt_repo_file
+Use any combination of ovirt_rpm_repo, ovirt_repo and ovirt_repo_file
 
 Dependencies
 ------------
@@ -30,7 +34,7 @@ Example Playbook
 
 ```yaml
 ---
-hosts: engine
+- hosts: engine
   remote_user: root
   vars:
     # download repo file (list)
@@ -52,9 +56,9 @@ hosts: engine
         enabled: yes # defualt yes
 
     # install from rpm (string)
-    ovirt_rpm_repo: http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm
+    ovirt_rpm_repo: http://resources.ovirt.org/pub/yum-repo/ovirt-master-release.rpm
   roles:
-    - { role: common }
+    - role: ovirt-common
 ```
 
 Author Information

@@ -3,6 +3,13 @@ Collect logs from oVirt deployment
 
 This role collects relevant logs from oVirt deployment members.
 
+Target systems
+--------------
+
+* engine
+* hypervisors
+* database
+* dwh
 
 Requirements
 ------------
