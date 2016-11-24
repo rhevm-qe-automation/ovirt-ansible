@@ -1,8 +1,14 @@
-Role Name
-=========
+oVirt Engine Backup
+===================
 
-Engine bakcup
-Backup engine to archive file and download to client node
+Backups engine to archive file and download to client node
+
+Target Systems
+--------------
+
+* engine
+* dwh
+* database
 
 Requirements
 ------------
@@ -14,28 +20,33 @@ Pre-installed and running ovirt.
 Role Variables
 --------------
 
-    ovirt_backup_mode: backup'restore
-    ovirt_backup_archive: Path to archive file
-    ovirt_backup_log_file: Log file, downloaded in case of error
-    ovirt_backup_scope: all|files|db|dwhdb|reportsdb
-    
+```yaml
+---
+ovirt_backup_mode: backup'restore
+ovirt_backup_archive: Path to archive file
+ovirt_backup_log_file: Log file, downloaded in case of error
+ovirt_backup_scope: all|files|db|dwhdb|reportsdb
+```
+
 Dependencies
 ------------
 
-None
+* ovirt-engine-setup
 
 Example Playbook
 ----------------
 
-    hosts: engine
-      remote_user: root
-    vars:
-        ovirt_backup_mode: 'backup'
-        ovirt_backup_archive: '/tmp/engine-backup.gzip'
-        ovirt_backup_log_file: '/tmp/engine-backup.log'
-        ovirt_backup_scope: 'all'
-    roles:
-      - { role: ovirt-engine-bakcup }
+```yaml
+---
+- hosts: engine
+  vars:
+    ovirt_backup_mode: 'backup'
+    ovirt_backup_archive: '/tmp/engine-backup.gzip'
+    ovirt_backup_log_file: '/tmp/engine-backup.log'
+    ovirt_backup_scope: 'all'
+  roles:
+      - ovirt-engine-bakcup
+```
 
 Author Information
 ------------------

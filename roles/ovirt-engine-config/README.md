@@ -3,6 +3,10 @@ oVirt engine config
 
 This role allows tune installed engine using ``engine-config`` CLI tool.
 
+Target systems
+--------------
+
+* engine
 
 Requirements
 ------------
@@ -15,7 +19,8 @@ Role Variables
 
 You can specify options one by one.
 
-```
+```yaml
+---
 ovirt_engine_config:
   -
     key: "option name"
@@ -26,7 +31,8 @@ ovirt_engine_config:
 Or specify set of options in property file.
 This way is preferable when you want to set passwords.
 
-```
+```yaml
+---
 ovirt_engine_config_property_file: "properties content"
 ```
 
@@ -42,17 +48,17 @@ Example Playbook
 
 ```yaml
 ---
-hosts: engine
+- hosts: engine
   remote_user: root
   vars:
-  ovirt_engine_config:
-    -
-      key: "EnableMACAntiSpoofingFilterRules"
-      value: false
-      version: "general"
+    ovirt_engine_config:
+      -
+        key: "EnableMACAntiSpoofingFilterRules"
+        value: false
+        version: "general"
   roles:
     -
-      role: "ovirt_engine_config"
+      role: "ovirt-engine-config"
 ```
 
 
