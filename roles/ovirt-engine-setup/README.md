@@ -38,6 +38,12 @@ ovirt_engine_dwh_db_port: Server listening port (default 5432)
 ovirt_engine_dwh_db_name: DB name for ovirt-engine-dwh (default: 'ovirt_engine_history')
 ovirt_engine_dwh_db_user: DB user which can access ovirt-engine-dwh DB (default: 'ovirt_engine_history')
 ovirt_engine_dwh_db_password: password for user of ovirt-engine DB
+
+# ISO domain related options
+ovirt_engine_configure_iso_domain: Whether to confiure ISO domain on engine (default False)
+ovirt_engine_iso_domain_path: Create local ISO domain on engine machine (default: /var/lib/exports/iso)
+ovirt_engine_iso_domain_name: Name of ISO domain (default: 'ISO_DOMAIN')
+ovirt_engine_iso_domain_acl: ACL permissions for ISO domain mount point (default: '0.0.0.0/0.0.0.0(rw)')
 ```
 
 Dependencies

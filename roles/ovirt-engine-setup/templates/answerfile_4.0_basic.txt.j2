@@ -40,12 +40,20 @@ OVESETUP_SYSTEM/memCheckEnabled=bool:False
 OVESETUP_SYSTEM/nfsConfigEnabled=bool:False
 OVESETUP_PKI/organization=str:{{ ovirt_engine_organization }}
 OVESETUP_PKI/renew=none:None
+{% if ovirt_engine_configure_iso_domain %}
+OVESETUP_CONFIG/isoDomainName=str:{{ ovirt_engine_iso_domain_name }}
+OVESETUP_CONFIG/isoDomainACL=str:{{ ovirt_engine_iso_domain_acl }}
+OVESETUP_CONFIG/isoDomainMountPoint=str:{{ ovirt_engine_iso_domain_path }}
+OVESETUP_SYSTEM/nfsConfigEnabled=bool:True
+{% else %}
 OVESETUP_CONFIG/isoDomainName=none:None
+OVESETUP_CONFIG/isoDomainACL=none:None
+OVESETUP_CONFIG/isoDomainMountPoint=none:None
+OVESETUP_SYSTEM/nfsConfigEnabled=bool:False
+{% endif %}
 OVESETUP_CONFIG/engineHeapMax=str:1024M
 OVESETUP_CONFIG/ignoreVdsgroupInNotifier=none:None
 OVESETUP_CONFIG/adminPassword=str:{{ ovirt_engine_admin_password }}
-OVESETUP_CONFIG/isoDomainACL=none:None
-OVESETUP_CONFIG/isoDomainMountPoint=none:None
 OVESETUP_CONFIG/engineDbBackupDir=str:/var/lib/ovirt-engine/backups
 OVESETUP_CONFIG/engineHeapMin=str:1024M
 OVESETUP_CONFIG/imageioProxyConfig=bool:True

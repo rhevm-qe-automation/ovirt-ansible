@@ -16,3 +16,8 @@ ovirt_engine_dwh_db_port: 5432
 ovirt_engine_dwh_db_name: 'ovirt_engine_history'
 ovirt_engine_dwh_db_user: 'ovirt_engine_history'
 ovirt_engine_dwh_db_password: '37xmBKECANQGm0z3SfylMp'
+
+ovirt_engine_configure_iso_domain: false
+ovirt_engine_iso_domain_path: '/var/lib/exports/iso'
+ovirt_engine_iso_domain_name: 'ISO_DOMAIN'
+ovirt_engine_iso_domain_acl: '0.0.0.0/0.0.0.0(rw)'
