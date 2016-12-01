@@ -60,7 +60,6 @@ Example Playbook
   vars:
     ovirt_engine_type: 'ovirt-engine'
     ovirt_engine_version: '4.1'
-    ovirt_engine_hostname: 'fqdn.of.ovirt.engine.com'
     ovirt_engine_organization: 'of.ovirt.engine.com'
     ovirt_engine_admin_password: 'secret'
   roles:

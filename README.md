@@ -68,7 +68,6 @@ ovirt_engine_type=ovirt-engine
 ovirt_engine_version=4.1
 # Make sure that link to release rpm is working!!!
 ovirt_rpm_repo: "http://resources.ovirt.org/pub/yum-repo/ovirt-release-master.rpm"
-ovirt_engine_hostname=fqdn.of.ovirt.engine.com
 ovirt_engine_organization=of.ovirt.engine.com
 ovirt_engine_admin_password=secret
 
