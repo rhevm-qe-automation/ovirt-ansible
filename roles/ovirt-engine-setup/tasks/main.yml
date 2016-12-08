@@ -30,8 +30,16 @@
     group: root
   when: not ovirt_engine_answer_file_path and ovirt_engine_version >= 4.0
 
+- name: Update pexpect version
+  shell: pip install pexpect>=3.3
+  
 - name: run engine-setup with answerfile
-  shell: 'engine-setup --config-append=/tmp/answerfile.txt'
+  expect:
+    command: 'engine-setup --config-append=/tmp/answerfile.txt'
+    responses:
+      (?i).*Yes.*: "Yes"
+      (?i).*OK.*: "OK"
+    timeout: 600
   when: ovirt_engine_status|failed
   tags:
     - skip_ansible_lint
