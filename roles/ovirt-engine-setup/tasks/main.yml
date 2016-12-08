@@ -32,7 +32,7 @@
 
 - name: Update pexpect version
   shell: pip install pexpect>=3.3
-  
+
 - name: run engine-setup with answerfile
   expect:
     command: 'engine-setup --config-append=/tmp/answerfile.txt'
