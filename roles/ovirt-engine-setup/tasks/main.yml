@@ -2,7 +2,7 @@
 # health page
 - name: check if ovirt-engine running (health page)
   uri:
-    url: "http://{{ ovirt_engine_hostname }}/ovirt-engine/services/health"
+    url: "http://{{ ansible_fqdn }}/ovirt-engine/services/health"
     status_code: 200
   register: ovirt_engine_status
   retries: 2
@@ -18,7 +18,7 @@
     mode: 0644
     owner: root
     group: root
-  when: not ovirt_engine_answer_file_path
+  when: "{{ ovirt_engine_answer_file_path == '' }}"
 
 # copy custom answer file
 - name: copy custom answer file
@@ -28,7 +28,7 @@
     mode: 0644
     owner: root
     group: root
-  when: ovirt_engine_answer_file_path != ""
+  when: "{{ ovirt_engine_answer_file_path != '' }}"
 
 - name: run engine-setup with answerfile
   shell: 'engine-setup --config-append=/tmp/answerfile.txt'
@@ -54,7 +54,7 @@
 
 - name: check health status of page
   uri:
-    url: "http://{{ ovirt_engine_hostname }}/ovirt-engine/services/health"
+    url: "http://{{ ansible_fqdn }}/ovirt-engine/services/health"
     status_code: 200
   register: health_page
   retries: 12
