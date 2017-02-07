@@ -18,7 +18,7 @@
     mode: 0644
     owner: root
     group: root
-  when: "{{ ovirt_engine_answer_file_path == '' }}"
+  when: "{{ ovirt_engine_answer_file_path is undefined }}"
 
 # copy custom answer file
 - name: copy custom answer file
@@ -28,7 +28,7 @@
     mode: 0644
     owner: root
     group: root
-  when: "{{ ovirt_engine_answer_file_path != '' }}"
+  when: "{{ ovirt_engine_answer_file_path is defined }}"
 
 - name: run engine-setup with answerfile
   shell: 'engine-setup --config-append=/tmp/answerfile.txt'
