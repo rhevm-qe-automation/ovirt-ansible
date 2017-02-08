@@ -5,7 +5,7 @@ OVESETUP_CONFIG/sanWipeAfterDelete=bool:False
 OVESETUP_CONFIG/firewallManager=str:firewalld
 OVESETUP_CONFIG/remoteEngineHostRootPassword=none:None
 OVESETUP_CONFIG/remoteEngineHostSshPort=none:None
-OVESETUP_CONFIG/fqdn=str:{{ ovirt_engine_hostname }}
+OVESETUP_CONFIG/fqdn=str:{{ ansible_fqdn }}
 OVESETUP_REMOVE/confirmUninstallGroups=bool:True
 OVESETUP_REMOVE/removeOptions=multi-str:ovirt-imageio-proxy
 ovirt-engine-websocket-proxy
@@ -41,7 +41,7 @@ OVESETUP_DWH_CORE/enable=bool:True
 OVESETUP_DWH_CONFIG/scale=str:1
 OVESETUP_DWH_CONFIG/dwhDbBackupDir=str:/var/lib/ovirt-engine-dwh/backups
 OVESETUP_DWH_REMOVE/database=bool:True
-OVESETUP_ENGINE_CONFIG/fqdn=str:{{ ovirt_engine_hostname }}
+OVESETUP_ENGINE_CONFIG/fqdn=str:{{ ansible_fqdn }}
 OVESETUP_CONFIG/imageioProxyConfig=bool:True
 OVESETUP_REMOVE/removeOip=bool:True
 OVESETUP_VMCONSOLE_PROXY_CONFIG/vmconsoleProxyConfig=bool:True

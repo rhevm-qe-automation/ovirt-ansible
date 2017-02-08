@@ -5,7 +5,7 @@ galaxy_info:
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
-  issue_tracker_url: https://github.com/StLuke/ovirt-ansible/issues
+  issue_tracker_url: https://github.com/rhevm-qe-automation/ovirt-ansible/issues
 
   # Some suggested licenses:
   # - BSD (default)
