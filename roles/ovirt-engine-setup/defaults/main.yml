@@ -2,7 +2,6 @@
 ovirt_engine_dwh: True
 ovirt_engine_type: 'ovirt-engine'
 ovirt_engine_version: '4.1'
-ovirt_engine_answer_file_path: ''
 ovirt_engine_admin_password: '123456'
 
 ovirt_engine_db_host: 'localhost'
