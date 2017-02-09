@@ -3,7 +3,7 @@
 - name: copy answerfile
   template:
     # TODO generate this varialbe from ovirt_engine_version and ovirt_engine_dwh
-    src: answerfile_{{ ovirt_engine_version }}.txt.j2
+    src: answerfile_{{ ovirt_engine_version|int }}.x.txt.j2
     dest: /tmp/answerfile.txt
     mode: 0644
     owner: root
