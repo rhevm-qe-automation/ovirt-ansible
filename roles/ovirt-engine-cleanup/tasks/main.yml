@@ -1,0 +1,20 @@
+---
+# copy answer file
+- name: copy answerfile
+  template:
+    # TODO generate this varialbe from ovirt_engine_version and ovirt_engine_dwh
+    src: answerfile_{{ ovirt_engine_version|int }}.x.txt.j2
+    dest: /tmp/answerfile.txt
+    mode: 0644
+    owner: root
+    group: root
+
+- name: run engine-cleanup with answerfile
+  shell: 'engine-cleanup --config-append=/tmp/answerfile.txt'
+  tags:
+    - skip_ansible_lint
+
+- name: clean tmp files
+  file:
+    path: '/tmp/answerfile.txt'
+    state: 'absent'
