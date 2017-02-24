@@ -1,0 +1,9 @@
+- name: Install latest {{ ovirt_guest_agent_pkg_prefix }}-guest-agent
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - "{{ ovirt_guest_agent_pkg_prefix }}-guest-agent"
+  notify: enable and start {{ ovirt_guest_agent_pkg_prefix }}-guest-agent
+  tags:
+    - skip_ansible_lint

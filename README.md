@@ -42,6 +42,7 @@ This host group is meant for node on which the DWH is supposed to be deployed.
 * [ovirt-engine-install-packages]
 * [ovirt-engine-remote-db]
 * [ovirt-engine-setup]
+* [ovirt-guest-agent]
 
 ## Example
 
@@ -89,3 +90,4 @@ fqdn.of.ovirt.hypervisor2.com
 [ovirt-engine-install-packages]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-install-packages/README.md
 [ovirt-engine-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md
 [ovirt-engine-setup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-setup/README.md
+[ovirt-guest-agent]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-guest-agent/README.md
