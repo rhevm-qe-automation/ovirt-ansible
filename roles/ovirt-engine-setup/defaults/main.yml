@@ -20,3 +20,5 @@ ovirt_engine_configure_iso_domain: false
 ovirt_engine_iso_domain_path: '/var/lib/exports/iso'
 ovirt_engine_iso_domain_name: 'ISO_DOMAIN'
 ovirt_engine_iso_domain_acl: '0.0.0.0/0.0.0.0(rw)'
+
+ovirt_engine_firewall_manager: 'firewalld'
