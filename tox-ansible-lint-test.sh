@@ -13,7 +13,9 @@ mkdir -p ${TOXWORKDIR}/playbooks
 for path_role in ${TOXINIDIR}/roles/*; do
   if [ -d "${path_role}" ]; then
       role=`echo ${path_role} | sed 's/.*\///'` # directory name only
-      echo -e "---\nremote_user: root\nroles:\n  - {role: ${role}}\n" > ${TOXWORKDIR}/playbooks/${role}.yml
+      if echo "$role" | grep "^ovirt-" ; then  # only ovirt-* roles
+        echo -e "---\nremote_user: root\nroles:\n  - {role: ${role}}\n" > ${TOXWORKDIR}/playbooks/${role}.yml
+      fi
   fi;
 done
 

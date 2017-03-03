@@ -44,6 +44,11 @@ ovirt_engine_configure_iso_domain: Whether to confiure ISO domain on engine (def
 ovirt_engine_iso_domain_path: Create local ISO domain on engine machine (default: /var/lib/exports/iso)
 ovirt_engine_iso_domain_name: Name of ISO domain (default: 'ISO_DOMAIN')
 ovirt_engine_iso_domain_acl: ACL permissions for ISO domain mount point (default: '0.0.0.0/0.0.0.0(rw)')
+
+# Configure firewall
+ovirt_engine_firewall_manager: |
+  In case you want to configure firewall, select the firewall manager
+  'firewalld', 'iptables' (default='firewalld'), or put null otherwise.
 ```
 
 Dependencies
