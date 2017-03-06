@@ -1,0 +1,6 @@
+---
+- name: enable and start {{ ovirt_guest_agent_pkg_prefix }}-guest-agent
+  service:
+    name: "{{ ovirt_guest_agent_pkg_prefix }}-guest-agent"
+    state: started
+    enabled: yes
