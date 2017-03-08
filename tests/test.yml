@@ -39,4 +39,4 @@
     - role: ovirt-engine-setup
     - role: ovirt-engine-config
 #    - role: ovirt-collect-logs  # Issue #102
-#    - role: ovirt-engine-cleanup  # Issue #53
+    - role: ovirt-engine-cleanup  # This role must be last
