@@ -8,7 +8,11 @@
   with_items:
     - "etc"
 
-- name: Link vdsm and libfirt logs
+- name: Register coredump path
+  shell: "cat /proc/sys/kernel/core_pattern | xargs dirname | head -n 1"
+  register: coredumpdir
+
+- name: Link vdsm and libvirt logs
   file:
     src: "{{ item.src }}"
     dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item.dest }}"
@@ -35,6 +39,9 @@
     -
       src: "/var/log/ovirt-hosted-engine-ha"
       dest: "hosted-engine-logs"
+    -
+      src: "{{ coredumpdir }}"
+      dest: "coredumps"
   ignore_errors: true
 
 - name: Dump mount
