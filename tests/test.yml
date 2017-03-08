@@ -11,7 +11,7 @@
       provision_docker_inventory: "{{ inventory }}"
 
 
-- name: Run ovirt-ansible roles on containerized environmentsV
+- name: Run ovirt-ansible roles on containerized environments
   hosts: docker_containers
   vars:
     ovirt_engine_type: "ovirt-engine"
@@ -39,8 +39,6 @@
     - role: ovirt-engine-setup
     - role: ovirt-engine-config
 #    - role: ovirt-collect-logs  # Issue #102
-    - role: ovirt-engine-cleanup  # This role must be last
-
 
 - name: Run ovirt-engine-cleanup on containerized environments
   hosts: docker_containers
