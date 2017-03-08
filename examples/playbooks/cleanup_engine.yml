@@ -1,0 +1,7 @@
+---
+# example playbook for cleanup engines
+# use with cleanup_engine.inv
+- hosts: engine
+  remote_user: root
+  roles:
+    - {role: ovirt-engine-cleanup}
