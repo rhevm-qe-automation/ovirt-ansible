@@ -2,17 +2,15 @@
 - name: Bring up docker containers
   hosts: localhost
   gather_facts: false
-  vars:
-    inventory:
-      - name: engine_centos7
-        image: "chrismeyers/centos7"
   roles:
     - role: provision_docker
-      provision_docker_inventory: "{{ inventory }}"
+      provision_docker_inventory_group: "{{ groups['engines'] }}"
+    - role: provision_docker
+      provision_docker_inventory_group: "{{ groups['guests'] }}"
 
 
 - name: Run ovirt-ansible roles on containerized environments
-  hosts: docker_containers
+  hosts: engines
   vars:
     ovirt_engine_type: "ovirt-engine"
     ovirt_engine_version: "4.1"
@@ -41,11 +39,21 @@
 #    - role: ovirt-collect-logs  # Issue #102
 
 - name: Run ovirt-engine-cleanup on containerized environments
-  hosts: docker_containers
+  hosts: engines
   vars:
     ovirt_engine_type: "ovirt-engine"
     ovirt_engine_version: "4.1"
     ovirt_engine_dwh: True
     ovirt_engine_hostname: "localhost"
   roles:
-    - role: ovirt-engine-cleanup  # This role must be last
+    - role: ovirt-engine-cleanup  # This role must be executed on living engine
+
+
+- name: Run ovirt-guest-agent role on containerized environments
+  hosts: guests
+  vars:
+    ovirt_engine_type: "ovirt-engine"
+    ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm"
+  roles:
+    - role: ovirt-common
+    - role: ovirt-guest-agent

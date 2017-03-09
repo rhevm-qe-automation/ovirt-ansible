@@ -1,1 +1,7 @@
 localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
+
+[engines]
+ovirt-engine image="chrismeyers/centos7"
+
+[guests]
+ovirt-guest image="chrismeyers/centos7"

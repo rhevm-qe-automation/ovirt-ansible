@@ -29,7 +29,7 @@ Default value if variable not given is ```ovirt```.
 Dependencies
 ------------
 
-None
+* ovirt-common
 
 Example Playbook
 ----------------
