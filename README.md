@@ -38,6 +38,7 @@ This host group is meant for node on which the DWH is supposed to be deployed.
 * [ovirt-collect-logs]
 * [ovirt-common]
 * [ovirt-engine-backup]
+* [ovirt-engine-cleanup]
 * [ovirt-engine-config]
 * [ovirt-engine-install-packages]
 * [ovirt-engine-remote-db]
@@ -86,6 +87,7 @@ fqdn.of.ovirt.hypervisor2.com
 [ovirt-collect-logs]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-collect-logs/README.md
 [ovirt-common]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-common/README.md
 [ovirt-engine-backup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-backup/README.md
+[ovirt-engine-cleanup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-cleanup/README.md
 [ovirt-engine-config]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-config/README.md
 [ovirt-engine-install-packages]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-install-packages/README.md
 [ovirt-engine-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md

@@ -6,7 +6,7 @@ This role generates answerfile for engine-cleanup and execute it.
 Requirements
 ------------
 
-None, it might be executed on clean environment as well.
+oVirt installed.
 
 Role Variables
 --------------

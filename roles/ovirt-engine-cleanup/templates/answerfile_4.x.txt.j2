@@ -7,8 +7,7 @@ OVESETUP_CONFIG/remoteEngineHostRootPassword=none:None
 OVESETUP_CONFIG/remoteEngineHostSshPort=none:None
 OVESETUP_CONFIG/fqdn=str:{{ ansible_fqdn }}
 OVESETUP_REMOVE/confirmUninstallGroups=bool:True
-OVESETUP_REMOVE/removeOptions=multi-str:ovirt-imageio-proxy
-ovirt-engine-websocket-proxy
+OVESETUP_REMOVE/removeOptions=multi-str:ovirt-imageio-proxy,ovirt-engine-websocket-proxy
 OVESETUP_REMOVE/enabledFileGroups=str:,core,ca_config,iso_images,ovirt_dwh_files,vmconsole_proxy_helper_pki,iso_domain,ca_pki,vmconsole_proxy_pki,exportfs,versionlock,ssl,nfs_config
 OVESETUP_REMOVE/removeAll=bool:True
 OVESETUP_REMOVE/removeChanged=none:None
