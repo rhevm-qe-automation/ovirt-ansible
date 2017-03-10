@@ -38,6 +38,7 @@
     - role: ovirt-engine-install-packages
     - role: ovirt-engine-setup
     - role: ovirt-engine-config
+    - role: ovirt-iso-uploader-conf
 #    - role: ovirt-collect-logs  # Issue #102
 
 - name: Run ovirt-engine-cleanup on containerized environments

@@ -1,0 +1,11 @@
+---
+ovirt_iso_uploader_conf: '/etc/ovirt-engine/isouploader.conf'
+ovirt_iso_uploader_user: 'admin@internal'
+ovirt_iso_uploader_password: '123456'
+ovirt_iso_uploader_engine: ""
+ovirt_iso_uploader_cert_file: ""
+ovirt_iso_uploader_iso_domain: ""
+ovirt_iso_uploader_nfs_server: ""
+ovirt_iso_uploader_ssh_user: ""
+ovirt_iso_uploader_ssh_port: ""
+ovirt_iso_uploader_key_file: ""
