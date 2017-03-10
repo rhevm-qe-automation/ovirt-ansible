@@ -33,6 +33,10 @@ deployed.
 
 This host group is meant for node on which the DWH is supposed to be deployed.
 
+### guest
+
+This host group is meant for virtual machines hosted by oVirt Engine.
+
 ## Implemented roles
 
 * [ovirt-collect-logs]
@@ -69,7 +73,7 @@ Minimal inventory example
 ovirt_engine_type=ovirt-engine
 ovirt_engine_version=4.1
 # Make sure that link to release rpm is working!!!
-ovirt_rpm_repo: "http://resources.ovirt.org/pub/yum-repo/ovirt-release-master.rpm"
+ovirt_rpm_repo=http://resources.ovirt.org/pub/yum-repo/ovirt-release-master.rpm
 ovirt_engine_organization=of.ovirt.engine.com
 ovirt_engine_admin_password=secret
 
@@ -81,6 +85,22 @@ fqdn.of.ovirt.hypervisor1.com
 fqdn.of.ovirt.hypervisor2.com
 ```
 
+## Test
+
+This project uses [provision_docker] an ansible role to run oVirt deployment
+roles against to docker containers.
+
+In order to run oVirt deployment against to docker containers, the docker
+service has to be configured and running on your system.
+
+```sh
+# Install ansible and docker-py
+pip install ansible docker-py
+# Download depending ansible roles
+ansible-galaxy install -r tests/requirements.yml -p tests/roles/
+# Run oVirt deployment roles
+ansible-playbook tests/test.yml -i tests/inventory
+```
 
 [travisimg]: https://travis-ci.org/rhevm-qe-automation/ovirt-ansible.svg?branch=master
 [travis]: https://travis-ci.org/rhevm-qe-automation/ovirt-ansible
@@ -93,3 +113,4 @@ fqdn.of.ovirt.hypervisor2.com
 [ovirt-engine-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md
 [ovirt-engine-setup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-setup/README.md
 [ovirt-guest-agent]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-guest-agent/README.md
+[provision_docker]: https://github.com/chrismeyersfsu/provision_docker/

@@ -7,7 +7,7 @@ ensures the service is enabled and running.
 Target Systems
 --------------
 
-* ovirt-guest
+* guest
 
 
 Requirements
@@ -29,14 +29,14 @@ Default value if variable not given is ```ovirt```.
 Dependencies
 ------------
 
-None
+* ovirt-common
 
 Example Playbook
 ----------------
 
 ```yaml
 ---
-- hosts: ovirt-guest
+- hosts: guest
   roles:
     - ovirt-guest-agent
 ```
