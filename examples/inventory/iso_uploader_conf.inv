@@ -1,0 +1,9 @@
+#### ISO uploader Host Section ####
+# Password for SSH connection to host
+ansible_ssh_pass=fillme
+
+[iso-uploader-host]
+## Host for ISO uploader ##
+# Add ip or hostname of machines
+192.168.1.1
+host.example.com

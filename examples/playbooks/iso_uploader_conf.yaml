@@ -1,0 +1,7 @@
+---
+# example playbook set ISO uploader username and password
+# use with examples/inventory/iso_uploader_conf.inv
+- hosts: iso-uploader-host
+  remote_user: root
+  roles:
+    - {role: ovirt-iso-uploader-conf}

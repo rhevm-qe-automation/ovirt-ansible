@@ -48,6 +48,7 @@ This host group is meant for virtual machines hosted by oVirt Engine.
 * [ovirt-engine-remote-db]
 * [ovirt-engine-setup]
 * [ovirt-guest-agent]
+* [ovirt-iso-uploader-conf]
 
 ## Example
 
@@ -114,3 +115,4 @@ ansible-playbook tests/test.yml -i tests/inventory
 [ovirt-engine-setup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-setup/README.md
 [ovirt-guest-agent]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-guest-agent/README.md
 [provision_docker]: https://github.com/chrismeyersfsu/provision_docker/
+[ovirt-iso-uploader-conf]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-iso-uploader-conf/README.md
