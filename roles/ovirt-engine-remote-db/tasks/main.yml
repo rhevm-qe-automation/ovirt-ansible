@@ -5,7 +5,7 @@
 - name: check PostgreSQL service
   service:
     name: postgresql
-    state: running
+    state: started
   register: postgresql_status
   ignore_errors: True
 
@@ -125,7 +125,7 @@
 - name: check iptables service
   service:
     name: iptables
-    state: running
+    state: started
   register: iptables_status
   when: postgresql_status|failed
   ignore_errors: True
@@ -145,7 +145,7 @@
 - name: check firewalld service
   service:
     name: firewalld
-    state: running
+    state: started
   register: firewalld_status
   when: postgresql_status|failed
   ignore_errors: True
