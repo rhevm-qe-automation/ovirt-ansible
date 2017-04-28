@@ -1,1 +1,7 @@
 localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
+
+[engine]
+engine_centos7 image="chrismeyers/centos7"
+
+[remote-db]
+remote_db_centos7 image="chrismeyers/centos7"

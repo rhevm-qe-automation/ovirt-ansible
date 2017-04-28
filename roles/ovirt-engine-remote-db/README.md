@@ -36,6 +36,12 @@ ovirt_engine_db_password: password for user of ovirt-engine DB
 ovirt_engine_dwh_db_name: DB name for ovirt-engine-dwh (default: 'ovirt_engine_history')
 ovirt_engine_dwh_db_user: DB user which can access ovirt-engine-dwh DB (default: 'ovirt_engine_history')
 ovirt_engine_dwh_db_password: password for user of ovirt-engine DB
+
+ovirt_engine_remote_db_access:  # configure access to engine remote DBs
+  -
+    type: host / local
+    address: 0.0.0.0/0   # mask for host, omitted for local
+    method: md5 / trust / ident / peer
 ```
 
 Dependencies
@@ -64,6 +70,14 @@ Example Playbook
     ovirt_engine_dwh_db_name: 'ovirt_engine_history'
     ovirt_engine_dwh_db_user: 'ovirt_engine_history'
     ovirt_engine_dwh_db_password: 123456
+    ovirt_engine_remote_db_access:
+      -
+        type: host
+        address: 0.0.0.0/0
+        method: md5
+      -
+        type: local
+        method: md5
   roles:
     - ovirt-engine-remote-db
 ```
