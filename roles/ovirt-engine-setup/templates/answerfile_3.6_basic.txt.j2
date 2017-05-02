@@ -5,10 +5,15 @@ OVESETUP_CONFIG/applicationMode=str:both
 OVESETUP_CONFIG/remoteEngineSetupStyle=none:None
 OVESETUP_CONFIG/sanWipeAfterDelete=bool:False
 OVESETUP_CONFIG/storageIsLocal=bool:False
-OVESETUP_CONFIG/firewallManager=str:iptables
 OVESETUP_CONFIG/remoteEngineHostRootPassword=none:None
-OVESETUP_CONFIG/firewallChangesReview=bool:False
+{% if ovirt_engine_firewall_manager %}
 OVESETUP_CONFIG/updateFirewall=bool:True
+OVESETUP_CONFIG/firewallManager=str:{{ ovirt_engine_firewall_manager }}
+{% else %}
+OVESETUP_CONFIG/updateFirewall=bool:False
+OVESETUP_CONFIG/firewallManager=none:None
+{% endif %}
+OVESETUP_CONFIG/firewallChangesReview=bool:False
 OVESETUP_CONFIG/remoteEngineHostSshPort=none:None
 OVESETUP_CONFIG/fqdn=str:{{ ansible_fqdn }}
 OVESETUP_CONFIG/storageType=none:None

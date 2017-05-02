@@ -74,7 +74,7 @@ Minimal inventory example
 ovirt_engine_type=ovirt-engine
 ovirt_engine_version=4.1
 # Make sure that link to release rpm is working!!!
-ovirt_rpm_repo=http://resources.ovirt.org/pub/yum-repo/ovirt-release-master.rpm
+ovirt_rpm_repo=http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm
 ovirt_engine_organization=of.ovirt.engine.com
 ovirt_engine_admin_password=secret
 
@@ -94,13 +94,20 @@ roles against to docker containers.
 In order to run oVirt deployment against to docker containers, the docker
 service has to be configured and running on your system.
 
+Under ``tests`` directory, there are playbooks for different oVirt versions
+
+* tests/test-3.6.yml
+* tests/test-4.0.yml
+* tests/test-4.1.yml
+* tests/test-master.yml
+
 ```sh
 # Install ansible and docker-py
 pip install ansible docker-py
 # Download depending ansible roles
 ansible-galaxy install -r tests/requirements.yml -p tests/roles/
 # Run oVirt deployment roles
-ansible-playbook tests/test.yml -i tests/inventory
+ansible-playbook tests/test-master.yml -i tests/inventory
 ```
 
 [travisimg]: https://travis-ci.org/rhevm-qe-automation/ovirt-ansible.svg?branch=master
