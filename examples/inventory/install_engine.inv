@@ -1,8 +1,5 @@
 #### Engine Section ####
 [engine:vars]
-# Password for SSH connection to engine host
-ansible_ssh_pass=fillme
-
 ## Product type ##
 # Choose engine type (upstream or downstream)
 #  Allowed options:
@@ -73,9 +70,6 @@ host.example.com
 database.example.com
 
 [database:vars]
-# Password for SSH connection to database host
-ansible_ssh_pass=qum5net
-
 ## PostgreSQL setting ##
 # ovirt_engine_remote_db_port: PostgreSQL port for listening (default: 5432)
 # ovirt_engine_remote_db_listen_address: Listen address (default '*')
