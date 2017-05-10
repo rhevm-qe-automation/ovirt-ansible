@@ -1,8 +1,5 @@
 #### Engine Section ####
 [engine:vars]
-# Password for SSH connection to engine host
-ansible_ssh_pass=fillme
-
 # Specify DB server of engine and DWH
 # ovirt_engine_db_host: IP or hostname of PostgreSQL server for engine database (default: 'localhost')
 # ovirt_engine_db_port: Server listening port (default 5432)

@@ -1,6 +1,4 @@
 #### ISO uploader Host Section ####
-# Password for SSH connection to host
-ansible_ssh_pass=fillme
 
 [iso-uploader-host]
 ## Host for ISO uploader ##
