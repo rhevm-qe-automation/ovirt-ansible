@@ -13,7 +13,7 @@ Role Variables
 
 ```yaml
 ---
-ovirt_engine_version: one of ["3.6", "4.0", "4.1"..]    
+ovirt_engine_version: one of ["3.6", "4.0", "4.1", "4.2"..]
 ovirt_engine_db_host: IP or hostname of PostgreSQL server for engine database (default: 'localhost')
 ovirt_engine_db_port: Server listening port (default 5432)
 ovirt_engine_db_name: DB name for ovirt-engine (default: 'engine')
@@ -49,7 +49,7 @@ Example Playbook
     ovirt_engine_dwh_db_port: 5432
     ovirt_engine_dwh_db_name: 'ovirt_engine_history'
     ovirt_engine_dwh_db_user: 'ovirt_engine_history'
-    ovirt_engine_dwh_db_password: 'password'      
+    ovirt_engine_dwh_db_password: 'password'
   roles:
     - { role: ovirt-engine-cleanup }
 ```

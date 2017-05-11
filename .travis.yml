@@ -14,7 +14,7 @@ env:
     - OVIRT_VERSION=3.6
     - OVIRT_VERSION=4.0
     - OVIRT_VERSION=4.1
-    - OVIRT_VERSION=master
+    - OVIRT_VERSION=4.2
 
 # Install python-pip
 addons:

@@ -72,9 +72,9 @@ Minimal inventory example
 ```ini
 [all:vars]
 ovirt_engine_type=ovirt-engine
-ovirt_engine_version=4.1
+ovirt_engine_version=4.2
 # Make sure that link to release rpm is working!!!
-ovirt_rpm_repo=http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm
+ovirt_rpm_repo=http://resources.ovirt.org/pub/yum-repo/ovirt-release42.rpm
 ovirt_engine_organization=of.ovirt.engine.com
 ovirt_engine_admin_password=secret
 
@@ -99,7 +99,7 @@ Under ``tests`` directory, there are playbooks for different oVirt versions
 * tests/test-3.6.yml
 * tests/test-4.0.yml
 * tests/test-4.1.yml
-* tests/test-master.yml
+* tests/test-4.2.yml
 
 ```sh
 # Install ansible and docker-py

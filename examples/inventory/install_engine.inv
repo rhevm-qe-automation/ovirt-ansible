@@ -6,7 +6,7 @@
 #    ovirt-engine - for installing oVirt (ovirt.org)
 #
 ovirt_engine_type=ovirt-engine
-ovirt_engine_version=4.1
+ovirt_engine_version=4.2
 
 ## Engine Repositories ##
 # Set repositories for installing engine
