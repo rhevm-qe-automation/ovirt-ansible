@@ -1,8 +1,5 @@
 #### Hypervisors Section ####
 [hypervisors:vars]
-# Password for SSH connection to host
-ansible_ssh_pass=fillme
-
 
 ## Hypervisor Repositories ##
 # Set repositories for installing hypervisors
