@@ -23,7 +23,7 @@ as ``ovirt_engine_answer_file_path``.
 ```yaml
 ---
 ovirt_engine_type: Type of product 'ovirt-engine' - for installing oVirt product
-ovirt_engine_version: Allowed version: [3.6, 4.0, 4.1]
+ovirt_engine_version: Allowed version: [3.6, 4.0, 4.1, 4.2]
 ovirt_engine_dwh: Bool value for installing local DWH (default: true)
 # ovirt_engine_answer_file_path: /path/to/custom/answerfile
 
@@ -64,7 +64,7 @@ Example Playbook
 - hosts: engine
   vars:
     ovirt_engine_type: 'ovirt-engine'
-    ovirt_engine_version: '4.1'
+    ovirt_engine_version: '4.2'
     ovirt_engine_organization: 'of.ovirt.engine.com'
     ovirt_engine_admin_password: 'secret'
   roles:
