@@ -9,6 +9,7 @@ ovirt_engine_db_port: 5432
 ovirt_engine_db_name: 'engine'
 ovirt_engine_db_user: 'engine'
 ovirt_engine_db_password: 'AqbXg4dpkbcVRZwPbY8WOR'
+ovirt_engine_db_vacuum: true
 
 ovirt_engine_dwh_db_host: 'localhost'
 ovirt_engine_dwh_db_port: 5432
@@ -23,4 +24,4 @@ ovirt_engine_iso_domain_acl: '0.0.0.0/0.0.0.0(rw)'
 
 ovirt_engine_firewall_manager: 'firewalld'
 
-ovirt_engine_update: False
+ovirt_engine_update: false
