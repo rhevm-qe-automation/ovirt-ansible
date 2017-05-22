@@ -14,7 +14,6 @@
     ovirt_engine_configure_iso_domain: true
     ovirt_engine_firewall_manager: null
     ovirt_collect_logs_from_system: "engine"
-    ovirt_engine_version: "{{ ovirt_upgrade_matrix[ovirt_engine_version] }}"
   roles:
     - role: ovirt-engine-install-packages
     - role: ovirt-engine-setup
