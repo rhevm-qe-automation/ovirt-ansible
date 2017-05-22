@@ -15,6 +15,7 @@ env:
     - OVIRT_VERSION=4.0
     - OVIRT_VERSION=4.1
     - OVIRT_VERSION=master
+    - OVIRT_UPGRADE_MATRIX=4.1-to-4.2
 
 # Install python-pip
 addons:
@@ -36,6 +37,7 @@ script:
   - tox
   # Execute oVirt engine deployment playbook
   - ansible-playbook tests/test-${OVIRT_VERSION}.yml -i tests/inventory
+  - ansible-playbook tests/tests/test-upgrade-${OVIRT_UPGRADE_MATRIX}.yml -i tests/inventory
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
