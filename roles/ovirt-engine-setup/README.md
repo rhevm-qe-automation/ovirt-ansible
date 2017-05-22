@@ -1,7 +1,8 @@
 oVirt Engine Setup
 ==================
 
-Generate answerfile and run engine-setup with it.
+Generate answerfile and run engine-setup with it. In case you pass variable
+'ovirt_engine_update: True' also setup packages will be updated.
 
 Target Systems
 --------------
@@ -49,6 +50,11 @@ ovirt_engine_iso_domain_acl: ACL permissions for ISO domain mount point (default
 ovirt_engine_firewall_manager: |
   In case you want to configure firewall, select the firewall manager
   'firewalld', 'iptables' (default='firewalld'), or put null otherwise.
+
+# Update
+ovirt_engine_update: |
+  True if you want to update setup packages and run engine-setup also when
+  engine is already installed and running (default: False)
 ```
 
 Dependencies
