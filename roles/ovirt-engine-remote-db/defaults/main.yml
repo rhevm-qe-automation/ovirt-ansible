@@ -17,3 +17,13 @@ ovirt_engine_remote_db_access:
     type: host
     address: 0.0.0.0/0
     method: md5
+
+ovirt_engine_remote_db_config_file: "/var/lib/pgsql/data/postgresql.conf"
+ovirt_engine_remote_db_vacuum: true
+ovirt_engine_remote_db_vacuum_config:
+  'autovacuum_vacuum_scale_factor': 0.01
+  'autovacuum_analyze_scale_factor': 0.075
+  'autovacuum_max_workers': 6
+  'maintenance_work_mem': 65536
+  'max_connections': 150
+  'lc_messages': 'en_US.UTF-8'

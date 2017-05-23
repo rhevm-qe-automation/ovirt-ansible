@@ -22,3 +22,5 @@ ovirt_engine_iso_domain_name: 'ISO_DOMAIN'
 ovirt_engine_iso_domain_acl: '0.0.0.0/0.0.0.0(rw)'
 
 ovirt_engine_firewall_manager: 'firewalld'
+
+ovirt_engine_update: false

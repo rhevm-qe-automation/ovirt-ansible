@@ -100,6 +100,7 @@ Under ``tests`` directory, there are playbooks for different oVirt versions
 * tests/test-4.0.yml
 * tests/test-4.1.yml
 * tests/test-master.yml
+* tests/test-upgrade-4.1-to-master.yml
 
 ```sh
 # Install ansible and docker-py

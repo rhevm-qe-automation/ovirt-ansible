@@ -11,10 +11,11 @@ env:
   global:
     - ANSIBLE_HOST_KEY_CHECKING="False"
   matrix:
-    - OVIRT_VERSION=3.6
-    - OVIRT_VERSION=4.0
-    - OVIRT_VERSION=4.1
-    - OVIRT_VERSION=master
+    - TEST_NAME=3.6
+    - TEST_NAME=4.0
+    - TEST_NAME=4.1
+    - TEST_NAME=master
+    - TEST_NAME=upgrade-4.1-to-master
 
 # Install python-pip
 addons:
@@ -35,7 +36,7 @@ script:
   # Run sytax checks and linters
   - tox
   # Execute oVirt engine deployment playbook
-  - ansible-playbook tests/test-${OVIRT_VERSION}.yml -i tests/inventory
+  - ansible-playbook tests/test-${TEST_NAME}.yml -i tests/inventory
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

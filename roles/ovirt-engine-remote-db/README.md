@@ -42,6 +42,13 @@ ovirt_engine_remote_db_access:  # configure access to engine remote DBs
     type: host / local
     address: 0.0.0.0/0   # mask for host, omitted for local
     method: md5 / trust / ident / peer
+
+ovirt_engine_remote_db_config_file: Path to postgresql configuration
+  (default: '/var/lib/pgsql/data/postgresql.conf')
+ovirt_engine_remote_db_vacuum: [True, False] True if set db configuration for
+  vacuum feature (default: True)
+ovirt_engine_remote_db_vacuum_config: Default postgresql cofiguration for
+  vacuum feature. See default varibles in defaults/main.yml
 ```
 
 Dependencies

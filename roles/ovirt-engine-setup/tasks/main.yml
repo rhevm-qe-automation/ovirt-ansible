@@ -30,9 +30,17 @@
     group: root
   when: ovirt_engine_answer_file_path is defined
 
+- name: update setup packages
+  yum:
+    name: 'ovirt*setup*'
+    state: latest
+  when: ovirt_engine_update
+  tags:
+    - skip_ansible_lint
+
 - name: run engine-setup with answerfile
   shell: 'engine-setup --config-append=/tmp/answerfile.txt'
-  when: ovirt_engine_status|failed
+  when: ovirt_engine_status|failed or ovirt_engine_update
   tags:
     - skip_ansible_lint
 
