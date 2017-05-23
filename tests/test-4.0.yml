@@ -1,6 +1,8 @@
 ---
 - include: containers-deploy.yml
 - include: db-deploy.yml
+  vars:
+    ovirt_engine_remote_db_vacuum: false
 - include: engine-deploy.yml
   vars:
     ovirt_engine_version: "4.0"

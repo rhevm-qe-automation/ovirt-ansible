@@ -75,7 +75,7 @@
 # listen on specific address
 - name: update postgresql.conf -> listen_addresses='*'
   lineinfile:
-    dest: '/var/lib/pgsql/data/postgresql.conf'
+    dest: "{{ ovirt_engine_remote_db_config_file }}"
     regexp: "^listen_addresses *=.*$"
     line: "listen_addresses='{{ovirt_engine_remote_db_listen_address}}'"
     insertafter: EOF
@@ -84,7 +84,7 @@
 # listen on specific port
 - name: update postgresql.conf -> port number
   lineinfile:
-    dest: '/var/lib/pgsql/data/postgresql.conf'
+    dest: "{{ ovirt_engine_remote_db_config_file }}"
     regexp: "^port *=.*$"
     line: "port={{ ovirt_engine_remote_db_port }}"
     insertafter: EOF
@@ -121,6 +121,16 @@
     line: "PGPORT={{ ovirt_engine_remote_db_port }}"
   when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432 and port_update|failed
   ignore_errors: True
+
+# Required for vacuum feature
+- name: set vacuum configuration for postgresql
+  ini_file:
+    path: "{{ ovirt_engine_remote_db_config_file }}"
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    section: null
+  with_dict: "{{ ovirt_engine_remote_db_vacuum_config }}"
+  when: ovirt_engine_remote_db_vacuum
 
 # allow selinux for postgresql non-standard port
 - name: allow selinux for non-standard port
