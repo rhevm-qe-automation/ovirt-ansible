@@ -7,3 +7,11 @@
       provision_docker_inventory_group: "{{ groups['remote-db'] }}"
     - role: provision_docker
       provision_docker_inventory_group: "{{ groups['engine'] }}"
+
+- name: "Update python because of ovirt-imageio-proxy"
+  hosts: engine
+  tasks:
+    - name: Update python
+      yum:
+        name: python-libs
+        state: latest
