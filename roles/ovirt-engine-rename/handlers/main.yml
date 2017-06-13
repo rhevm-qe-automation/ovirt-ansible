@@ -1,11 +1,11 @@
 ---
 # delete the temp file which was created for grep comparison
-- name: delete temp expected result file
+- name: delete current engine rename logs
   file:
-    path: '/tmp/engine-rename-result.grep'
+    path: '/tmp/engine-rename-logs-current.grep'
     state: 'absent'
 
-- name: delete expected grep file
+- name: delete rename result expected grep file
   file:
-    path: '/tmp/engine-rename-expected.grep'
+    path: '/tmp/check-engine-name-expected-result.grep'
     state: 'absent'
