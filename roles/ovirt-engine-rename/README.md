@@ -1,7 +1,7 @@
 oVirt Engine Rename
 ===================
 
-Generate answerfile and run engine-setup with it.
+Role to rename to ovirt-engine
 
 Target Systems
 --------------
@@ -16,7 +16,7 @@ Preinstalled clean environment with configured repositories and a working engine
 Role Variables
 --------------
 
-- `ansible_fqdn`: would be the new engine-name that you want
+- `engine_new_fqdn`: would be the new engine-name that you want
 
 Example Playbook
 ----------------
@@ -25,7 +25,7 @@ Example Playbook
 ---
 - hosts: engine
   vars: 
-    ansible_fqdn: 'ovirt-rename-testing.gsoc.org'
+    engine_new_fqdn: 'ovirt-rename-testing.gsoc.org'
   roles:
     - role: ovirt-engine-rename
 ```

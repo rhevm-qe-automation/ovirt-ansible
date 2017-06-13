@@ -1,6 +1,6 @@
 ---
 - name: Register the engine name stored inside the files in directory `/etc/ovirt-engine`
-  shell: grep -R {{ ansible_fqdn }} /etc/ovirt-engine
+  shell: grep -R {{ engine_new_fqdn }} /etc/ovirt-engine
   register: grep_output_remote_run
   ignore_errors: yes
 
@@ -14,7 +14,7 @@
   notify:
     - delete expected grep file
 
-- debug: msg="The command grep -R {{ ansible_fqdn }} /etc/ovirt-engine returned {{ grep_output_remote_run.stdout }}"
+- debug: msg="The command grep -R {{ engine_new_fqdn }} /etc/ovirt-engine returned {{ grep_output_remote_run.stdout }}"
 
 - name: Copy the expected result to /tmp on the remote vm to be compared
   template:
@@ -29,23 +29,23 @@
   register: grep_diff
   ignore_errors: yes
 
+- name: Changing the system host name to reflect the new engine-name
+  shell: hostnamectl set-hostname {{ engine_new_fqdn }}
+
 - name: Running engine-rename command (if the engine-name diff command status is not 0)
   shell: |
     /usr/share/ovirt-engine/setup/bin/ovirt-engine-rename \
-    --newname={{ ansible_fqdn }} \
+    --newname={{ engine_new_fqdn }} \
     --otopi-environment="OSETUP_RENAME/forceIgnoreAIAInCA=bool:'True' \
     OVESETUP_CORE/engineStop=bool:'True' \
     OSETUP_RENAME/confirmForceOverwrite=bool:'False'"
   when: grep_diff.rc != 0
   register: engine_rename_result
 
-- name: Changing the system host name to reflect the new engine-name
-  shell: hostnamectl set-hostname {{ ansible_fqdn }}
-
 - debug: msg="change your /etc/hosts file to reflect to the new changed ovirt-engine name"
 
 - name: Checking if the engine-rename is successfull
-  shell: grep -R {{ ansible_fqdn }} /etc/ovirt-engine
+  shell: grep -R {{ engine_new_fqdn }} /etc/ovirt-engine
   register: final_check
 
 - name: Engine rename successfull or not?

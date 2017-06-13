@@ -1,4 +1,4 @@
-/etc/ovirt-engine/engine.conf.d/10-setup-protocols.conf:ENGINE_FQDN={{ansible_fqdn}}
-/etc/ovirt-engine/ovirt-vmconsole-proxy-helper.conf.d/10-setup.conf:ENGINE_BASE_URL=http://{{ansible_fqdn}}:80/ovirt-engine/
-/etc/ovirt-engine/isouploader.conf.d/10-engine-setup.conf:engine={{ansible_fqdn}}:443
-/etc/ovirt-engine/logcollector.conf.d/10-engine-setup.conf:engine={{ansible_fqdn}}:443
+/etc/ovirt-engine/engine.conf.d/10-setup-protocols.conf:ENGINE_FQDN={{engine_new_fqdn}}
+/etc/ovirt-engine/ovirt-vmconsole-proxy-helper.conf.d/10-setup.conf:ENGINE_BASE_URL=http://{{engine_new_fqdn}}:80/ovirt-engine/
+/etc/ovirt-engine/isouploader.conf.d/10-engine-setup.conf:engine={{engine_new_fqdn}}:443
+/etc/ovirt-engine/logcollector.conf.d/10-engine-setup.conf:engine={{engine_new_fqdn}}:443
