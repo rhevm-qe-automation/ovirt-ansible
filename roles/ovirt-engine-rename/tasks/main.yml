@@ -1,6 +1,6 @@
 ---
 - name: Register the engine name stored inside the files in directory `/etc/ovirt-engine`
-  shell: grep -R {{ engine_new_fqdn }} /etc/ovirt-engine
+  shell: grep -R {{ ovirt_engine_rename_new_fqdn }} /etc/ovirt-engine
   register: grep_output_remote_run
   ignore_errors: yes
 
@@ -14,7 +14,7 @@
   notify:
     - delete expected grep file
 
-- debug: msg="The command grep -R {{ engine_new_fqdn }} /etc/ovirt-engine returned {{ grep_output_remote_run.stdout }}"
+- debug: msg="The command grep -R {{ ovirt_engine_rename_new_fqdn }} /etc/ovirt-engine returned {{ grep_output_remote_run.stdout }}"
 
 - name: Copy the expected result to /tmp on the remote vm to be compared
   template:
@@ -29,25 +29,34 @@
   register: grep_diff
   ignore_errors: yes
 
-- name: Changing the system host name to reflect the new engine-name
-  shell: hostnamectl set-hostname {{ engine_new_fqdn }}
-
 - name: Running engine-rename command (if the engine-name diff command status is not 0)
   shell: |
     /usr/share/ovirt-engine/setup/bin/ovirt-engine-rename \
-    --newname={{ engine_new_fqdn }} \
+    --newname={{ ovirt_engine_rename_new_fqdn }} \
     --otopi-environment="OSETUP_RENAME/forceIgnoreAIAInCA=bool:'True' \
     OVESETUP_CORE/engineStop=bool:'True' \
     OSETUP_RENAME/confirmForceOverwrite=bool:'False'"
   when: grep_diff.rc != 0
   register: engine_rename_result
 
+- name: Changing the system host name to reflect the new engine-name
+  shell: hostnamectl set-hostname {{ ovirt_engine_rename_new_fqdn }}
+
 - debug: msg="change your /etc/hosts file to reflect to the new changed ovirt-engine name"
 
 - name: Checking if the engine-rename is successfull
-  shell: grep -R {{ engine_new_fqdn }} /etc/ovirt-engine
+  shell: grep -R {{ ovirt_engine_rename_new_fqdn }} /etc/ovirt-engine
   register: final_check
 
 - name: Engine rename successfull or not?
   shell: echo Engine Rename successfull
   when: final_check.rc == 0
+
+- name: check health status of page
+  uri:
+    url: "http://{{ ovirt_engine_rename_new_fqdn }}/ovirt-engine/services/health"
+    status_code: 200
+  register: health_page
+  retries: 12
+  delay: 10
+  until: health_page|success

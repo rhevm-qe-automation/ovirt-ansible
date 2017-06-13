@@ -1,7 +1,7 @@
 oVirt Engine Rename
 ===================
 
-Role to rename to ovirt-engine
+Role to rename ovirt-engine and re-enroll all the related certificates
 
 Target Systems
 --------------
@@ -11,13 +11,13 @@ Target Systems
 Requirements
 ------------
 
-- Preinstalled clean environment with configured repositories and a working engine installation
-- to have internally resolvable hostname using which we change the engine hostname to the new one
+- preinstalled clean environment with configured repositories and a working engine installation
+- To have internally resolvable hostname using which we change the engine hostname to the new one
 
 Role Variables
 --------------
 
-- `engine_new_fqdn`: would be the new engine-name that you want
+- `ovirt_engine_rename_new_fqdn`: would be the new engine-name that you want
 
 Example Playbook
 ----------------
@@ -26,7 +26,7 @@ Example Playbook
 ---
 - hosts: engine
   vars: 
-    engine_new_fqdn: 'ovirt-rename-testing.gsoc.org'
+    ovirt_engine_rename_new_fqdn: 'ovirt-rename-testing.gsoc.org'
   roles:
     - role: ovirt-engine-rename
 ```
