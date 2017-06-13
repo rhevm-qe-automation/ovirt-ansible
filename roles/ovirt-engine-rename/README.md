@@ -11,7 +11,8 @@ Target Systems
 Requirements
 ------------
 
-Preinstalled clean environment with configured repositories and a working engine installation
+- Preinstalled clean environment with configured repositories and a working engine installation
+- to have internally resolvable hostname using which we change the engine hostname to the new one
 
 Role Variables
 --------------
