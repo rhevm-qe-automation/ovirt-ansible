@@ -1,0 +1,7 @@
+---
+- name: Run ovirt-engine-rename on containerized environment
+  hosts: engine
+  vars:
+    ovirt_engine_rename_new_fqdn: 'test.ovirt.org'
+  roles:
+    - role: ovirt-engine-rename

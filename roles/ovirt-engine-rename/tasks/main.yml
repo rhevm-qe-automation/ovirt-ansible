@@ -41,11 +41,14 @@
     OVESETUP_CORE/engineStop=bool:'True' \
     OSETUP_RENAME/confirmForceOverwrite=bool:'False'"
   when: grep_diff.stdout != ""
+  # ^ i.e skip when engine-name is already at the state we want it to be
+  tags:
+    - skip_ansible_lint
 
 # this is optional and is to be commented out if your systems use the DNS
 # to get the hostname, if not let it remain
 - name: Changing the system host name to reflect the new engine-name
-  shell: hostnamectl set-hostname {{ ovirt_engine_rename_new_fqdn }}
+  command: hostnamectl set-hostname {{ ovirt_engine_rename_new_fqdn }}
 
 - debug: msg="change your /etc/hosts file to reflect to the new changed ovirt-engine name"
 
