@@ -48,7 +48,10 @@
 # this is optional and is to be commented out if your systems use the DNS
 # to get the hostname, if not let it remain
 - name: Changing the system host name to reflect the new engine-name
-  command: hostnamectl set-hostname {{ ovirt_engine_rename_new_fqdn }}
+  # command: hostnamectl set-hostname {{ ovirt_engine_rename_new_fqdn }}
+  command: hostname {{ ovirt_engine_rename_new_fqdn }}
+  tags:
+    - skip_ansible_lint
 
 - debug: msg="change your /etc/hosts file to reflect to the new changed ovirt-engine name"
 
