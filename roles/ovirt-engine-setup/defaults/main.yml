@@ -13,6 +13,9 @@ ovirt_engine_db_name: 'engine'
 ovirt_engine_db_user: 'engine'
 ovirt_engine_db_password: 'AqbXg4dpkbcVRZwPbY8WOR'
 
+ovirt_engine_dwh_db_configure: true
+# ^ set this to false if you want to install the dwh on a different host
+# machine rather than the same machine where the engine is installed.
 ovirt_engine_dwh_db_host: 'localhost'
 ovirt_engine_dwh_db_port: 5432
 ovirt_engine_dwh_db_name: 'ovirt_engine_history'

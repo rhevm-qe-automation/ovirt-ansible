@@ -77,6 +77,30 @@ Example Playbook
     - ovirt-engine-setup
 ```
 
+Extra
+-----
+
+If you want to install just the `ovirt-engine` and configure the DWH database later on a different host, then the playbook would look like
+
+```yaml
+---
+- hosts: engine
+  vars:
+    ovirt_engine_type: 'ovirt-engine'
+    ovirt_engine_version: '4.1'
+    ovirt_engine_organization: 'of.ovirt.engine.com'
+    ovirt_engine_admin_password: 'secret'
+    ovirt_engine_dwh_db_configure: false
+  roles:
+    - ovirt-engine-setup
+```
+
+Running this play file would be done like
+
+```bash
+$ ansible-playbook site.yml -i inventory --skip-tags remote_dwh_yum_install
+```
+
 Author Information
 ------------------
 
