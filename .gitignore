@@ -1,3 +1,6 @@
 .tox
 *.retry
 roles/provision_docker
+
+site.yml
+inventory
