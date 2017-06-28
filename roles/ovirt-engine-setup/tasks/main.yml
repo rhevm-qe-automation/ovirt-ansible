@@ -67,6 +67,8 @@
   notify:
     - Reload firewalld
   when: ovirt_engine_dwh_db_host != 'localhost'
+  tags:
+    - skip-travis
 
 - name: check health status of page
   uri:
