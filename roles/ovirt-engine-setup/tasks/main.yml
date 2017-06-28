@@ -60,6 +60,14 @@
     name: ovirt-engine
     state: restarted
 
+- name: Open port 5432 for opening connection to remote DWH if not being setup on this host
+  command: firewall-cmd --zone=public --add-port={{ item }}/tcp --permanent
+  with_items:
+    - '5432'
+  notify:
+    - Reload firewalld
+  when: ovirt_engine_dwh_db_host != 'localhost'
+
 - name: check health status of page
   uri:
     url: "http://{{ ansible_fqdn }}/ovirt-engine/services/health"

@@ -1,0 +1,81 @@
+---
+# health page
+- name: check if ovirt-engine running (health page)
+  uri:
+    url: "http://{{ ovirt_engine_db_host }}/ovirt-engine/services/health"
+    status_code: 200
+  register: ovirt_engine_status
+  retries: 2
+  delay: 5
+  until: ovirt_engine_status|success
+  ignore_errors: True
+
+# copy dwh on dwh answer file
+- name: copy default answerfile
+  template:
+    src: answerfile_{{ ovirt_engine_version }}_dwh_on_dwh.txt.j2
+    dest: /tmp/answerfile.txt
+    mode: 0644
+    owner: root
+    group: root
+  when: ovirt_dwh_on_dwh == True
+
+# TODO
+# ====
+# - case where the database of dwh on 3rd machine
+
+- name: run engine-setup with answerfile
+  shell: 'engine-setup --config-append=/tmp/answerfile.txt'
+  tags:
+    - skip_ansible_lint
+
+- name: check state of database
+  service:
+    name: postgresql
+    state: started
+  when: (ovirt_engine_dwh_db_host == 'localhost' and ovirt_engine_dwh == True) or ovirt_engine_db_host == 'localhost'
+
+- name: configure firewalld
+  copy: src=ovirt-{{ item.src }}.xml dest=/etc/firewalld/services
+  with_items:
+    - { src: 'http' }
+    - { src: 'https' }
+    - { src: 'postgres' }
+  when: ovirt_engine_firewall_manager == 'firewalld'
+  notify:
+    - Reload firewalld
+
+- name: firewalld | adding the permanent services
+  command: firewall-cmd --permanent --add-service {{ item }}
+  with_items:
+    - ovirt-postgres
+    - ovirt-https
+    - ovirt-http
+  notify:
+    - Reload firewalld
+  tags:
+    - skip_ansible_lint
+
+- name: firewalld | opening ports 443, 80, 5432
+  command: firewall-cmd --zone=public --add-port={{ item }}/tcp --permanent
+  with_items:
+    - '80'
+    - '443'
+    - '5432'
+  notify:
+    - Reload firewalld
+  tags:
+    - skip_ansible_lint
+
+# health page
+- name: check if ovirt-engine running (health page)
+  uri:
+    url: "http://{{ ovirt_engine_db_host }}/ovirt-engine/services/health"
+    status_code: 200
+  register: ovirt_engine_status
+  retries: 2
+  delay: 5
+  until: ovirt_engine_status|success
+  ignore_errors: True
+
+- debug: msg='Restart ovirt-engine on the remote host by doing a `service ovirt-engine restart`'
