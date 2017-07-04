@@ -4,6 +4,6 @@
     state: latest
   with_items:
     - "{{ ovirt_guest_agent_pkg_prefix }}-guest-agent"
-  notify: enable and start {{ ovirt_guest_agent_pkg_prefix }}-guest-agent
+  notify: enable and start guest-agent service
   tags:
     - skip_ansible_lint
