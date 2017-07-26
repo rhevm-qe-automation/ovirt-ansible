@@ -21,7 +21,7 @@ Role Variables
 
 ```yaml
 ---
-ovirt_guest_agent_pkg_prefix: "ovirt|rhevm|qemu"
+ovirt_guest_agent_pkg_prefix: "ovirt|rhevm"
 ```
 
 Default value if variable not given is ```ovirt```.
