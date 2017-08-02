@@ -1,0 +1,12 @@
+ovirt_engine_dwh_db_name: ovirt_engine_history
+ovirt_engine_dwh_db_user: ovirt_engine_history 
+ovirt_engine_dwh_db_password: password
+ovirt_engine_dwh_db_port: 5432
+
+# the below 2 are to be filled in the playbook site.yml at the root when you are
+# running the playbook.
+engine_vm_network_cidr: ''
+# a value of '139.162.45.0/24' would take for 'engine_vm_network_cidr' when the IP
+# address of the engine VM is '139.162.45.249'. The value for the value below 
+# is calculated similarly
+dwhservice_vm_network_cidr: ''

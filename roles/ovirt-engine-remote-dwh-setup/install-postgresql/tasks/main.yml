@@ -1,0 +1,86 @@
+---
+- name: install postgresql
+  yum: 
+    name: postgresql-server
+    state: installed
+    update_cache: yes
+
+- name: Check if the db is initialized 
+  stat:
+    path: /var/lib/pgsql/data
+  register: db_initialised
+
+- name: Initialize the postgresql db
+  command: su -l postgres -c "/usr/bin/initdb --locale=en_US.UTF8 --auth='ident' --pgdata=/var/lib/pgsql/data/"
+  when: db_initialised.stat.isdir is not defined
+
+- name: Start postgresql.service
+  systemd:
+    state: started
+    name: postgresql
+
+- name: creating directory for sql scripts in /tmp/ansible-sql
+  file:
+    path: /tmp/ansible-sql
+    state: directory
+
+- name: copy SQL scripts
+  template:
+    src: "{{ item }}.j2"
+    dest: "/tmp/ansible-sql/{{ item }}"
+    mode: 0644
+    owner: postgres
+    group: postgres
+  with_items:
+    - "ovirt-engine-dwh-db-user-create.sql"
+    - "ovirt-engine-dwh-db-create.sql"
+
+- name: create engine DWH DB and user
+  become_user: postgres
+  become: yes
+  command: psql -p {{ ovirt_engine_dwh_db_port }} -a -f /tmp/ansible-sql/'{{ item }}'
+  with_items:
+    - "ovirt-engine-dwh-db-user-create.sql"
+    - "ovirt-engine-dwh-db-create.sql"      
+
+- name: Adding engine and dwhservice vm IP's in the dwhdb conf to be acessed remotely
+  lineinfile:
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    line: "{{ item }}"
+  with_items:
+    - 'host    {{ ovirt_engine_dwh_db_name }}    {{ ovirt_engine_dwh_db_name }}    {{ engine_vm_network_cidr }}     md5 # engine'
+    - 'host    {{ ovirt_engine_dwh_db_name }}    {{ ovirt_engine_dwh_db_name }}    {{ dwhservice_vm_network_cidr }}     md5 # dwhservice'
+
+- name: Edit the config file /var/lib/pgsql/data/postgresql.conf
+  command: "{{ item }}"
+  with_items:
+    - sed -i -- 's/max_connections = 100/max_connections = 150/g' /var/lib/pgsql/data/postgresql.conf
+    - sed -i "60ilisten_addresses = '*'" /var/lib/pgsql/data/postgresql.conf
+
+- name: Enable firewalld and open up port 5432
+  command: "{{ item }}"
+  with_items:
+    - systemctl start firewalld
+    - firewall-cmd --zone=public --add-port=5432/tcp --permanent
+    - firewall-cmd --reload
+  
+- name: Restart postgresql for the loading the newer configs
+  systemd:
+    state: restarted
+    name: postgresql
+    
+- name: check PostgreSQL service
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: clean tmp files
+  file:
+    path: '/tmp/ansible-sql'
+    state: 'absent'
+
+- name: Enable postgresql.service to start at boot time
+  systemd:
+    enabled: yes
+    name: postgresql
