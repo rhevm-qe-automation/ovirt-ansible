@@ -1,6 +1,6 @@
 ---
-ovirt_collect_logs_tmp_dir: "/var/tmp/ovirt-logs"
-ovirt_collect_logs_archive: "/var/tmp/ovirt-logs.tar.gz"
+ovirt_collect_logs_tmp_dir: "/var/tmp/ovirt-logs-{{ ovirt_collect_logs_from_system }}"
+ovirt_collect_logs_archive: "/var/tmp/ovirt-logs-{{ ovirt_collect_logs_from_system }}.tar.gz"
 ovirt_collect_logs_shell_commands:
   rpm-list: "rpm -qa | sort -f"
   yum-list: "yum list installed"
