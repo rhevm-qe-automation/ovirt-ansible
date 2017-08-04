@@ -11,18 +11,27 @@
   ignore_errors: True
 
 # copy dwh on dwh answer file
-- name: copy default answerfile
+# this answerfile results in a 2 VM setup where
+# VM 1: holds engine and it's `engine` DB instance
+# and VM 2: which holds dwh service and it's `ovirt_engine_history` DB 
+- name: copy answerfile for `ovirt_engine_history` db to be on dwhservice VM
   template:
-    src: answerfile_{{ ovirt_engine_version }}_dwh_on_dwh.txt.j2
+    src: answerfile_{{ ovirt_engine_version }}_ovirt_engine_history_db_on_dwhservice_host.txt.j2
     dest: /tmp/answerfile.txt
     mode: 0644
     owner: root
     group: root
-  when: ovirt_dwh_on_dwh == True
+  when: ovirt_engine_history_db_on_dwhservice_host == True
 
-# TODO
-# ====
 # - case where the database of dwh on 3rd machine
+- name: copy answerfile for `ovirt_engine_history` db to be on remote VM and not on dwhservice VM
+  template:
+    src: answerfile_{{ ovirt_engine_version }}_ovirt_engine_history_db_not_on_dwhservice_host.txt.j2
+    dest: /tmp/answerfile.txt
+    mode: 0644
+    owner: root
+    group: root
+  when: ovirt_engine_history_db_on_dwhservice_host == False
 
 - name: run engine-setup with answerfile
   shell: 'engine-setup --config-append=/tmp/answerfile.txt'
@@ -77,5 +86,10 @@
   delay: 5
   until: ovirt_engine_status|success
   ignore_errors: True
+
+- name: Restart `ovirt-engine-dwhd` service
+  service:
+    name: ovirt-engine-dwhd
+    state: restarted
 
 - debug: msg='Restart ovirt-engine on the remote host by doing a `service ovirt-engine restart`'

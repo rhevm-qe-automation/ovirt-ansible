@@ -1,9 +1,17 @@
 ---
+- name: check PostgreSQL service
+  service:
+    name: postgresql
+    state: started
+  register: postgresql_status
+  ignore_errors: True
+
 - name: install postgresql
   yum: 
     name: postgresql-server
     state: installed
     update_cache: yes
+  when: postgresql_status|failed
 
 - name: Check if the db is initialized 
   stat:
@@ -12,12 +20,13 @@
 
 - name: Initialize the postgresql db
   command: su -l postgres -c "/usr/bin/initdb --locale=en_US.UTF8 --auth='ident' --pgdata=/var/lib/pgsql/data/"
-  when: db_initialised.stat.isdir is not defined
+  when: postgresql_status|failed
 
 - name: Start postgresql.service
   systemd:
     state: started
     name: postgresql
+  when: postgresql_status|failed
 
 - name: creating directory for sql scripts in /tmp/ansible-sql
   file:

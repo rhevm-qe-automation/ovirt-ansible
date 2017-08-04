@@ -72,7 +72,7 @@ After which you have to configure your remote DWH installation to the previous h
     ovirt_engine_db_host: 'dwhmanualenginetest.ovirt.org' # FQDN of the ovirt-engine installation host, should be resolvable from the new DWH host
     ovirt_engine_host_fqdn: 'dwhmanualenginetest.ovirt.org'
     ovirt_engine_dwh_db_host: 'localhost'
-    ovirt_dwh_on_dwh: True
+    ovirt_engine_history_db_on_dwhservice_host: True
   roles:
     - role: ovirt-common
     - role: ovirt-engine-install-packages
@@ -151,7 +151,33 @@ $ ansible-playbook site.yml -i inventory
 
 Now VM which hosts the `dwhservice` needs to be setup. 
 
-TODO 
+```yaml
+---
+- hosts: dwhservice
+  vars:
+    ovirt_engine_type: 'ovirt-engine'
+    ovirt_engine_version: '4.1'
+    ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm'
+    ovirt_engine_host_root_passwd: 'pycon2017'  # the root password of the host where ovirt-engine is installed
+    ovirt_engine_firewall_manager: 'firewalld'
+    ovirt_engine_host_fqdn: 'testengine.ovirt.org'  # FQDN of the ovirt-engine installation host, should be resolvable from the new DWH host
+    ovirt_engine_db_host: 'testengine.ovirt.org' 
+    ovirt_engine_dwh_db_host: 'testdwhdb.ovirt.org'
+    ovirt_engine_dwh_db_password: 'password'
+    ovirt_engine_history_db_on_dwhservice_host: False
+  roles:
+    - role: ovirt-common
+    - role: ovirt-engine-install-packages
+    - role: ovirt-engine-remote-dwh-setup
+```
+
+Running this would be 
+
+```bash
+$ ansible-playbook site.yml -i inventory --skip-tags skip_yum_install_ovirt_engine,skip_yum_install_ovirt_engine_dwh -vvv
+```
+
+Now restart `ovirt-engine` in VM A by doing a `systemctl restart ovirt-engine`
 
 This will setup your ovirt-engine setup ready for the incoming remote DWH installation setup
 
