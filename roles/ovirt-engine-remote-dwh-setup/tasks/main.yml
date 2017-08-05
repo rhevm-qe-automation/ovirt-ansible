@@ -13,7 +13,7 @@
 # copy dwh on dwh answer file
 # this answerfile results in a 2 VM setup where
 # VM 1: holds engine and it's `engine` DB instance
-# and VM 2: which holds dwh service and it's `ovirt_engine_history` DB 
+# and VM 2: which holds dwh service and it's `ovirt_engine_history` DB
 - name: copy answerfile for `ovirt_engine_history` db to be on dwhservice VM
   template:
     src: answerfile_{{ ovirt_engine_version }}_ovirt_engine_history_db_on_dwhservice_host.txt.j2
