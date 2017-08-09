@@ -1,6 +1,7 @@
 ---
-- name: enable and start {{ ovirt_guest_agent_pkg_prefix }}-guest-agent
+- name: enable and start guest-agent service
   service:
-    name: "{{ ovirt_guest_agent_pkg_prefix }}-guest-agent"
+    # Name of service is same for both packages (ovirt/rhevm)
+    name: "ovirt-guest-agent"
     state: started
     enabled: yes
