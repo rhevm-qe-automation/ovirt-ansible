@@ -1,15 +1,13 @@
 ---
+# grep returns an exit code of 1 when it doesn't match any lines. Ansible then
+# interprets this (actually any status code other than 0 from a shell/command
+# task) as an error and so promptly fails.
 - name: Register the engine name stored inside the files in directory `/etc/ovirt-engine`
   command: grep -R --include \*.conf {{ ovirt_engine_rename_new_fqdn }} /etc/ovirt-engine
   register: grep_output_remote_run
   changed_when: False
   failed_when: "grep_output_remote_run.rc == 2"
   ignore_errors: yes
-
-# ^ ignore_errors?
-# grep returns an exit code of 1 when it doesn't match any lines. Ansible then
-# interprets this (actually any status code other than 0 from a shell/command
-# task) as an error and so promptly fails.
 
 - name: Saving the above diff result
   copy: content="{{ grep_output_remote_run.stdout }}" dest=/tmp/engine-rename-logs-current.grep

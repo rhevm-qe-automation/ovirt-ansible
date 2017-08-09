@@ -1,7 +1,7 @@
 oVirt Engine Rename
 ===================
 
-Role to rename ovirt-engine and re-enroll all the related certificates
+Role to change ovirt-engine fqdn and re-enroll all the related certificates
 
 Target Systems
 --------------
@@ -12,12 +12,12 @@ Requirements
 ------------
 
 - Preinstalled clean environment with configured repositories and a working engine installation
-- To have internally resolvable hostname using which we change the engine hostname to the new one
+- New internally resolvable hostname
 
 Role Variables
 --------------
 
-- `ovirt_engine_rename_new_fqdn`: would be the new engine-name that you want
+- `ovirt_engine_rename_new_fqdn`: new ovirt-engine hostname
 
 Example Playbook
 ----------------
