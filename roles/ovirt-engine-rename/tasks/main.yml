@@ -12,7 +12,7 @@
 - name: Saving the above diff result
   copy: content="{{ grep_output_remote_run.stdout }}" dest=/tmp/engine-rename-logs-current.grep
   notify:
-    - delete current engine rename logs
+    - delete engine-rename engine rename logs
 
 - debug: msg="The command grep -R {{ ovirt_engine_rename_new_fqdn }} /etc/ovirt-engine returned {{ grep_output_remote_run.stdout }}"
 
@@ -21,7 +21,7 @@
     src: check-engine-name-expected-result.grep.j2
     dest: /tmp/check-engine-name-expected-result.grep
   notify:
-    - delete rename result expected grep file
+    - delete engine-rename expected log files
 
 # if the engine-name is already at the state where we want it to be
 - name: Comparing the grep diff for the one that we expect and the one we just ran
