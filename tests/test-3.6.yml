@@ -7,6 +7,7 @@
   vars:
     ovirt_engine_version: "3.6"
     ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm"
+- include: engine-rename.yml
 - include: engine-cleanup.yml
   vars:
     ovirt_engine_version: "3.6"
