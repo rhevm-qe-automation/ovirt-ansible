@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: "Lucie Leistnerova"
+  description: "oVirt DB dump"
+  company: "Red Hat"
+  license: "GPLv3"
+  min_ansible_version: 1.9
+  platforms:
+  - name: EL
+    versions:
+    - all
+  galaxy_tags:
+    - migration
+    - export

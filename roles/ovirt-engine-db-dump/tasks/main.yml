@@ -1,0 +1,120 @@
+---
+# get engine and dwh database settings
+- name: set variables
+  set_fact:
+    ovirt_engine_db_dump_engine_db: {}
+    ovirt_engine_db_dump_dwh_db: {}
+
+- name: get engine variables
+  shell: grep "^ENGINE_DB" {{ ovirt_engine_etc_conf_path }}/10-setup-database.conf
+  register: cmd
+
+- name: get engine variables 2
+  set_fact:
+    ovirt_engine_db_dump_engine_db: >
+      {{
+        ovirt_engine_db_dump_engine_db |
+        combine(
+          dict([ item.partition('=')[::2] ])
+        )
+      }}
+  with_items: "{{ cmd.stdout_lines|list }}"
+
+- name: get dwh variables
+  shell: grep "^DWH_DB" {{ ovirt_engine_etc_conf_path }}/10-setup-dwh-database.conf
+  register: cmd
+
+- name: get dwh variables 2
+  set_fact:
+    ovirt_engine_db_dump_dwh_db: >
+      {{
+        ovirt_engine_db_dump_dwh_db |
+        combine(
+          dict([ item.partition('=')[::2] ])
+        )
+      }}
+  with_items: "{{ cmd.stdout_lines|list }}"
+
+# stop engine and dwh services that it won't generate more data to database
+- name: stop engine service
+  service:
+    name: ovirt-engine
+    state: stopped
+
+- name: stop dwh service
+  service:
+    name: ovirt-engine-dwhd
+    state: stopped
+  when: ovirt_engine_db_dump_dwh == True
+
+# get engine and dwh database dumps
+- name: create local dir
+  local_action:
+    file path={{ playbook_dir }}/engine_dump state=directory
+
+- name: get dump of engine database
+  become: yes
+  become_user: postgres
+  shell: pg_dump -F c {{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE'] }} -f engine.sql
+
+- name: get dump of dwh database
+  become: yes
+  become_user: postgres
+  shell: pg_dump -F c {{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }} -f dwh.sql
+  when: ovirt_engine_db_dump_dwh == True
+
+# print variables to file
+- name: print engine variables to file
+  local_action:
+        copy content="{{ ovirt_engine_db_dump_engine_db }}" dest="{{ playbook_dir }}/engine_dump/engine_variables.json"
+
+- name: print DWH variables to file
+  local_action:
+        copy content="{{ ovirt_engine_db_dump_dwh_db }}" dest="{{ playbook_dir }}/engine_dump/dwh_variables.json"
+  when: ovirt_engine_db_dump_dwh == True
+
+# copy files to localhost
+- name: get postgres path
+  become: yes
+  become_user: postgres
+  become_method: su
+  become_flags: "-"
+  shell: echo $HOME
+  register: pgpath
+
+- name: copy engine dump to local
+  fetch:
+    src: "{{ pgpath.stdout }}/engine.sql"
+    dest: "{{ playbook_dir }}/engine_dump/engine.sql"
+    flat: yes
+
+- name: copy dwh dump to local
+  fetch:
+    src: "{{ pgpath.stdout }}/dwh.sql"
+    dest: "{{ playbook_dir }}/engine_dump/dwh.sql"
+    flat: yes
+  when: ovirt_engine_db_dump_dwh == True
+
+# start needed services
+- name: start engine and dwh service
+  service:
+    name: ovirt-engine
+    state: started
+  when: ovirt_engine_db_dump_start_services == True
+
+- name: start engine and dwh service
+  service:
+    name: ovirt-engine-dwhd
+    state: started
+  when: 
+    - ovirt_engine_db_dump_dwh == True
+    - ovirt_engine_db_dump_start_services == True
+
+# clean
+- name: remove dumps from engine
+  file:
+    path: "{{ pgpath.stdout }}/{{ item }}.sql"
+    state: absent
+  with_items:
+    - engine
+    - dwh
