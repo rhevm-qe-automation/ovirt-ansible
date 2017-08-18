@@ -238,8 +238,8 @@
     - "ovirt-engine-db-drop.sql"
     - "ovirt-engine-db-user-drop.sql"
   when: 
-  - ovirt_engine_remote_db == True
-  - ovirt_engine_remote_db_force == True
+    - ovirt_engine_remote_db == True
+    - ovirt_engine_remote_db_force == True
 
 - name: create engine DB and user
   become_user: postgres
@@ -258,8 +258,8 @@
     - "ovirt-engine-dwh-db-drop.sql"
     - "ovirt-engine-dwh-db-user-drop.sql"
   when: 
-  - ovirt_engine_dwh_remote_db == True
-  - ovirt_engine_remote_db_force == True
+    - ovirt_engine_dwh_remote_db == True
+    - ovirt_engine_remote_db_force == True
 
 - name: create engine DWH DB and user
   become_user: postgres
