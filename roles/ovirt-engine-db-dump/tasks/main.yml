@@ -38,15 +38,13 @@
   when: ovirt_engine_db_dump_dwh == True
 
 # stop engine and dwh services that it won't generate more data to database
-- name: stop dwh service
+- name: stop necessary service
   service:
-    name: ovirt-engine-dwhd
+    name: "{{ item }}"
     state: stopped
-
-- name: stop engine service
-  service:
-    name: ovirt-engine
-    state: stopped
+  with_items:
+    - ovirt-engine-dwhd
+    - ovirt-engine
 
 # get engine and dwh database dumps
 - name: create local dir
@@ -97,16 +95,13 @@
   when: ovirt_engine_db_dump_dwh == True
 
 # start needed services
-- name: start engine service
+- name: start engine and dwh service
   service:
-    name: ovirt-engine
+    name: "{{ item }}"
     state: started
-  when: ovirt_engine_db_dump_start_services == True
-
-- name: start dwh service
-  service:
-    name: ovirt-engine-dwhd
-    state: started
+  with_items:
+    - ovirt-engine
+    - ovirt-engine-dwhd
   when: ovirt_engine_db_dump_start_services == True
 
 # clean
