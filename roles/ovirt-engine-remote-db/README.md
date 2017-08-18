@@ -49,6 +49,12 @@ ovirt_engine_remote_db_vacuum: [True, False] True if set db configuration for
   vacuum feature (default: True)
 ovirt_engine_remote_db_vacuum_config: Default postgresql cofiguration for
   vacuum feature. See default varibles in defaults/main.yml
+
+ovirt_engine_remote_db_force: [True, False] If engine or DWH database already exists - 
+  True: drop them and create clean ones, False: playbook will fail with error. (default: False)
+
+ovirt_engine_remote_db_dump: Path to sql dump of engine database on local machine
+ovirt_engine_remote_db_dwh_dump: Path to sql dump of DWH database on local machine
 ```
 
 Dependencies
