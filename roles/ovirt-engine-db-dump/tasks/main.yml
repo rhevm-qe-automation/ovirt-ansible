@@ -95,7 +95,7 @@
   when: ovirt_engine_db_dump_dwh == True
 
 # start needed services
-- name: start engine and dwh service
+- name: start necessary service
   service:
     name: "{{ item }}"
     state: started
