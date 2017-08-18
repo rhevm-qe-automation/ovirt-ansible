@@ -42,7 +42,6 @@
   service:
     name: ovirt-engine-dwhd
     state: stopped
-  when: ovirt_engine_db_dump_dwh == True
 
 - name: stop engine service
   service:
@@ -98,17 +97,15 @@
   when: ovirt_engine_db_dump_dwh == True
 
 # start needed services
-- name: start dwh service
-  service:
-    name: ovirt-engine-dwhd
-    state: started
-  when: 
-    - ovirt_engine_db_dump_dwh == True
-    - ovirt_engine_db_dump_start_services == True
-
 - name: start engine service
   service:
     name: ovirt-engine
+    state: started
+  when: ovirt_engine_db_dump_start_services == True
+
+- name: start dwh service
+  service:
+    name: ovirt-engine-dwhd
     state: started
   when: ovirt_engine_db_dump_start_services == True
 
