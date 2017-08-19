@@ -76,7 +76,7 @@ After which you have to configure your remote DWH installation to the previous h
   roles:
     - role: ovirt-common
     - role: ovirt-engine-install-packages
-    - role: ovirt-engine-remote-dwh-setup
+    - role: ovirt-engine-remote-dwh
 ```
 
 Running this play file would be done like
@@ -137,7 +137,7 @@ the VM has to be setup for the `ovirt_engine_history` VM which is to be used by 
     dwhservice_vm_network_cidr: '139.162.61.0/24'
     ovirt_engine_dwh_db_password: 'password'
   roles:
-    - role: ovirt-engine-remote-dwh-setup/install-postgresql
+    - role: ovirt-engine-remote-dwh/install-postgresql
 
 ```
 
@@ -168,7 +168,7 @@ Now VM which hosts the `dwhservice` needs to be setup.
   roles:
     - role: ovirt-common
     - role: ovirt-engine-install-packages
-    - role: ovirt-engine-remote-dwh-setup
+    - role: ovirt-engine-remote-dwh
 ```
 
 Running this would be 
