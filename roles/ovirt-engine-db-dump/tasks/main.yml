@@ -8,6 +8,8 @@
 - name: grep engine variables
   shell: grep "^ENGINE_DB" {{ ovirt_engine_etc_conf_path }}/10-setup-database.conf
   register: cmd
+  tags:
+    - skip_ansible_lint
 
 - name: set facts for engine variables
   set_fact:
@@ -24,6 +26,8 @@
   shell: grep "^DWH_DB" {{ ovirt_engine_etc_conf_path }}/10-setup-dwh-database.conf
   register: cmd
   when: ovirt_engine_db_dump_dwh == True
+  tags:
+    - skip_ansible_lint
 
 - name: set facts for dwh variables
   set_fact:
@@ -55,12 +59,16 @@
   become: yes
   become_user: postgres
   shell: pg_dump -F c {{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE'] }} -f engine.sql
+  tags:
+    - skip_ansible_lint
 
 - name: get dump of dwh database
   become: yes
   become_user: postgres
   shell: pg_dump -F c {{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }} -f dwh.sql
   when: ovirt_engine_db_dump_dwh == True
+  tags:
+    - skip_ansible_lint
 
 # print variables to file
 - name: print engine variables to file
@@ -80,6 +88,8 @@
   become_flags: "-"
   shell: echo $HOME
   register: pgpath
+  tags:
+    - skip_ansible_lint
 
 - name: copy engine dump to local
   fetch:
