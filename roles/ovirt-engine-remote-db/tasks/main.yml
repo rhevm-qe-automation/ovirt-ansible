@@ -189,15 +189,25 @@
   tags:
     - skip_ansible_lint
 
-- name: creating directory for sql scripts in /tmp/ansible-sql
+- name: get postgres path
+  become: yes
+  become_user: postgres
+  become_method: su
+  become_flags: "-"
+  shell: echo $HOME
+  register: pgpath
+  tags:
+    - skip_ansible_lint
+
+- name: creating directory ansible-sql for sql scripts
   file:
-    path: /tmp/ansible-sql
+    path: "{{ pgpath.stdout }}/ansible-sql"
     state: directory
 
 - name: copy SQL scripts
   template:
     src: "{{item}}.j2"
-    dest: "/tmp/ansible-sql/{{item}}"
+    dest: "{{ pgpath.stdout }}/ansible-sql/{{item}}"
     mode: 0644
     owner: postgres
     group: postgres
@@ -207,23 +217,102 @@
     - "ovirt-engine-dwh-db-create.sql"
     - "ovirt-engine-dwh-db-user-create.sql"
 
+- name: copy drop SQL scripts
+  template:
+    src: "{{item}}.j2"
+    dest: "{{ pgpath.stdout }}/ansible-sql/{{item}}"
+    mode: 0644
+    owner: postgres
+    group: postgres
+  with_items:
+    - "ovirt-engine-db-drop.sql"
+    - "ovirt-engine-db-user-drop.sql"
+    - "ovirt-engine-dwh-db-drop.sql"
+    - "ovirt-engine-dwh-db-user-drop.sql"
+  when: ovirt_engine_remote_db_force == True
+
+- name: drop engine DB and user
+  become_user: postgres
+  become: yes
+  # ON_ERROR_STOP=1 - command returns non-zero value, otherwise is always 0 with -f flag
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f ansible-sql/'{{item}}'
+  with_items:
+    - "ovirt-engine-db-drop.sql"
+    - "ovirt-engine-db-user-drop.sql"
+  when:
+    - ovirt_engine_remote_db == True
+    - ovirt_engine_remote_db_force == True
+
 - name: create engine DB and user
   become_user: postgres
   become: yes
-  command: psql -p {{ovirt_engine_remote_db_port}} -a -f /tmp/ansible-sql/'{{item}}'
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f ansible-sql/'{{item}}'
   with_items:
     - "ovirt-engine-db-user-create.sql"
     - "ovirt-engine-db-create.sql"
   when: ovirt_engine_remote_db == True
 
-- name: create engine DWH DB and user
+- name: drop DWH DB and user
   become_user: postgres
   become: yes
-  command: psql -p {{ovirt_engine_remote_db_port}} -a -f /tmp/ansible-sql/'{{item}}'
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f ansible-sql/'{{item}}'
+  with_items:
+    - "ovirt-engine-dwh-db-drop.sql"
+    - "ovirt-engine-dwh-db-user-drop.sql"
+  when:
+    - ovirt_engine_dwh_remote_db == True
+    - ovirt_engine_remote_db_force == True
+
+- name: create DWH DB and user
+  become_user: postgres
+  become: yes
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f ansible-sql/'{{item}}'
   with_items:
     - "ovirt-engine-dwh-db-user-create.sql"
     - "ovirt-engine-dwh-db-create.sql"
   when: ovirt_engine_dwh_remote_db == True
+
+- name: create directory ansible-dump for db dump files
+  file:
+    path: "{{ pgpath.stdout }}/ansible-dump"
+    state: directory
+  when: virt_engine_remote_db_dump is defined or ovirt_engine_remote_db_dump is defined
+
+- name: get engine dump
+  copy:
+    src: "{{ ovirt_engine_remote_db_dump }}"
+    dest: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dump | basename }}"
+  when:
+    - ovirt_engine_remote_db_dump is defined
+    - ovirt_engine_remote_db == True
+
+- name: import engine dump
+  become_user: postgres
+  become: yes
+  shell: pg_restore -d {{ ovirt_engine_db_name }} ansible-dump/{{ ovirt_engine_remote_db_dump | basename }}
+  when:
+    - ovirt_engine_remote_db_dump is defined
+    - ovirt_engine_remote_db == True
+  tags:
+    - skip_ansible_lint
+
+- name: get DWH dump
+  copy:
+    src: "{{ ovirt_engine_remote_db_dwh_dump }}"
+    dest: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dwh_dump | basename }}"
+  when:
+    - ovirt_engine_remote_db_dwh_dump is defined
+    - ovirt_engine_dwh_remote_db == True
+
+- name: import DWH dump
+  become_user: postgres
+  become: yes
+  shell: pg_restore -d {{ ovirt_engine_dwh_db_name }} ansible-dump/{{ ovirt_engine_remote_db_dwh_dump | basename }}
+  when:
+    - ovirt_engine_remote_db_dwh_dump is defined
+    - ovirt_engine_dwh_remote_db == True
+  tags:
+    - skip_ansible_lint
 
 - name: check PostgreSQL service
   service:
@@ -231,7 +320,13 @@
     state: started
     enabled: yes
 
-- name: clean tmp files
+- name: clean sql files
   file:
-    path: '/tmp/ansible-sql'
+    path: '{{ pgpath.stdout }}/ansible-sql'
     state: 'absent'
+
+- name: clean dump files
+  file:
+    path: '{{ pgpath.stdout }}/ansible-dump'
+    state: 'absent'
+
