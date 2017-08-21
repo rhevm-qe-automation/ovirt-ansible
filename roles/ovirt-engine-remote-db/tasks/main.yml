@@ -220,35 +220,156 @@
   tags:
     - skip_ansible_lint
 
+# get database dump files if defined
+- name: get postgres path
+  become: yes
+  become_user: postgres
+  become_method: su
+  become_flags: "-"
+  shell: echo $HOME
+  register: pgpath
+  tags:
+    - skip_ansible_lint
+
+- name: create directory ansible-dump for db dump files
+  file:
+    path: "{{ pgpath.stdout }}/ansible-dump"
+    state: directory
+  when: virt_engine_remote_db_dump is defined or ovirt_engine_remote_db_dump is defined
+
+- name: get engine dump
+  copy:
+    src: "{{ ovirt_engine_remote_db_dump }}"
+    dest: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dump | basename }}"
+  when:
+    - ovirt_engine_remote_db_dump is defined
+    - ovirt_engine_remote_db == True
+
+- name: get DWH dump
+  copy:
+    src: "{{ ovirt_engine_remote_db_dwh_dump }}"
+    dest: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dwh_dump | basename }}"
+  when:
+    - ovirt_engine_remote_db_dwh_dump is defined
+    - ovirt_engine_dwh_remote_db == True
+
+# drop/create db users and databases
+- name: drop engine DB user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ ovirt_engine_db_user }}"
+    state: absent
+  when:
+    - ovirt_engine_remote_db == True
+    - ovirt_engine_remote_db_force == True
+
+- name: create engine DB user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ ovirt_engine_db_user }}"
+    password: "{{ ovirt_engine_db_password }}"
+  when: ovirt_engine_remote_db == True
+
+- name: drop DWH DB user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ ovirt_engine_dwh_db_user }}"
+    state: absent
+  when:
+    - ovirt_engine_remote_dwh_db == True
+    - ovirt_engine_remote_dwh_db_force == True
+
 - name: create DWH DB user
   become: true
   become_user: postgres
   postgresql_user:
-    name: "{{ item.user }}"
-    password: "{{ item.password }}"
-  with_items:
-    - user: "{{ ovirt_engine_db_user }}"
-      password: "{{ ovirt_engine_db_password }}"
-    - user: "{{ ovirt_engine_dwh_db_user }}"
-      password: "{{ ovirt_engine_dwh_db_password }}"
+    name: "{{ ovirt_engine_dwh_db_user }}"
+    password: "{{ ovirt_engine_dwh_db_password }}"
   when: ovirt_engine_dwh_remote_db == True
 
-- name: create engine & DWH DBs
+- name: drop engine DB
   become: true
   become_user: postgres
   postgresql_db:
-    name: "{{ item.db_name }}"
-    owner: "{{ item.user }}"
+    name: "{{ ovirt_engine_db_name }}"
+    state: absent
+  when:
+    - ovirt_engine_remote_db == True
+    - ovirt_engine_remote_db_force == True
+
+- name: create engine DB without data
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ ovirt_engine_db_name }}"
+    owner: "{{ ovirt_engine_db_user }}"
     encoding: UTF-8
     lc_collate: en_US.UTF-8
     lc_ctype: en_US.UTF-8
     template: template0
-  with_items:
-    - db_name: "{{ ovirt_engine_db_name }}"
-      user: "{{ ovirt_engine_db_user }}"
-    - db_name: "{{ ovirt_engine_dwh_db_name }}"
-      user: "{{ ovirt_engine_dwh_db_user }}"
-  when: ovirt_engine_dwh_remote_db == True
+  when:
+    - ovirt_engine_remote_db_dump is not defined
+    - ovirt_engine_remote_db == True
+
+- name: create engine DB with data
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ ovirt_engine_db_name }}"
+    owner: "{{ ovirt_engine_db_user }}"
+    encoding: UTF-8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    template: template0
+    state: restore
+    target: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dump | basename }}"
+  when:
+    - ovirt_engine_remote_db_dump is defined
+    - ovirt_engine_remote_db == True
+
+- name: drop DWH DB
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ ovirt_engine_dwh_db_name }}"
+    state: absent
+  when:
+    - ovirt_engine_remote_dwh_db == True
+    - ovirt_engine_remote_dwh_db_force == True
+
+- name: create DWH DB without data
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ ovirt_engine_dwh_db_name }}"
+    owner: "{{ ovirt_engine_dwh_db_user }}"
+    encoding: UTF-8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    template: template0
+  when:
+    - ovirt_engine_remote_db_dwh_dump is not defined
+    - ovirt_engine_dwh_remote_db == True
+
+- name: create DWH DB with data
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ ovirt_engine_dwh_db_name }}"
+    owner: "{{ ovirt_engine_dwh_db_user }}"
+    encoding: UTF-8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    template: template0
+    state: restore
+    target: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dwh_dump | basename }}"
+  when:
+    - ovirt_engine_remote_db_dwh_dump is defined
+    - ovirt_engine_dwh_remote_db == True
+# drop/create db users and databases - end
 
 - name: check PostgreSQL service
   service:
@@ -256,7 +377,8 @@
     state: started
     enabled: yes
 
-- name: clean tmp files
+- name: clean dump files
   file:
-    path: '/tmp/ansible-sql'
+    path: '{{ pgpath.stdout }}/ansible-dump'
     state: 'absent'
+
