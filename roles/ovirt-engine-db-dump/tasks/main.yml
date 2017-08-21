@@ -113,7 +113,7 @@
     - ovirt-engine
     - ovirt-engine-dwhd
   when: ovirt_engine_db_dump_start_services == True
-  
+
 # clean
 - name: remove dumps from engine
   file:
