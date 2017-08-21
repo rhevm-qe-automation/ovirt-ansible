@@ -1,5 +1,5 @@
 ---
-ovirt_engine_etc_conf_path: "/etc/ovirt-engine/engine.conf.d"
+ovirt_engine_etc_conf_path: "/etc/ovirt-engine/engine.conf.d/"
 ovirt_engine_db_dump_dwh: False
 ovirt_engine_db_dump_start_services: True
 

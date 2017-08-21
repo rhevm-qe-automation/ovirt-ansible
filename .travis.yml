@@ -37,7 +37,7 @@ script:
   # Run sytax checks and linters
   - tox
   # Execute oVirt engine deployment playbook
-  - ansible-playbook tests/test-${TEST_NAME}.yml -i tests/inventory
+  - ansible-playbook tests/test-${TEST_NAME}.yml -i tests/inventory -vvv
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
