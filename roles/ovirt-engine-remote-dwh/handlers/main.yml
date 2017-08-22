@@ -1,5 +1,0 @@
----
-- name: Reload firewalld
-  command: firewall-cmd --reload
-  tags:
-    - skip_ansible_lint

@@ -44,38 +44,6 @@
     state: started
   when: (ovirt_engine_dwh_db_host == 'localhost' and ovirt_engine_dwh == True) or ovirt_engine_db_host == 'localhost'
 
-- name: configure firewalld
-  copy: src=ovirt-{{ item.src }}.xml dest=/etc/firewalld/services
-  with_items:
-    - { src: 'http' }
-    - { src: 'https' }
-    - { src: 'postgres' }
-  when: ovirt_engine_firewall_manager == 'firewalld'
-  notify:
-    - Reload firewalld
-
-- name: firewalld | adding the permanent services
-  command: firewall-cmd --permanent --add-service {{ item }}
-  with_items:
-    - ovirt-postgres
-    - ovirt-https
-    - ovirt-http
-  notify:
-    - Reload firewalld
-  tags:
-    - skip_ansible_lint
-
-- name: firewalld | opening ports 443, 80, 5432
-  command: firewall-cmd --zone=public --add-port={{ item }}/tcp --permanent
-  with_items:
-    - '80'
-    - '443'
-    - '5432'
-  notify:
-    - Reload firewalld
-  tags:
-    - skip_ansible_lint
-
 # health page
 - name: check if ovirt-engine running (health page)
   uri:
