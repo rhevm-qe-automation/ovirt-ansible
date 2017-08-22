@@ -224,8 +224,6 @@
 - name: get postgres path
   become: yes
   become_user: postgres
-  become_method: su
-  become_flags: "-"
   shell: echo $HOME
   register: pgpath
   tags:
