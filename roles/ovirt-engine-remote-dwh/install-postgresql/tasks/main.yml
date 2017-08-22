@@ -57,8 +57,8 @@
     dest: /var/lib/pgsql/data/pg_hba.conf
     line: "{{ item }}"
   with_items:
-    - 'host    {{ ovirt_engine_dwh_db_name }}    {{ ovirt_engine_dwh_db_name }}    {{ engine_vm_network_cidr }}     md5 # engine'
-    - 'host    {{ ovirt_engine_dwh_db_name }}    {{ ovirt_engine_dwh_db_name }}    {{ dwhservice_vm_network_cidr }}     md5 # dwhservice'
+    - 'host    {{ ovirt_engine_dwh_db_name }}    {{ ovirt_engine_dwh_db_name }}    {{ engine_vm_network_cidr | mandatory }}     md5 # engine'
+    - 'host    {{ ovirt_engine_dwh_db_name }}    {{ ovirt_engine_dwh_db_name }}    {{ dwhservice_vm_network_cidr | mandatory }}     md5 # dwhservice'
 
 - name: Edit the config file /var/lib/pgsql/data/postgresql.conf
   command: "{{ item }}"

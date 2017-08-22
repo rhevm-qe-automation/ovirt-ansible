@@ -131,8 +131,9 @@ the VM has to be setup for the `ovirt_engine_history` VM which is to be used by 
 ---
 - hosts: dwhdb
   vars:
-    # the below vars are explained in `install-postgresql/defaults/main.yml` and 
-    # also the other configurable variables are placed there
+    # a value of '139.162.45.0/24' would take for 'engine_vm_network_cidr' when the IP
+    # address of the engine VM is '139.162.45.249'. The value for the value below 
+    # is calculated similarly
     engine_vm_network_cidr: '139.162.45.0/24' # Network where the Engine VM lies
     dwhservice_vm_network_cidr: '139.162.61.0/24'
     ovirt_engine_dwh_db_password: 'password'
