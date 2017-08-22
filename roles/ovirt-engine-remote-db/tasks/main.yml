@@ -233,7 +233,7 @@
   become_user: postgres
   become: yes
   # ON_ERROR_STOP=1 - command returns non-zero value, otherwise is always 0 with -f flag
-  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f ansible-sql/'{{item}}'
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f {{ pgpath.stdout }}/ansible-sql/'{{item}}'
   with_items:
     - "ovirt-engine-db-drop.sql"
     - "ovirt-engine-db-user-drop.sql"
@@ -244,7 +244,7 @@
 - name: create engine DB and user
   become_user: postgres
   become: yes
-  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f ansible-sql/'{{item}}'
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f {{ pgpath.stdout }}/ansible-sql/'{{item}}'
   with_items:
     - "ovirt-engine-db-user-create.sql"
     - "ovirt-engine-db-create.sql"
@@ -253,7 +253,7 @@
 - name: drop DWH DB and user
   become_user: postgres
   become: yes
-  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f ansible-sql/'{{item}}'
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f {{ pgpath.stdout }}/ansible-sql/'{{item}}'
   with_items:
     - "ovirt-engine-dwh-db-drop.sql"
     - "ovirt-engine-dwh-db-user-drop.sql"
@@ -264,7 +264,7 @@
 - name: create DWH DB and user
   become_user: postgres
   become: yes
-  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f ansible-sql/'{{item}}'
+  command: psql -p {{ovirt_engine_remote_db_port}} -a -v ON_ERROR_STOP=1 -f {{ pgpath.stdout }}/ansible-sql/'{{item}}'
   with_items:
     - "ovirt-engine-dwh-db-user-create.sql"
     - "ovirt-engine-dwh-db-create.sql"
