@@ -287,7 +287,7 @@
 - name: import engine dump
   become_user: postgres
   become: yes
-  shell: pg_restore -d {{ ovirt_engine_db_name }} ansible-dump/{{ ovirt_engine_remote_db_dump | basename }}
+  shell: pg_restore -d {{ ovirt_engine_db_name }} {{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dump | basename }}
   when:
     - ovirt_engine_remote_db_dump is defined
     - ovirt_engine_remote_db == True
@@ -305,7 +305,7 @@
 - name: import DWH dump
   become_user: postgres
   become: yes
-  shell: pg_restore -d {{ ovirt_engine_dwh_db_name }} ansible-dump/{{ ovirt_engine_remote_db_dwh_dump | basename }}
+  shell: pg_restore -d {{ ovirt_engine_dwh_db_name }} {{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dwh_dump | basename }}
   when:
     - ovirt_engine_remote_db_dwh_dump is defined
     - ovirt_engine_dwh_remote_db == True
