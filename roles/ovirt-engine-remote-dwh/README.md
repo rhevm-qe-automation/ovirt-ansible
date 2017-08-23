@@ -134,8 +134,8 @@ the VM has to be setup for the `ovirt_engine_history` VM which is to be used by 
     # a value of '139.162.45.0/24' would take for 'engine_vm_network_cidr' when the IP
     # address of the engine VM is '139.162.45.249'. The value for the value below 
     # is calculated similarly
-    engine_vm_network_cidr: '139.162.45.0/24' # Network where the Engine VM lies
-    dwhservice_vm_network_cidr: '139.162.61.0/24'
+    engine_vm_network_cidr: '1.2.3.4' # Network where the Engine VM lies
+    dwhservice_vm_network_cidr: '1.2.3.5'
     ovirt_engine_dwh_db_password: 'password'
   roles:
     - role: ovirt-engine-remote-dwh/install-postgresql
