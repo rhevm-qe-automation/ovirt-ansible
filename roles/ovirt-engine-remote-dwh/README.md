@@ -159,7 +159,7 @@ Now VM which hosts the `dwhservice` needs to be setup.
     ovirt_engine_type: 'ovirt-engine'
     ovirt_engine_version: '4.1'
     ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm'
-    ovirt_engine_host_root_passwd: 'pycon2017'  # the root password of the host where ovirt-engine is installed
+    ovirt_engine_host_root_passwd: 'password'  # the root password of the host where ovirt-engine is installed
     ovirt_engine_firewall_manager: 'firewalld'
     ovirt_engine_host_fqdn: 'testengine.ovirt.org'  # FQDN of the ovirt-engine installation host, should be resolvable from the new DWH host
     ovirt_engine_db_host: 'testengine.ovirt.org' 
