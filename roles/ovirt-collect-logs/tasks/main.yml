@@ -34,6 +34,13 @@
   tags:
     - skip_ansible_lint # check for shell module is not working correctly in Lint
 
+- name: Check if /var/log/messages exists else we have to use journalctl
+  stat: path=/var/log/messages
+  register: message_file
+
+- name: Copy journalctl output if /var/log/messages is missing
+  shell: journalctl > "/var/log/messages"
+  when: not message_file.stat.exists
 
 - name: Link common logs
   file:
@@ -61,3 +68,9 @@
     src: "{{ ovirt_collect_logs_archive }}"
     dest: "logs/{{ ovirt_collect_logs_from_system }}-{{ ansible_hostname }}/ovirt-engine-logs.tar.gz"
     flat: yes
+
+- name: Remove /var/log/messages if it was not there before
+  file:
+    path: /var/log/messages
+    state: absent
+  when: not message_file.stat.exists
