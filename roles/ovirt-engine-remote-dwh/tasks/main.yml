@@ -50,7 +50,7 @@
     url: "http://{{ ovirt_engine_db_host }}/ovirt-engine/services/health"
     status_code: 200
   register: ovirt_engine_status
-  retries: 2
+  retries: 12
   delay: 5
   until: ovirt_engine_status|success
   ignore_errors: True
