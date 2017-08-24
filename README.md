@@ -46,6 +46,7 @@ This host group is meant for virtual machines hosted by oVirt Engine.
 * [ovirt-engine-config]
 * [ovirt-engine-db-dump]
 * [ovirt-engine-install-packages]
+* [ovirt-engine-local-to-remote-db]
 * [ovirt-engine-remote-db]
 * [ovirt-engine-setup]
 * [ovirt-guest-agent]
@@ -122,6 +123,7 @@ ansible-playbook tests/test-master.yml -i tests/inventory
 [ovirt-engine-config]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-config/README.md
 [ovirt-engine-db-dump]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-db-dump/README.md
 [ovirt-engine-install-packages]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-install-packages/README.md
+[ovirt-engine-local-to-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-local-to-remote-db/README.md
 [ovirt-engine-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md
 [ovirt-engine-setup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-setup/README.md
 [ovirt-guest-agent]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-guest-agent/README.md

@@ -1,0 +1,39 @@
+---
+# to be sure services are stopped
+- name: stop necessary service
+  service:
+    name: "{{ item }}"
+    state: stopped
+  with_items:
+    - ovirt-engine-dwhd
+    - ovirt-engine
+# change in engine configuration localhost to remote server
+- name: update engine settings
+  replace:
+    path: "{{ item }}"
+    regexp: '^(ENGINE.*)localhost'
+    replace: '\g<1>{{ groups["database"][0] }}'
+  with_items: "{{ ovirt_engine_etc_conf_files }}"
+  when: ovirt_engine_to_remote_db == True
+- name: update aaa settings
+  replace:
+    path: "{{ item }}"
+    regexp: "localhost"
+    replace: "{{ groups['database'][0] }}"
+  with_items: "{{ ovirt_engine_etc_conf_files_aaa }}"
+  when: ovirt_engine_to_remote_db == True
+- name: update dwh settings
+  replace:
+    path: "{{ item }}"
+    regexp: '^(DWH.*)localhost'
+    replace: '\g<1>{{ groups["database"][0] }}'
+  with_items: "{{ ovirt_engine_etc_conf_files }}"
+  when: ovirt_engine_dwh_to_remote_db == True
+# restart needed services
+- name: start engine and dwh service
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - ovirt-engine
+    - ovirt-engine-dwhd
