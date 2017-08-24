@@ -7,6 +7,7 @@
   with_items:
     - ovirt-engine-dwhd
     - ovirt-engine
+
 # change in engine configuration localhost to remote server
 - name: update engine settings
   replace:
@@ -15,6 +16,7 @@
     replace: '\g<1>{{ groups["database"][0] }}'
   with_items: "{{ ovirt_engine_etc_conf_files }}"
   when: ovirt_engine_to_remote_db == True
+
 - name: update aaa settings
   replace:
     path: "{{ item }}"
@@ -22,6 +24,7 @@
     replace: "{{ groups['database'][0] }}"
   with_items: "{{ ovirt_engine_etc_conf_files_aaa }}"
   when: ovirt_engine_to_remote_db == True
+
 - name: update dwh settings
   replace:
     path: "{{ item }}"
@@ -29,6 +32,7 @@
     replace: '\g<1>{{ groups["database"][0] }}'
   with_items: "{{ ovirt_engine_etc_conf_files }}"
   when: ovirt_engine_dwh_to_remote_db == True
+
 # restart needed services
 - name: start engine and dwh service
   service:

@@ -15,7 +15,7 @@ Requirements
 ------------
 
 Preinstalled engine with local DB.
-Preinstalled clean operating system on remote server.
+Preinstalled clean el7/linux based operating system on remote server.
 
 Role Variables
 --------------
