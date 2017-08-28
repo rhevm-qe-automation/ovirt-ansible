@@ -1,0 +1,4 @@
+ovirt_engine_dwh_db_name: ovirt_engine_history
+ovirt_engine_dwh_db_user: ovirt_engine_history 
+ovirt_engine_dwh_db_password: password
+ovirt_engine_dwh_db_port: 5432
