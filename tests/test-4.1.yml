@@ -6,6 +6,11 @@
     ovirt_engine_version: "4.1"
     ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm"
 - include: engine-rename.yml
+- include: engine-deploy-local-db.yml
+  vars:
+    ovirt_engine_version: "4.1"
+    ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm"
+- include: engine-local-to-remote-db.yml
 - include: engine-cleanup.yml
   vars:
     ovirt_engine_version: "4.1"

@@ -5,3 +5,15 @@ engine_centos7 image="chrismeyers/centos7"
 
 [remote-db]
 remote_db_centos7 image="chrismeyers/centos7"
+
+[engine-local-db]
+engine_centos7 image="chrismeyers/centos7"
+
+[engine-local-db:vars]
+ovirt_type=engine
+
+[remote-db-migrate]
+remote_db_centos7 image="chrismeyers/centos7"
+
+[remote-db-migrate:vars]
+ovirt_type=remote_db

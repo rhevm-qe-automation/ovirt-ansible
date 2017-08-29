@@ -12,24 +12,24 @@
 - name: update engine settings
   replace:
     path: "{{ item }}"
-    regexp: '^(ENGINE.*)localhost'
-    replace: '\g<1>{{ remote_db_ip }}'
+    regexp: '^(ENGINE.*){{ remote_db_ip }}'
+    replace: '\g<1>localhost'
   with_items: "{{ ovirt_engine_etc_conf_files }}"
   when: ovirt_engine_to_remote_db == True
 
 - name: update aaa settings
   replace:
     path: "{{ item }}"
-    regexp: "localhost"
-    replace: "{{ remote_db_ip }}"
+    regexp: "{{ remote_db_ip }}"
+    replace: "localhost"
   with_items: "{{ ovirt_engine_etc_conf_files_aaa }}"
   when: ovirt_engine_to_remote_db == True
 
 - name: update dwh settings
   replace:
     path: "{{ item }}"
-    regexp: '^(DWH.*)localhost'
-    replace: '\g<1>{{ remote_db_ip }}'
+    regexp: '^(DWH.*){{ remote_db_ip }}'
+    replace: '\g<1>localhost'
   with_items: "{{ ovirt_engine_etc_conf_files }}"
   when: ovirt_engine_dwh_to_remote_db == True
 

@@ -10,3 +10,14 @@
     ovirt_engine_dwh_db_host: "{{ hostvars['remote_db_centos7']['ansible_default_ipv4']['address'] }}"
   roles:
     - role: ovirt-engine-cleanup  # This role must be last
+- name: Run ovirt-engine-cleanup on engine with local db
+  hosts: engine-local-db
+  vars:
+    ovirt_engine_type: "ovirt-engine"
+    ovirt_engine_version: "{{ ovirt_engine_version }}"
+    ovirt_engine_hostname: "localhost"
+    ovirt_engine_db_host: "localhost"
+    ovirt_engine_dwh: true
+    ovirt_engine_dwh_db_host: "localhost"
+  roles:
+    - role: ovirt-engine-cleanup  # This role must be last

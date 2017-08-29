@@ -24,6 +24,9 @@ Role Variables
 ---
 ovirt_engine_to_remote_db: [True, False] Change from local to remote engine database (default: True)
 ovirt_engine_dwh_to_remote_db: [True, False] Change from local to remote DWH database (default: False)
+
+ovirt_engine_reset: [True, False] True - set back engine to local db (default: False)
+ovirt_engine_drop_local_db: [True, False] Drop local databases after engine is set to remote db, dump will be stored (default: True)
 ```
 
 Dependencies

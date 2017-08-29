@@ -1,7 +1,19 @@
 ---
 - name: set engine variables
   set_fact:
-    engine_ip: "{% if hostvars[groups['engine'][0]]['ansible_default_ipv4']['address'] is defined %}{{ hostvars[groups['engine'][0]]['ansible_default_ipv4']['address'] }}{% else %}{{ groups['engine'][0] }}{% endif %}"
+    engine_ip: "{% if hostvars[inventory_hostname]['ansible_default_ipv4']['address'] is defined %}{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}{% else %}{{ inventory_hostname }}{% endif %}"
+  delegate_to: "{{ item }}"
+  delegate_facts: True
+  with_items: "{{ groups['all'] }}"
+  when: ovirt_type == "engine"
+
+- name: set db variables
+  set_fact:
+    remote_db_ip: "{% if hostvars[inventory_hostname]['ansible_default_ipv4']['address'] is defined %}{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}{% else %}{{ inventory_hostname }}{% endif %}"
+  delegate_to: "{{ item }}"
+  delegate_facts: True
+  with_items: "{{ groups['all'] }}"
+  when: ovirt_type == "remote_db"
 
 # first dump databases on engine and get connection variables
 - name: dump databases
@@ -11,19 +23,25 @@
     ovirt_engine_db_dump_dwh: "{{ ovirt_engine_dwh_to_remote_db }}"
     ovirt_engine_db_dump_start_services: False
     ovirt_engine_db_dump_local_dir: "{{ playbook_dir }}/engine_dump"
-  when: ovirt_type == "engine"
+  when: 
+    - ovirt_type == "engine"
+    - ovirt_engine_reset == False
 
 - name: get engine variables from file
   include_vars:
     file: "{{ playbook_dir }}/engine_dump/engine_variables.json"
     name: ovirt_engine_db_dump_engine_db
-  when: ovirt_engine_to_remote_db == True
+  when: 
+    - ovirt_engine_to_remote_db == True
+    - ovirt_engine_reset == False
 
 - name: get DWH variables from file
   include_vars:
     file: "{{ playbook_dir }}/engine_dump/dwh_variables.json"
     name: ovirt_engine_db_dump_dwh_db
-  when: ovirt_engine_dwh_to_remote_db == True
+  when: 
+    - ovirt_engine_dwh_to_remote_db == True
+    - ovirt_engine_reset == False
 
 # create databases on remote server and import data
 - name: create databases and import data
@@ -47,13 +65,25 @@
         type: host
         address: "{{ engine_ip }}/32"
         method: md5
-  when: ovirt_type == "remote_db"
+  when: 
+    - ovirt_type == "remote_db"
+    - ovirt_engine_reset == False
 
 # set engine from local to remote db
 - include: set-engine.yml
-  when: ovirt_type == "engine"
+  when: 
+    - ovirt_type == "engine"
+    - ovirt_engine_reset == False
+
+# reset engine back to local db
+- include: reset-engine.yml
+  when: 
+    - ovirt_type == "engine"
+    - ovirt_engine_reset == True
 
 # clean
 - name: remove dump files from local
   local_action:
     file path={{ playbook_dir }}/engine_dump state=absent
+  when: 
+    - ovirt_engine_reset == False
