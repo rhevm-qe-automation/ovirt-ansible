@@ -123,6 +123,7 @@ ansible-playbook tests/test-master.yml -i tests/inventory
 [ovirt-engine-db-dump]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-db-dump/README.md
 [ovirt-engine-install-packages]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-install-packages/README.md
 [ovirt-engine-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md
+[ovirt-engine-remote-dwh]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-dwh/README.md
 [ovirt-engine-setup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-setup/README.md
 [ovirt-guest-agent]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-guest-agent/README.md
 [provision_docker]: https://github.com/chrismeyersfsu/provision_docker/

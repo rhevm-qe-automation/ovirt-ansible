@@ -77,6 +77,34 @@ Example Playbook
     - ovirt-engine-setup
 ```
 
+Extra
+-----
+
+If you want to install just the `ovirt-engine` and configure the DWH database later on a different host, then the playbook would look like
+
+```yaml
+---
+- hosts: engine
+  vars:
+    ovirt_engine_type: 'ovirt-engine'
+    ovirt_engine_version: '4.1'
+    ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm'
+    ovirt_engine_organization: 'dwhmanualenginetest.ovirt.org'
+    ovirt_engine_organization: 'ovirt.org'
+    ovirt_engine_admin_password: 'secret'
+    ovirt_engine_dwh: False
+  roles:
+    - ovirt-common
+    - ovirt-engine-install-packages
+    - ovirt-engine-setup
+```
+
+Running this play file would be done like
+
+```bash
+$ ansible-playbook site.yml -i inventory
+```
+
 Author Information
 ------------------
 
