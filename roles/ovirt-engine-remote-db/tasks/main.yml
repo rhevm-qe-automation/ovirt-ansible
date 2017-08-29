@@ -188,7 +188,8 @@
   ignore_errors: True
 
 - name: open port for PostgreSQL in iptables
-  shell: "iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport {{ovirt_engine_remote_db_port}} -j ACCEPT"
+  shell: "iptables -I INPUT -s {{ item.address }} -p tcp -m state --state NEW -m tcp --dport {{ovirt_engine_remote_db_port}} -j ACCEPT"
+  with_items: "{{ ovirt_engine_remote_db_access | list }}"
   when: postgresql_status|failed and not iptables_status|failed
   tags:
     - skip_ansible_lint
@@ -209,9 +210,11 @@
 
 - name: open port for PostgreSQL in firewalld
   firewalld:
+    source: "{{ item.address }}"
     port: "{{ovirt_engine_remote_db_port|int}}/tcp"
     permanent: True
     state: enabled
+  with_items: "{{ ovirt_engine_remote_db_access | list }}"
   when: postgresql_status|failed and not firewalld_status|failed
 
 - name: reload firewalld
