@@ -1,0 +1,36 @@
+---
+- name: Copy via.q repo file and "999-cloud-init-requiretty"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "viaq.repo", dest: "/etc/yum.repos.d/" }
+    - { src: "999-cloud-init-requiretty", dest: "/etc/sudoers.d/" }
+
+- name: Install dockerpy and iptables-service
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - "docker"
+    - "iptables-services"
+
+- name: Install openshift-origin from the repos
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - "openshift-ansible"
+    - "openshift-ansible-callback-plugins"
+    - "openshift-ansible-filter-plugins"
+    - "openshift-ansible-lookup-plugins"
+    - "openshift-ansible-playbooks"
+    - "openshift-ansible-roles"
+
+- name: Unmask NetworkManager and start the service
+  command: systemctl {{ item }} NetworkManager
+  with_items:
+    - "unmask"
+    - "start"
+
+# WIP
