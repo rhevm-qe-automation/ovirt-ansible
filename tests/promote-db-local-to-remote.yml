@@ -1,5 +1,5 @@
 ---
 - name: Change engines local to remote db
-  hosts: engine-local-db remote-db-migrate
+  hosts: engine remote-db
   roles:
     - role: ovirt-engine-local-to-remote-db

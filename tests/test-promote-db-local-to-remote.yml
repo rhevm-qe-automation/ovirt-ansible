@@ -1,0 +1,16 @@
+---
+- include: containers-deploy.yml
+- include: engine-deploy.yml
+  vars:
+    engine_db_host: "localhost"
+    engine_dwh_db_host: "localhost"
+    ovirt_engine_version: "4.1"
+    ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm"
+
+- include: promote-db-local-to-remote.yml
+
+- include: engine-cleanup.yml
+  vars:
+    engine_db_host: "localhost"
+    engine_dwh_db_host: "localhost"
+    ovirt_engine_version: "4.1"
