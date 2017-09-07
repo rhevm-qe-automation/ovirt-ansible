@@ -15,7 +15,7 @@ Target systems
 Requirements
 ------------
 
-Preinstalled clean operating system.
+Preinstalled clean environment with configured repositories.
 
 Role Variables
 --------------
@@ -54,7 +54,7 @@ ovirt_engine_remote_db_vacuum_config: Default postgresql cofiguration for
 Dependencies
 ------------
 
-None
+* ovirt-common
 
 Example Playbook
 ----------------
@@ -86,6 +86,7 @@ Example Playbook
         type: local
         method: md5
   roles:
+    - ovirt-common
     - ovirt-engine-remote-db
 ```
 

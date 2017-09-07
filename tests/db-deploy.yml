@@ -13,4 +13,5 @@
         type: local
         method: trust
   roles:
+    - role: ovirt-common
     - role: ovirt-engine-remote-db
