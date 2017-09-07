@@ -46,7 +46,7 @@
 
 - name: check state of database
   service:
-    name: postgresql
+    name: rh-postgresql95-postgresql
     state: started
   when: (ovirt_engine_dwh_db_host == 'localhost' and ovirt_engine_dwh == True) or ovirt_engine_db_host == 'localhost'
 
