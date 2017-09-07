@@ -2,6 +2,8 @@
 - name: Deploy node for ovirt-engine remote DB
   hosts: remote-db
   vars:
+    ovirt_engine_version: "{{ ovirt_engine_version }}"
+    ovirt_rpm_repo: "{{ ovirt_rpm_repo }}"
     ovirt_engine_remote_db: true
     ovirt_engine_dwh_remote_db: true
     ovirt_engine_remote_db_access:
@@ -13,4 +15,5 @@
         type: local
         method: trust
   roles:
+    - role: ovirt-common
     - role: ovirt-engine-remote-db

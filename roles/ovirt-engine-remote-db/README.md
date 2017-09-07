@@ -43,8 +43,6 @@ ovirt_engine_remote_db_access:  # configure access to engine remote DBs
     address: 0.0.0.0/0   # mask for host, omitted for local
     method: md5 / trust / ident / peer
 
-ovirt_engine_remote_db_config_file: Path to postgresql configuration
-  (default: '/var/lib/pgsql/data/postgresql.conf')
 ovirt_engine_remote_db_vacuum: [True, False] True if set db configuration for
   vacuum feature (default: True)
 ovirt_engine_remote_db_vacuum_config: Default postgresql cofiguration for
@@ -54,7 +52,7 @@ ovirt_engine_remote_db_vacuum_config: Default postgresql cofiguration for
 Dependencies
 ------------
 
-* ovirt-common
+* ovirt-common - this is only a must on ovirt > 4.1
 
 Example Playbook
 ----------------
@@ -63,8 +61,10 @@ Example Playbook
 ---
 - hosts: database
   vars:
+    ovirt_engine_version: "4.2"
+    # var for ovirt-common, this is not a must for ovirt <= 4.1
     ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm'
-  # vars for PostgreSQL
+    # vars for PostgreSQL
     ovirt_engine_remote_db_port: 5432
     ovirt_engine_remote_db_listen_address: '*'
 
@@ -87,6 +87,7 @@ Example Playbook
         type: local
         method: md5
   roles:
+    # ovirt-common is not a must for ovirt <= 4.1
     - ovirt-common
     - ovirt-engine-remote-db
 ```
