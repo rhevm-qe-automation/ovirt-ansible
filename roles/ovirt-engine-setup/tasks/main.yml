@@ -46,7 +46,7 @@
 
 - name: Define DB service
    set_fact:
-     postgres_service: "{% if ovirt_engine_version <= 4.1 %} 'postgresql' {% else %} 'rh-postgresql95-postgresql' {% endif %}"
+       postgres_service: "{% if ovirt_engine_version <= 4.1 %} 'postgresql' {% else %} 'rh-postgresql95-postgresql' {% endif %}"
 
 - name: check state of database
   service:
