@@ -63,6 +63,7 @@ Example Playbook
 ---
 - hosts: database
   vars:
+    ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm'
   # vars for PostgreSQL
     ovirt_engine_remote_db_port: 5432
     ovirt_engine_remote_db_listen_address: '*'
