@@ -16,5 +16,5 @@
   roles:
     - role: ovirt-engine-install-packages
     - role: ovirt-engine-setup
-      ovirt_engine_update: True
+      ovirt_engine_update: true
       ovirt_engine_answer_file_path: "answerfile_{{ ovirt_engine_version }}_upgrade.txt.j2"

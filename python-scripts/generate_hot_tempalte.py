@@ -57,14 +57,16 @@ if __name__ == '__main__':
 
     # Check conflicting arguements
     if args.hot_help:
-        print 'For HOT usage it is necessary to set up credentials file to ' \
-              'openstack. \nParameters file should contain at least these ' \
-              'arguments:'
-        print '\tpublic_net: \t\tNetwork interface to connect within the stack'
-        print '\tkey_name: \t\tSsh key added to open stack instance'
-        print '\tflavor: \t\tFlavor of instance specified within open stack.'
-        print '\timage_engine36: \timage name for engine36'
-        print '\timage_engine40: \timage name for engine40'
+        print('For HOT usage it is necessary to set up credentials file to '
+              'openstack. \nParameters file should contain at least these '
+              'arguments:')
+        print(
+            '\tpublic_net: \t\tNetwork interface to connect within the stack'
+        )
+        print('\tkey_name: \t\tSsh key added to open stack instance')
+        print('\tflavor: \t\tFlavor of instance specified within open stack.')
+        print('\timage_engine36: \timage name for engine36')
+        print('\timage_engine40: \timage name for engine40')
         sys.exit(0)
     if args.dwh not in ["local", "remote", "none"]:
         sys.stderr.write(

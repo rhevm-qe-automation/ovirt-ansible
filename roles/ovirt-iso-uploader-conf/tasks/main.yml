@@ -13,12 +13,30 @@
   when:
     item.val != ""
   with_items:
-    - { key: "user", val: "{{ ovirt_iso_uploader_user }}" }
-    - { key: "passwd", val: "{{ ovirt_iso_uploader_password }}" }
-    - { key: "engine", val: "{{ ovirt_iso_uploader_engine }}" }
-    - { key: "cert-file", val: "{{ ovirt_iso_uploader_cert_file }}" }
-    - { key: "iso-domain", val: "{{ ovirt_iso_uploader_iso_domain }}" }
-    - { key: "nfs-server", val: "{{ ovirt_iso_uploader_nfs_server }}" }
-    - { key: "ssh-user", val: "{{ ovirt_iso_uploader_ssh_user }}" }
-    - { key: "ssh-port", val: "{{ ovirt_iso_uploader_ssh_port }}" }
-    - { key: "key-file", val: "{{ ovirt_iso_uploader_key_file }}" }
+    -
+      key: "user"
+      val: "{{ ovirt_iso_uploader_user }}"
+    -
+      key: "passwd"
+      val: "{{ ovirt_iso_uploader_password }}"
+    -
+      key: "engine"
+      val: "{{ ovirt_iso_uploader_engine }}"
+    -
+      key: "cert-file"
+      val: "{{ ovirt_iso_uploader_cert_file }}"
+    -
+      key: "iso-domain"
+      val: "{{ ovirt_iso_uploader_iso_domain }}"
+    -
+      key: "nfs-server"
+      val: "{{ ovirt_iso_uploader_nfs_server }}"
+    -
+      key: "ssh-user"
+      val: "{{ ovirt_iso_uploader_ssh_user }}"
+    -
+      key: "ssh-port"
+      val: "{{ ovirt_iso_uploader_ssh_port }}"
+    -
+      key: "key-file"
+      val: "{{ ovirt_iso_uploader_key_file }}"

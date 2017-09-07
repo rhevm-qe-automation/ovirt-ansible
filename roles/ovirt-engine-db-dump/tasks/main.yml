@@ -73,11 +73,15 @@
 # print variables to file
 - name: print engine variables to file
   local_action:
-        copy content="{{ ovirt_engine_db_dump_engine_db }}" dest="{{ playbook_dir }}/engine_dump/engine_variables.json"
+    module: copy
+    content: "{{ ovirt_engine_db_dump_engine_db }}"
+    dest: "{{ playbook_dir }}/engine_dump/engine_variables.json"
 
 - name: print DWH variables to file
   local_action:
-        copy content="{{ ovirt_engine_db_dump_dwh_db }}" dest="{{ playbook_dir }}/engine_dump/dwh_variables.json"
+    module: copy
+    content: "{{ ovirt_engine_db_dump_dwh_db }}"
+    dest: "{{ playbook_dir }}/engine_dump/dwh_variables.json"
   when: ovirt_engine_db_dump_dwh == True
 
 # copy files to localhost

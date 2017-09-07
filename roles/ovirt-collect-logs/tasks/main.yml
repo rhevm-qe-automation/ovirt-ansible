@@ -48,7 +48,9 @@
     dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item.dest }}"
     state: link
   with_items:
-    - { src: "/var/log/messages", dest: "messages" }
+    -
+      src: "/var/log/messages"
+      dest: "messages"
 
 # Collect system specific stuff
 

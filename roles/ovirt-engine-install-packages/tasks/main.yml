@@ -4,7 +4,7 @@
   yum:
     name: "{{ovirt_engine_type}}"
     state: installed
-    update_cache: yes
+    update_cache: true
   tags:
     - skip_yum_install_ovirt_engine
 
