@@ -5,11 +5,11 @@
 - name: Include postgres params
   include_vars: default.yml
 
-- name: Override postgres params for CentOs or Red Hat when ovirt >= 4.2
+- name: Override postgres params for CentOs or RedHat when ovirt >= 4.2
   include_vars: postgres95.yml
   when:
     - ovirt_engine_version >= '4.2'
-    - ansible_distribution in ('CentOS', 'Red Hat')
+    - ansible_distribution in ('CentOS', 'RedHat')
 
 # install libselinux-python on machine - selinux policy
 - name: install SELinux requirements to run ansible modules managing SELinux.
@@ -52,7 +52,7 @@
   when:
     - postgresql_status|failed
     - ovirt_engine_version >= '4.2'
-    - ansible_distribution in ('CentOS', 'Red Hat')
+    - ansible_distribution in ('CentOS', 'RedHat')
   tags:
     - skip_ansible_lint
 
