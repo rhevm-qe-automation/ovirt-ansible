@@ -98,10 +98,11 @@ service has to be configured and running on your system.
 
 Under ``tests`` directory, there are playbooks for different oVirt versions
 
-* tests/test-3.6.yml
-* tests/test-4.0.yml
+* tests/test-3.6.yml  (Disabled because of #155)
+* tests/test-4.0.yml  (Disabled because of #155)
 * tests/test-4.1.yml
 * tests/test-master.yml
+* tests/test-upgrade-4.0-to-4.1.yml  (Disabled because of #155)
 * tests/test-upgrade-4.1-to-master.yml
 
 ```sh
