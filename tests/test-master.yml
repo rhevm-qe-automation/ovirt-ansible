@@ -8,7 +8,7 @@
   vars:
     ovirt_engine_version: "4.2"
     ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release-master.rpm"
-- include: engine-rename.yml
+# - include: engine-rename.yml
 - include: engine-cleanup.yml
   vars:
     ovirt_engine_version: "4.2"
