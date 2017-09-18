@@ -9,10 +9,10 @@
     ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm"
 - include: engine-rename.yml
   vars:
-    ovirt_engine_rename_new_fqdn: "{{ item }}"
-  with_items:
-    - "test.ovirt.org"
-    - "{{ ansible_hostname }}"
+    ovirt_engine_rename_new_fqdn: "test.ovirt.org"
+- include: engine-rename.yml
+  vars:
+    ovirt_engine_rename_new_fqdn: "{{ ansible_hostname }}"
 - include: engine-cleanup.yml
   vars:
     ovirt_engine_version: "4.1"
