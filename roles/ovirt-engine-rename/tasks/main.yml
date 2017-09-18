@@ -51,8 +51,13 @@
   tags:
     - skip_ansible_lint
 
-- debug: msg="change your /etc/hosts file to reflect to the new changed ovirt-engine name"
 
+- name "change your /etc/hosts file to reflect to the new changed ovirt-engine name"
+  lineinfile: 
+    dest: /etc/hosts
+    line: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} {{ ovirt_engine_rename_new_fqdn}}"
+    state: present
+  
 - name: Checking if the engine-rename is successful
   command: grep -R --include \*.conf {{ ovirt_engine_rename_new_fqdn }} /etc/ovirt-engine
   changed_when: False
