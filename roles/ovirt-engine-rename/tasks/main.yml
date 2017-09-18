@@ -75,4 +75,3 @@
   retries: 12
   delay: 10
   until: health_page|success
-  delegate_to: "{{ ovirt_engine_rename_new_fqdn }}"
