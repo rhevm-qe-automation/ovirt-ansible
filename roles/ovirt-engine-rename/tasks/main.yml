@@ -51,15 +51,6 @@
   tags:
     - skip_ansible_lint
 
-- name: check health status of page
-  uri:
-    url: "http://{{ ovirt_engine_rename_new_fqdn }}/ovirt-engine/services/health"
-    status_code: 200
-  register: health_page
-  retries: 12
-  delay: 10
-  until: health_page|success
-
 - name: Checking if the engine-rename is successful
   command: grep -R --include \*.conf {{ ovirt_engine_rename_new_fqdn }} /etc/ovirt-engine
   changed_when: False
@@ -69,3 +60,12 @@
   command: echo Engine Rename successful
   changed_when: False
   when: final_check.rc == 0
+
+- name: check health status of page
+  uri:
+    url: "http://{{ ovirt_engine_rename_new_fqdn }}/ovirt-engine/services/health"
+    status_code: 200
+  register: health_page
+  retries: 12
+  delay: 10
+  until: health_page|success

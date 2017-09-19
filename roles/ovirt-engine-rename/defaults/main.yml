@@ -1,2 +1,0 @@
-# This variable allows run rename role under container
-ovirt_run_containerized: false
