@@ -14,11 +14,9 @@
 - include: engine-rename.yml
   vars:
     ovirt_engine_rename_new_fqdn: "test.ovirt.org"
-    ovirt_run_containerized: true
 - include: engine-rename.yml
   vars:
     ovirt_engine_rename_new_fqdn: "{{ ansible_hostname }}"
-    ovirt_run_containerized: true
 - include: engine-cleanup.yml
   vars:
     ovirt_engine_version: "4.2"
