@@ -56,7 +56,7 @@
     dest: /etc/hosts
     line: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} {{ ovirt_engine_rename_new_fqdn}}"
     state: present
-    unsafe_writes: {{ovirt_run_containerized}}
+    unsafe_writes: "{{ovirt_run_containerized}}"
 
 - name: check health status of page
   uri:
