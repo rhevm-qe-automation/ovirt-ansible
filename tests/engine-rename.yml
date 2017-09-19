@@ -1,7 +1,12 @@
 ---
 - name: Run ovirt-engine-rename on containerized environment
   hosts: engine
-  vars:
-    ovirt_engine_rename_new_fqdn: 'test.ovirt.org'
+  pre_tasks:
+    - name: "change your /etc/hosts file to reflect to the new changed ovirt-engine name"
+      lineinfile:
+        dest: /etc/hosts
+        line: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} {{ ovirt_engine_rename_new_fqdn }}"
+        state: present
+        unsafe_writes: yes
   roles:
     - role: ovirt-engine-rename
