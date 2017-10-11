@@ -99,10 +99,11 @@ service has to be configured and running on your system.
 
 Under ``tests`` directory, there are playbooks for different oVirt versions
 
-* tests/test-3.6.yml
-* tests/test-4.0.yml
+* tests/test-3.6.yml  (Disabled because of #155)
+* tests/test-4.0.yml  (Disabled because of #155)
 * tests/test-4.1.yml
 * tests/test-master.yml
+* tests/test-upgrade-4.0-to-4.1.yml  (Disabled because of #155)
 * tests/test-upgrade-4.1-to-master.yml
 
 ```sh
@@ -125,6 +126,7 @@ ansible-playbook tests/test-master.yml -i tests/inventory
 [ovirt-engine-install-packages]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-install-packages/README.md
 [ovirt-engine-local-to-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-local-to-remote-db/README.md
 [ovirt-engine-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md
+[ovirt-engine-remote-dwh]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-dwh/README.md
 [ovirt-engine-setup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-setup/README.md
 [ovirt-guest-agent]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-guest-agent/README.md
 [provision_docker]: https://github.com/chrismeyersfsu/provision_docker/

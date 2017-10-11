@@ -11,13 +11,14 @@ env:
   global:
     - ANSIBLE_HOST_KEY_CHECKING="False"
   matrix:
-    - TEST_NAME=3.6
-    - TEST_NAME=4.0
+#    - TEST_NAME=3.6
+#    - TEST_NAME=4.0
     - TEST_NAME=4.1
     - TEST_NAME=master
     - TEST_NAME=upgrade-4.0-to-4.1
     - TEST_NAME=upgrade-4.1-to-master
     - TEST_NAME=promote-db-local-to-remote
+#    - TEST_NAME=upgrade-4.0-to-4.1
 
 # Install python-pip
 addons:
@@ -38,7 +39,7 @@ script:
   # Run sytax checks and linters
   - tox
   # Execute oVirt engine deployment playbook
-  - ansible-playbook tests/test-${TEST_NAME}.yml -i tests/inventory -vvv
+  - ansible-playbook tests/test-${TEST_NAME}.yml -i tests/inventory --skip-tags skip-travis -vvv
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

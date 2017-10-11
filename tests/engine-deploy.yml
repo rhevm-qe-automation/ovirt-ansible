@@ -29,4 +29,4 @@
     - role: ovirt-engine-setup
     - role: ovirt-engine-config
     - role: ovirt-iso-uploader-conf
-#    - role: ovirt-collect-logs  # Issue #102
+    - role: ovirt-collect-logs
