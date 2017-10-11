@@ -4,7 +4,7 @@ galaxy_info:
   description: "oVirt change engine/dwh local to remote database"
   company: "Red Hat"
   license: "GPLv3"
-  min_ansible_version: 1.9
+  min_ansible_version: 2.0
   platforms:
   - name: EL
     versions:

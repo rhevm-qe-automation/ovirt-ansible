@@ -1,6 +1,6 @@
 ---
 # to be sure services are stopped
-- name: stop necessary service
+- name: set engine back to local - stop necessary service
   service:
     name: "{{ item }}"
     state: stopped

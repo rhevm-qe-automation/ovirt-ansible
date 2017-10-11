@@ -1,7 +1,9 @@
 ---
+- debug:
+    msg: "{{hostvars}}"
 - name: set engine variables
   set_fact:
-    engine_ip: "{% if hostvars[inventory_hostname]['ansible_default_ipv4']['address'] is defined %}{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}{% else %}{{ inventory_hostname }}{% endif %}"
+    engine_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   delegate_to: "{{ item }}"
   delegate_facts: True
   with_items: "{{ groups['all'] }}"
@@ -9,7 +11,7 @@
 
 - name: set db variables
   set_fact:
-    remote_db_ip: "{% if hostvars[inventory_hostname]['ansible_default_ipv4']['address'] is defined %}{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}{% else %}{{ inventory_hostname }}{% endif %}"
+    remote_db_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   delegate_to: "{{ item }}"
   delegate_facts: True
   with_items: "{{ groups['all'] }}"
@@ -75,6 +77,39 @@
     - ovirt_type == "engine"
     - ovirt_engine_reset == False
 
+# check engine running
+- name: check if ovirt-engine running (health page)
+  uri:
+    url: "http://{{ ansible_fqdn }}/ovirt-engine/services/health"
+    status_code: 200
+  register: ovirt_engine_status
+  retries: 2
+  delay: 5
+  until: ovirt_engine_status|success
+  ignore_errors: True
+  when:
+    - ovirt_type == "engine"
+    - ovirt_engine_reset == False
+
+# engine is not running reset engine back to local
+- name: engine not running - set back to local
+  set_fact:
+    ovirt_engine_remove_db: False
+    ovirt_engine_reset: True
+  when:
+    - ovirt_type == "engine"
+    - ovirt_engine_reset == False
+    - ovirt_engine_status|failed
+
+- name: engine is running - remove database
+  set_fact:
+    ovirt_engine_remove_db: True
+  when:
+    - ovirt_type == "engine"
+    - ovirt_engine_reset == False
+    - ovirt_engine_status|success
+    - ovirt_engine_dont_remove_db == False
+
 # reset engine back to local db
 - include: reset-engine.yml
   when:
@@ -87,3 +122,9 @@
     file path={{ playbook_dir }}/engine_dump state=absent
   when:
     - ovirt_engine_reset == False
+
+# drop databases
+- include: remove-local-db.yml
+  when:
+    - ovirt_type == "engine"
+    - ovirt_engine_remove_db == True
