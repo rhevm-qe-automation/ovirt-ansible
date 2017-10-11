@@ -29,16 +29,29 @@ OVESETUP_DB/port=int:{{ovirt_engine_db_port}}
 OVESETUP_DB/filter=none:None
 OVESETUP_DB/restoreJobs=int:2
 OVESETUP_DB/securedHostValidation=bool:False
+{% if ovirt_engine_dwh_db_configure %}
 OVESETUP_DWH_DB/secured=bool:False
 OVESETUP_DWH_DB/host=str:{{ovirt_engine_dwh_db_host}}
 OVESETUP_DWH_DB/user=str:{{ovirt_engine_dwh_db_user}}
 OVESETUP_DWH_DB/password=str:{{ovirt_engine_dwh_db_password}}
-OVESETUP_DWH_DB/dumper=str:pg_custom
 OVESETUP_DWH_DB/database=str:{{ovirt_engine_dwh_db_name}}
 OVESETUP_DWH_DB/port=int:{{ovirt_engine_dwh_db_port}}
+{% else %}
+OVESETUP_DWH_DB/secured=none:None
+OVESETUP_DWH_DB/host=none:None
+OVESETUP_DWH_DB/user=none:None
+OVESETUP_DWH_DB/password=none:None
+OVESETUP_DWH_DB/database=none:None
+OVESETUP_DWH_DB/port=none:None
+{% endif %}
+OVESETUP_DWH_DB/dumper=str:pg_custom
 OVESETUP_DWH_DB/filter=none:None
 OVESETUP_DWH_DB/restoreJobs=int:2
+{% if ovirt_engine_dwh_db_configure %}
 OVESETUP_DWH_DB/securedHostValidation=bool:False
+{% else %}
+OVESETUP_DWH_DB/securedHostValidation=none:None
+{% endif %}
 OVESETUP_ENGINE_CORE/enable=bool:True
 OVESETUP_CORE/engineStop=none:None
 OVESETUP_SYSTEM/memCheckEnabled=bool:False
@@ -65,13 +78,21 @@ OVESETUP_CONFIG/imageioProxyConfig=bool:True
 OVESETUP_PROVISIONING/postgresProvisioningEnabled=bool:True
 OVESETUP_APACHE/configureRootRedirection=bool:True
 OVESETUP_APACHE/configureSsl=bool:True
+{% if ovirt_engine_dwh_db_configure %}
 OVESETUP_DWH_CORE/enable=bool:{{ovirt_engine_dwh}}
+{% else %}
+OVESETUP_DWH_CORE/enable=bool:False
+{% endif %}
 OVESETUP_DWH_CONFIG/scale=str:1
 OVESETUP_DWH_CONFIG/dwhDbBackupDir=str:/var/lib/ovirt-engine-dwh/backups
 OVESETUP_DWH_DB/restoreBackupLate=bool:True
 OVESETUP_DWH_DB/disconnectExistingDwh=none:None
 OVESETUP_DWH_DB/performBackup=none:None
+{% if ovirt_engine_dwh_db_configure %}
 OVESETUP_DWH_PROVISIONING/postgresProvisioningEnabled=bool:True
+{% else %}
+OVESETUP_DWH_PROVISIONING/postgresProvisioningEnabled=bool:False
+{% endif %}
 OVESETUP_DB/password=str:{{ovirt_engine_db_password}}
 OVESETUP_RHEVM_DIALOG/confirmUpgrade=bool:True
 OVESETUP_VMCONSOLE_PROXY_CONFIG/vmconsoleProxyConfig=bool:True

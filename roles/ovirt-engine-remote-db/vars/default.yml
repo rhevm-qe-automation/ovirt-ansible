@@ -1,0 +1,6 @@
+---
+postgres_service_name: "postgresql"
+postgres_server: "postgresql-server"
+postgres_data_dir: "/var/lib/pgsql/data"
+postgres_config_file: "/var/lib/pgsql/data/postgresql.conf"
+postgres_setup_cmd: "/usr/bin/initdb  -D /var/lib/pgsql/data"
