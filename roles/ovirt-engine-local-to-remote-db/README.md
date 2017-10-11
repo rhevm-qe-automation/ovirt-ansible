@@ -48,6 +48,22 @@ Example Playbook
     - ovirt-engine-local-to-remote-db
 ```
 
+Example Inventory
+----------------
+
+```yaml
+---
+[engine]
+engine1.example.com
+[engine:vars]
+ovirt_type=engine
+
+[database]
+db1.example.com
+[database:vars]
+ovirt_type=remote_db
+```
+
 Author Information
 ------------------
 
