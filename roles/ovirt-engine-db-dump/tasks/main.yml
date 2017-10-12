@@ -51,6 +51,13 @@
     - ovirt-engine
 
 # get engine and dwh database dumps
+- name: enable sudo without tty
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^Defaults *requiretty$'
+    line: 'Defaults    !requiretty'
+
 - name: get postgres path
   become: yes
   become_user: postgres
