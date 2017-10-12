@@ -44,12 +44,6 @@
   tags:
     - skip_ansible_lint
 
-- name: check state of database
-  service:
-    name: postgresql
-    state: started
-  when: (ovirt_engine_dwh_db_host == 'localhost' and ovirt_engine_dwh == True) or ovirt_engine_db_host == 'localhost'
-
 - name: check state of engine
   service:
     name: ovirt-engine

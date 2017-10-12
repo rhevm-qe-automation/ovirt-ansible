@@ -38,6 +38,9 @@
     -
       src: "/etc/ovirt-vmconsole"
       dest: "etc/ovirt-vmconsole"
+    -
+      src: "/var/log/ovirt-provider-ovn.log"
+      dest: "ovirt-provider-ovn.log"
   ignore_errors: true
 
 - name: Link ovirt-requests logs

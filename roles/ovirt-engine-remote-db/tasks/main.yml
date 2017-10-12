@@ -2,6 +2,15 @@
 # main file for remote DB task
 # based on https://fedoraproject.org/wiki/PostgreSQL
 
+- name: Include postgres params
+  include_vars: default.yml
+
+- name: Override postgres params for CentOs or RedHat when ovirt >= 4.2
+  include_vars: postgres95.yml
+  when:
+    - ovirt_engine_version >= '4.2'
+    - ansible_distribution in ('CentOS', 'RedHat')
+
 # install libselinux-python on machine - selinux policy
 - name: install SELinux requirements to run ansible modules managing SELinux.
   yum:
@@ -11,16 +20,21 @@
     - libselinux-python
     - policycoreutils-python
 
+- name: install psycopg2 requirements to run ansible modules managing postgres.
+  yum:
+    name: "python-psycopg2"
+    state: "present"
+
 - name: check PostgreSQL service
   service:
-    name: postgresql
+    name: "{{ postgres_service_name }}"
     state: started
   register: postgresql_status
   ignore_errors: True
 
 - name: yum install PostgreSQL
   yum:
-    name: "postgresql-server"
+    name: "{{ postgres_server }}"
     state: installed
     update_cache: yes
   when: postgresql_status|failed
@@ -33,26 +47,43 @@
     line: 'Defaults    !requiretty'
   when: postgresql_status|failed
 
-- name: run PostgreSQL initdb
+- name: scl enable
+  shell: 'scl enable rh-postgresql95 bash'
+  when:
+    - postgresql_status|failed
+    - ovirt_engine_version >= '4.2'
+    - ansible_distribution in ('CentOS', 'RedHat')
+  tags:
+    - skip_ansible_lint
+
+- name: run PostgreSQL DB config
   become_user: postgres
   become: yes
-  shell: '/usr/bin/initdb -D /var/lib/pgsql/data'
+  shell: '{{ postgres_setup_cmd }}'
   args:
-    creates: "/var/lib/pgsql/data/postgresql.conf"
-  when: postgresql_status|failed
+    creates: "{{ postgres_config_file }}"
+  when: ovirt_engine_version < '4.2'
+  tags:
+    - skip_ansible_lint
+
+- name: run PostgreSQL DB config
+  shell: '{{ postgres_setup_cmd }}'
+  args:
+    creates: "{{ postgres_config_file }}"
+  when: ovirt_engine_version >= '4.2'
   tags:
     - skip_ansible_lint
 
 - name: start PostgreSQL service
   service:
-    name: postgresql
+    name: "{{ postgres_service_name }}"
     state: started
     enabled: yes
 
 # allow access engine database access from outside
 - name: "update pg_hba.conf to allow connection for ovirt_engine_remote_db"
   lineinfile:
-    dest: '/var/lib/pgsql/data/pg_hba.conf'
+    dest: '{{ postgres_data_dir }}/pg_hba.conf'
     line: >
       {{ item.type }} {{ ovirt_engine_db_name }} {{ ovirt_engine_db_user }}
       {{ item.address | default(' ') }} {{ item.method }}
@@ -63,7 +94,7 @@
 # allow access engine dwh database access from outside
 - name: "update pg_hba.conf to allow connection for ovirt_engine_dwh_remote_db"
   lineinfile:
-    dest: '/var/lib/pgsql/data/pg_hba.conf'
+    dest: '{{ postgres_data_dir }}/pg_hba.conf'
     line: >
       {{ item.type }} {{ ovirt_engine_dwh_db_name }}
       {{ ovirt_engine_dwh_db_user }} {{ item.address | default(' ') }}
@@ -75,7 +106,7 @@
 # listen on specific address
 - name: update postgresql.conf -> listen_addresses='*'
   lineinfile:
-    dest: "{{ ovirt_engine_remote_db_config_file }}"
+    dest: "{{ postgres_config_file }}"
     regexp: "^listen_addresses *=.*$"
     line: "listen_addresses='{{ovirt_engine_remote_db_listen_address}}'"
     insertafter: EOF
@@ -84,7 +115,7 @@
 # listen on specific port
 - name: update postgresql.conf -> port number
   lineinfile:
-    dest: "{{ ovirt_engine_remote_db_config_file }}"
+    dest: "{{ postgres_config_file }}"
     regexp: "^port *=.*$"
     line: "port={{ ovirt_engine_remote_db_port }}"
     insertafter: EOF
@@ -97,7 +128,7 @@
 #    - Environment=PGPORT=5432
 - name: update postgresql.conf -> port number in service file (Fedora & RHEL)
   lineinfile:
-    dest: '/usr/lib/systemd/system/postgresql.service'
+    dest: '/usr/lib/systemd/system/{{ postgres_service_name }}.service'
     backrefs: yes
     regexp: "^Environment=PGPORT *=.*$"
     line: "Environment=PGPORT={{ ovirt_engine_remote_db_port }}"
@@ -125,7 +156,7 @@
 # Required for vacuum feature
 - name: set vacuum configuration for postgresql
   ini_file:
-    path: "{{ ovirt_engine_remote_db_config_file }}"
+    path: "{{ postgres_config_file }}"
     option: "{{ item.key }}"
     value: "{{ item.value }}"
     section: null
@@ -145,7 +176,7 @@
 # first check of PostgreSQL - if fail, setup
 - name: PostgreSQL reload configuration
   service:
-    name: postgresql
+    name: "{{ postgres_service_name }}"
     state: restarted
 
 - name: check iptables service
@@ -189,45 +220,39 @@
   tags:
     - skip_ansible_lint
 
-- name: creating directory for sql scripts in /tmp/ansible-sql
-  file:
-    path: /tmp/ansible-sql
-    state: directory
-
-- name: copy SQL scripts
-  template:
-    src: "{{item}}.j2"
-    dest: "/tmp/ansible-sql/{{item}}"
-    mode: 0644
-    owner: postgres
-    group: postgres
-  with_items:
-    - "ovirt-engine-db-create.sql"
-    - "ovirt-engine-db-user-create.sql"
-    - "ovirt-engine-dwh-db-create.sql"
-    - "ovirt-engine-dwh-db-user-create.sql"
-
-- name: create engine DB and user
+- name: create DWH DB user
+  become: true
   become_user: postgres
-  become: yes
-  command: psql -p {{ovirt_engine_remote_db_port}} -a -f /tmp/ansible-sql/'{{item}}'
+  postgresql_user:
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
   with_items:
-    - "ovirt-engine-db-user-create.sql"
-    - "ovirt-engine-db-create.sql"
-  when: ovirt_engine_remote_db == True
+    - user: "{{ ovirt_engine_db_user }}"
+      password: "{{ ovirt_engine_db_password }}"
+    - user: "{{ ovirt_engine_dwh_db_user }}"
+      password: "{{ ovirt_engine_dwh_db_password }}"
+  when: ovirt_engine_dwh_remote_db == True
 
-- name: create engine DWH DB and user
+- name: create engine & DWH DBs
+  become: true
   become_user: postgres
-  become: yes
-  command: psql -p {{ovirt_engine_remote_db_port}} -a -f /tmp/ansible-sql/'{{item}}'
+  postgresql_db:
+    name: "{{ item.db_name }}"
+    owner: "{{ item.user }}"
+    encoding: UTF-8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    template: template0
   with_items:
-    - "ovirt-engine-dwh-db-user-create.sql"
-    - "ovirt-engine-dwh-db-create.sql"
+    - db_name: "{{ ovirt_engine_db_name }}"
+      user: "{{ ovirt_engine_db_user }}"
+    - db_name: "{{ ovirt_engine_dwh_db_name }}"
+      user: "{{ ovirt_engine_dwh_db_user }}"
   when: ovirt_engine_dwh_remote_db == True
 
 - name: check PostgreSQL service
   service:
-    name: postgresql
+    name: "{{ postgres_service_name }}"
     state: started
     enabled: yes
 

@@ -18,7 +18,6 @@ ovirt_engine_remote_db_access:
     address: 0.0.0.0/0
     method: md5
 
-ovirt_engine_remote_db_config_file: "/var/lib/pgsql/data/postgresql.conf"
 ovirt_engine_remote_db_vacuum: true
 ovirt_engine_remote_db_vacuum_config:
   'autovacuum_vacuum_scale_factor': 0.01
