@@ -286,8 +286,8 @@
     name: "{{ ovirt_engine_dwh_db_user }}"
     state: absent
   when:
-    - ovirt_engine_remote_dwh_db == True
-    - ovirt_engine_remote_dwh_db_force == True
+    - ovirt_engine_dwh_remote_db == True
+    - ovirt_engine_remote_db_force == True
 
 - name: create DWH DB user
   become: true
@@ -344,8 +344,8 @@
     name: "{{ ovirt_engine_dwh_db_name }}"
     state: absent
   when:
-    - ovirt_engine_remote_dwh_db == True
-    - ovirt_engine_remote_dwh_db_force == True
+    - ovirt_engine_dwh_remote_db == True
+    - ovirt_engine_remote_db_force == True
 
 - name: create DWH DB without data
   become: true
