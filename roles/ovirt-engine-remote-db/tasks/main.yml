@@ -218,7 +218,10 @@
     permanent: True
     state: enabled
   with_items: "{{ ovirt_engine_remote_db_access | list }}"
-  when: postgresql_status|failed and not firewalld_status|failed
+  when:
+    - postgresql_status|failed
+    - not firewalld_status|failed
+    - item.address is defined
 
 - name: reload firewalld
   shell: "firewall-cmd --reload"
@@ -385,4 +388,3 @@
   file:
     path: '{{ pgpath.stdout }}/ansible-dump'
     state: 'absent'
-
