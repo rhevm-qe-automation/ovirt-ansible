@@ -44,6 +44,8 @@ Example Playbook
 - hosts: engine database
   vars:
     ovirt_engine_dwh_to_remote_db: True
+    ovirt_engine_version: "4.2"
+    # var for ovirt-common, this is not a must for ovirt <= 4.1
   roles:
     - ovirt-engine-local-to-remote-db
 ```

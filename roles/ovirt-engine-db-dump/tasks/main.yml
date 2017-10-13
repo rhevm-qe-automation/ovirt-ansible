@@ -73,17 +73,18 @@
 - name: get dump of engine database
   become: yes
   become_user: postgres
-  shell: pg_dump -F c {{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE'] }} -f {{ pgpath.stdout }}/engine.sql
-  tags:
-    - skip_ansible_lint
+  postgresql_db:
+    name: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE'] }}"
+    target: "{{ pgpath.stdout }}/engine.sql"
+    state: dump
 
 - name: get dump of dwh database
   become: yes
   become_user: postgres
-  shell: pg_dump -F c {{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }} -f {{ pgpath.stdout }}/dwh.sql
-  when: ovirt_engine_db_dump_dwh == True
-  tags:
-    - skip_ansible_lint
+  postgresql_db:
+    name: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }}"
+    target: "{{ pgpath.stdout }}/dwh.sql"
+    state: dump
 
 # print variables to file
 - name: print engine variables to file

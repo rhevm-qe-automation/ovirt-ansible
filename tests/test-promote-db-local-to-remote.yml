@@ -8,6 +8,8 @@
     ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm"
 
 - include: promote-db-local-to-remote.yml
+  vars:
+    ovirt_engine_version: "4.1"
 
 - include: engine-cleanup.yml
   vars:

@@ -9,10 +9,20 @@
     - ovirt-engine
     - ovirt-fence-kdump-listener
 
+- name: Include postgres params
+  include_vars: default.yml
+
+
+- name: Override postgres params for CentOs or Red Hat when ovirt >= 4.2
+  include_vars: postgres95.yml
+  when:
+    - ovirt_engine_version >= "4.2"
+    - ansible_distribution in ("CentOS", "Red Hat")
+
 # no connections left in db
 - name: restart postgres
   service:
-    name: postgresql
+    name: "{{ postgres_service_name }}"
     state: restarted
 
 - name: remove engine/dwh databases - get postgres path
@@ -34,69 +44,55 @@
 - name: get dump of engine database
   become: yes
   become_user: postgres
-  shell: pg_dump -F c {{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE'] }} -f {{ pgpath.stdout }}/engine-backup/engine.sql
-  tags:
-    - skip_ansible_lint
+  postgresql_db:
+    name: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE'] }}"
+    target: "{{ pgpath.stdout }}/engine-backup/engine.sql"
+    state: dump
+  when: ovirt_engine_to_remote_db == True
 
 - name: get dump of dwh database
   become: yes
   become_user: postgres
-  shell: pg_dump -F c {{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }} -f {{ pgpath.stdout }}/engine-backup/dwh.sql
+  postgresql_db:
+    name: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }}"
+    target: "{{ pgpath.stdout }}/engine-backup/dwh.sql"
+    state: dump
+  when: ovirt_engine_dwh_to_remote_db == True
+
+# drop databases and users
+- name: drop engine local db
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE'] }}"
+    state: absent
   when:
-    - ovirt_engine_dwh_to_remote_db == True
-  tags:
-    - skip_ansible_lint
+    - ovirt_engine_to_remote_db == True
 
-# drop databases
-- name: creating directory ansible-sql for sql scripts
-  file:
-    path: "{{ pgpath.stdout }}/ansible-sql"
-    state: directory
-
-- name: copy drop engine SQL scripts
-  template:
-    src: "{{item}}.j2"
-    dest: "{{ pgpath.stdout }}/ansible-sql/{{item}}"
-    mode: 0644
-    owner: postgres
-    group: postgres
-  with_items:
-    - "ovirt-engine-db-drop.sql"
-    - "ovirt-engine-db-user-drop.sql"
-  when:
-    - ovirt_engine_remove_db == True
-
-- name: copy drop dwh SQL scripts
-  template:
-    src: "{{item}}.j2"
-    dest: "{{ pgpath.stdout }}/ansible-sql/{{item}}"
-    mode: 0644
-    owner: postgres
-    group: postgres
-  with_items:
-    - "ovirt-engine-dwh-db-drop.sql"
-    - "ovirt-engine-dwh-db-user-drop.sql"
+- name: drop dwh local db
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }}"
+    state: absent
   when:
     - ovirt_engine_dwh_to_remote_db == True
 
-- name: drop engine DB and user
-  become_user: postgres
+- name: drop engine local db user
   become: yes
-  # ON_ERROR_STOP=1 - command returns non-zero value, otherwise is always 0 with -f flag
-  command: psql -p {{ ovirt_engine_db_dump_engine_db['ENGINE_DB_PORT'] }} -a -v ON_ERROR_STOP=1 -f {{ pgpath.stdout }}/ansible-sql/'{{item}}'
-  with_items:
-    - "ovirt-engine-db-drop.sql"
-    - "ovirt-engine-db-user-drop.sql"
+  become_user: postgres
+  postgresql_db:
+    name: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_USER'] }}"
+    state: absent
   when:
-    - ovirt_engine_remove_db == True
+    - ovirt_engine_to_remote_db == True
 
-- name: drop DWH DB and user
-  become_user: postgres
+- name: drop dwh local db user
   become: yes
-  command: psql -p {{ ovirt_engine_db_dump_engine_db['ENGINE_DB_PORT'] }} -a -v ON_ERROR_STOP=1 -f {{ pgpath.stdout }}/ansible-sql/'{{item}}'
-  with_items:
-    - "ovirt-engine-dwh-db-drop.sql"
-    - "ovirt-engine-dwh-db-user-drop.sql"
+  become_user: postgres
+  postgresql_user:
+    name: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_USER'] }}"
+    state: absent
   when:
     - ovirt_engine_dwh_to_remote_db == True
 
