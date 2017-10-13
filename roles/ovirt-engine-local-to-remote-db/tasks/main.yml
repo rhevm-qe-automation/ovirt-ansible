@@ -49,15 +49,15 @@
     name: ovirt-engine-remote-db
   vars:
     ovirt_engine_version: "{{ ovirt_engine_version }}"
-    ovirt_engine_remote_db_port: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_PORT']|regex_replace('\"', '') }}"
-    ovirt_engine_db_name: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE']|regex_replace('\"', '') }}"
-    ovirt_engine_db_user: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_USER']|regex_replace('\"', '') }}"
-    ovirt_engine_db_password: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_PASSWORD']|regex_replace('\"', '') }}"
+    ovirt_engine_remote_db_port: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_PORT'] }}"
+    ovirt_engine_db_name: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_DATABASE'] }}"
+    ovirt_engine_db_user: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_USER'] }}"
+    ovirt_engine_db_password: "{{ ovirt_engine_db_dump_engine_db['ENGINE_DB_PASSWORD'] }}"
     ovirt_engine_remote_db: "{{ ovirt_engine_to_remote_db }}"
     ovirt_engine_dwh_remote_db: "{{ ovirt_engine_dwh_to_remote_db }}"
-    ovirt_engine_dwh_db_name: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE']|regex_replace('\"', '') }}"
-    ovirt_engine_dwh_db_user: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_USER']|regex_replace('\"', '') }}"
-    ovirt_engine_dwh_db_password: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_PASSWORD']|regex_replace('\"', '') }}"
+    ovirt_engine_dwh_db_name: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }}"
+    ovirt_engine_dwh_db_user: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_USER'] }}"
+    ovirt_engine_dwh_db_password: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_PASSWORD'] }}"
     ovirt_engine_remote_db_force: True
     ovirt_engine_remote_db_dump: "{{ ovirt_engine_db_dump_local_dir }}/engine.sql"
     ovirt_engine_remote_db_dwh_dump: "{{ ovirt_engine_db_dump_local_dir }}/dwh.sql"
