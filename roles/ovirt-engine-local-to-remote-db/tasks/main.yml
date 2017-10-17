@@ -58,8 +58,8 @@
     ovirt_engine_dwh_db_user: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_USER'] }}"
     ovirt_engine_dwh_db_password: "{{ ovirt_engine_db_dump_dwh_db['DWH_DB_PASSWORD'] }}"
     ovirt_engine_remote_db_force: True
-    ovirt_engine_remote_db_dump: "{{ ovirt_engine_db_dump_local_dir }}/engine.sql"
-    ovirt_engine_remote_db_dwh_dump: "{{ ovirt_engine_db_dump_local_dir }}/dwh.sql"
+    ovirt_engine_remote_db_dump: "{{ playbook_dir }}/engine_dump/engine.sql"
+    ovirt_engine_remote_db_dwh_dump: "{{ playbook_dir }}/engine_dump/dwh.sql"
     ovirt_engine_remote_db_access:
       -
         type: host
