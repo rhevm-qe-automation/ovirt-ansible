@@ -318,10 +318,9 @@
     lc_ctype: en_US.UTF-8
     template: template0
   when:
-    - ovirt_engine_remote_db_dump is not defined
     - ovirt_engine_remote_db == True
 
-- name: create engine DB with data
+- name: restore engine DB data
   become: true
   become_user: postgres
   postgresql_db:
@@ -358,10 +357,9 @@
     lc_ctype: en_US.UTF-8
     template: template0
   when:
-    - ovirt_engine_remote_db_dwh_dump is not defined
     - ovirt_engine_dwh_remote_db == True
 
-- name: create DWH DB with data
+- name: restore DWH DB data
   become: true
   become_user: postgres
   postgresql_db:
