@@ -93,21 +93,12 @@
 # engine is not running reset engine back to local
 - name: engine not running - set back to local
   set_fact:
-    ovirt_engine_remove_db: False
+    ovirt_engine_drop_local_db: False
     ovirt_engine_reset: True
   when:
     - ovirt_type == "engine"
     - ovirt_engine_reset == False
     - ovirt_engine_status|failed
-
-- name: engine is running - remove database
-  set_fact:
-    ovirt_engine_remove_db: True
-  when:
-    - ovirt_type == "engine"
-    - ovirt_engine_reset == False
-    - ovirt_engine_status|success
-    - ovirt_engine_dont_remove_db == False
 
 # reset engine back to local db
 - include: reset-engine.yml
@@ -126,4 +117,4 @@
 - include: remove-local-db.yml
   when:
     - ovirt_type == "engine"
-    - ovirt_engine_remove_db == True
+    - ovirt_engine_drop_local_db == True
