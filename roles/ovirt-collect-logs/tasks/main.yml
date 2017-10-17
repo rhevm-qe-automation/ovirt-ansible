@@ -52,7 +52,8 @@
 
 # Collect system specific stuff
 
-- include: "{{ ovirt_collect_logs_from_system }}.yml"
+- name: Collect logs from specific system
+  include_tasks: "{{ ovirt_collect_logs_from_system }}.yml"
 
 # Fetch stuff to local system
 - name: Archive logs
