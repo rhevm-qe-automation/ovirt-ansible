@@ -26,3 +26,5 @@ ovirt_engine_remote_db_vacuum_config:
   'maintenance_work_mem': 65536
   'max_connections': 150
   'lc_messages': 'en_US.UTF-8'
+
+ovirt_engine_remote_db_force: False
