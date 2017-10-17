@@ -26,7 +26,7 @@ ovirt_engine_to_remote_db: [True, False] Change from local to remote engine data
 ovirt_engine_dwh_to_remote_db: [True, False] Change from local to remote DWH database (default: False)
 
 ovirt_engine_reset: [True, False] True - set back engine to local db (default: False)
-ovirt_engine_drop_local_db: [True, False] Drop local databases after engine is set to remote db, dump will be stored (default: True)
+ovirt_engine_dont_remove_db: [True, False] Don't drop local databases after engine is set to remote db, dump will be stored (default: False)
 ```
 
 Dependencies
@@ -46,6 +46,7 @@ Example Playbook
     ovirt_engine_dwh_to_remote_db: True
     ovirt_engine_version: "4.2"
     # var for ovirt-common, this is not a must for ovirt <= 4.1
+    ovirt_engine_dont_remove_db: True
   roles:
     - ovirt-engine-local-to-remote-db
 ```
