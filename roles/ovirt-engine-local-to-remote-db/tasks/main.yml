@@ -117,3 +117,4 @@
   when:
     - ovirt_type == "engine"
     - ovirt_engine_drop_local_db == True
+    - ovirt_engine_reset == False
