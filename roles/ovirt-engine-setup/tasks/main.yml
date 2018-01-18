@@ -32,7 +32,7 @@
 
 - name: update setup packages
   yum:
-    name: 'ovirt*setup*'
+    name: 'ovirt*setup'
     state: latest
   when: ovirt_engine_update
   tags:
