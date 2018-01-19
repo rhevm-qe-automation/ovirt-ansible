@@ -1,3 +1,7 @@
 ---
 - src: chrismeyersfsu.provision_docker
   name: provision_docker
+- src: oVirt.engine-setup
+  name: oVirt.engine-setup
+- src: oVirt.repositories
+  name: oVirt.repositories

@@ -14,9 +14,7 @@ env:
 #    - TEST_NAME=3.6
 #    - TEST_NAME=4.0
     - TEST_NAME=4.1
-    - TEST_NAME=master
-    - TEST_NAME=upgrade-4.1-to-master
-#    - TEST_NAME=upgrade-4.0-to-4.1
+    - TEST_NAME=4.2
 
 # Install python-pip
 addons:

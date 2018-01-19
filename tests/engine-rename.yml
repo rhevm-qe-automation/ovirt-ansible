@@ -7,6 +7,6 @@
         dest: /etc/hosts
         line: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} {{ ovirt_engine_rename_new_fqdn }}"
         state: present
-        unsafe_writes: yes
+        unsafe_writes: true
   roles:
     - role: ovirt-engine-rename

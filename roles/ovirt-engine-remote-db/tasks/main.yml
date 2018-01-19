@@ -39,6 +39,11 @@
     update_cache: yes
   when: postgresql_status|failed
 
+- name: install sudo package
+  yum:
+    name: sudo
+    state: present
+
 - name: enable sudo without tty
   lineinfile:
     path: /etc/sudoers
