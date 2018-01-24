@@ -1,7 +1,29 @@
 ---
 - hosts: database
-  remote_user: root
-  become: true
   roles:
-    - {role: ovirt-common}
-    - {role: ovirt-engine-remote-db}
+    #  First install required repositories with oVirt.repositories role
+    # - role: oVirt.repositories
+    #  ovirt_repositories_ovirt_release_rpm: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm'
+    - role: ovirt-engine-remote-db
+      ovirt_engine_version: "4.2"
+      # vars for PostgreSQL
+      ovirt_engine_remote_db_port: 5432
+      ovirt_engine_remote_db_listen_address: '*'
+      ovirt_engine_remote_db: true
+      ovirt_engine_dwh_remote_db: true
+
+      # vars for databases and roles
+      ovirt_engine_db_name: 'engine'
+      ovirt_engine_db_user: 'engine'
+      ovirt_engine_db_password: 123456
+      ovirt_engine_dwh_db_name: 'ovirt_engine_history'
+      ovirt_engine_dwh_db_user: 'ovirt_engine_history'
+      ovirt_engine_dwh_db_password: 123456
+      ovirt_engine_remote_db_access:
+        -
+          type: host
+          address: 0.0.0.0/0
+          method: md5
+        -
+          type: local
+          method: md5

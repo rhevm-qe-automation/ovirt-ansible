@@ -33,7 +33,7 @@ ovirt_iso_uploader_key_file: the identity file (private key) to be used for acce
 Dependencies
 ------------
 
-* ovirt-common
+* [oVirt.repositories](https://galaxy.ansible.com/oVirt/repositories/)
 
 
 Example Playbook

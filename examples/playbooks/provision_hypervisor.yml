@@ -1,7 +1,0 @@
----
-# example playbook for provisioning hypervisors
-# use with examples/inventory/provision_hypervisor.inventory
-- hosts: hypervisors
-  remote_user: root
-  roles:
-    - {role: ovirt-common}

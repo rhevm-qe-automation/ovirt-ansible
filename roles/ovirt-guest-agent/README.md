@@ -29,7 +29,7 @@ Default value if variable not given is ```ovirt```.
 Dependencies
 ------------
 
-* ovirt-common
+* [oVirt.repositories](https://galaxy.ansible.com/oVirt/repositories/)
 
 Example Playbook
 ----------------

@@ -1,16 +1,13 @@
 ---
 - include: containers-deploy.yml
-- include: db-deploy.yml
-  vars:
-    ovirt_engine_version: "4.1"
-- include: engine-deploy.yml
-  vars:
-    ovirt_engine_version: "4.1"
-    ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm"
-- include: engine-upgrade.yml
+- include: db-deploy-master.yml
   vars:
     ovirt_engine_version: "4.2"
-    ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release-master.rpm"
+    ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release42.rpm"
+- include: engine-deploy.yml
+  vars:
+    ovirt_engine_version: "4.2"
+    ovirt_rpm_repo: "http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release42.rpm"
 - include: engine-rename.yml
   vars:
     ovirt_engine_rename_new_fqdn: "test.ovirt.org"

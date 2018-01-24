@@ -1,32 +1,32 @@
 ---
 - name: Run ovirt-ansible roles on containerized environments
   hosts: engine
-  vars:
-    ovirt_engine_type: "ovirt-engine"
-    ovirt_engine_version: "{{ ovirt_engine_version }}"
-    ovirt_rpm_repo: "{{ ovirt_rpm_repo }}"
-    ovirt_engine_hostname: "localhost"
-    ovirt_engine_organization: "example.com"
-    ovirt_engine_admin_password: "123456"
-    ovirt_engine_db_host: "{{ hostvars['remote_db_centos7']['ansible_default_ipv4']['address'] }}"
-    ovirt_engine_dwh: true
-    ovirt_engine_dwh_db_host: "{{ hostvars['remote_db_centos7']['ansible_default_ipv4']['address'] }}"
-    ovirt_engine_configure_iso_domain: true
-    ovirt_engine_firewall_manager: null
-    ovirt_engine_config:
-      -
-        key: "VmPoolMonitorIntervalInMinutes"
-        value: "1"
-        version: "general"
-      -
-        key: "UserDefinedNetworkCustomProperties"
-        value: "ethtool_opts=.*"
-        version: "{{ ovirt_engine_version }}"
-    ovirt_collect_logs_from_system: "engine"
   roles:
-    - role: ovirt-common
-    - role: ovirt-engine-install-packages
-    - role: ovirt-engine-setup
+    - role: oVirt.repositories
+      ovirt_repositories_ovirt_release_rpm: "{{ ovirt_rpm_repo }}"
+    - role: oVirt.engine-setup
+      ovirt_engine_setup_type: "ovirt-engine"
+      ovirt_engine_setup_version: "{{ ovirt_engine_version }}"
+      ovirt_engine_setup_hostname: "localhost"
+      ovirt_engine_setup_organization: "example.com"
+      ovirt_engine_setup_db_configure: true
+      ovirt_engine_setup_db_host: "{{ hostvars['remote_db_centos7']['ansible_default_ipv4']['address'] }}"
+      ovirt_engine_setup_db_password: 'AqbXg4dpkbcVRZwPbY8WOR'
+      ovirt_engine_setup_dwh_db_configure: true
+      ovirt_engine_setup_dwh_db_host: "{{ hostvars['remote_db_centos7']['ansible_default_ipv4']['address'] }}"
+      ovirt_engine_setup_dwh_db_password: '37xmBKECANQGm0z3SfylMp'
+      ovirt_engine_setup_firewall_manager: null
+      ovirt_engine_setup_admin_password: "123456"
     - role: ovirt-engine-config
+      ovirt_engine_config:
+        -
+          key: "VmPoolMonitorIntervalInMinutes"
+          value: "1"
+          version: "general"
+        -
+          key: "UserDefinedNetworkCustomProperties"
+          value: "ethtool_opts=.*"
+          version: "{{ ovirt_engine_version }}"
     - role: ovirt-iso-uploader-conf
     - role: ovirt-collect-logs
+      ovirt_collect_logs_from_system: "engine"

@@ -58,45 +58,12 @@ ovirt_engine_remote_db_dwh_dump: Path to sql dump of DWH database on local machi
 Dependencies
 ------------
 
-* ovirt-common - this is only a must on ovirt > 4.1
+* oVirt.repositories - this is only a must on ovirt > 4.1
 
 Example Playbook
 ----------------
 
-```yaml
----
-- hosts: database
-  vars:
-    ovirt_engine_version: "4.2"
-    # var for ovirt-common, this is not a must for ovirt <= 4.1
-    ovirt_rpm_repo: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release41.rpm'
-    # vars for PostgreSQL
-    ovirt_engine_remote_db_port: 5432
-    ovirt_engine_remote_db_listen_address: '*'
-
-    ovirt_engine_remote_db: yes
-    ovirt_engine_dwh_remote_db: yes
-
-    # vars for databases and roles
-    ovirt_engine_db_name: 'engine'
-    ovirt_engine_db_user: 'engine'
-    ovirt_engine_db_password: 123456
-    ovirt_engine_dwh_db_name: 'ovirt_engine_history'
-    ovirt_engine_dwh_db_user: 'ovirt_engine_history'
-    ovirt_engine_dwh_db_password: 123456
-    ovirt_engine_remote_db_access:
-      -
-        type: host
-        address: 0.0.0.0/0
-        method: md5
-      -
-        type: local
-        method: md5
-  roles:
-    # ovirt-common is not a must for ovirt <= 4.1
-    - ovirt-common
-    - ovirt-engine-remote-db
-```
+../../../examples/playbooks/remote_db.yml
 
 Author Information
 ------------------
