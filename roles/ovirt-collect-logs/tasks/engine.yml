@@ -41,10 +41,17 @@
     -
       src: "/var/log/ovirt-provider-ovn.log"
       dest: "ovirt-provider-ovn.log"
-    - 
+    -
       src: "/var/log/ovirt-imageio-proxy"
       dest: "ovirt-imageio-proxy"
   ignore_errors: true
+
+- name: Copy answerfiles
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}"
+  with_fileglob:
+    - "/tmp/answerfile*"
 
 - name: Link ovirt-requests logs
   file:
