@@ -42,6 +42,9 @@
     -
       src: "{{ coredumpdir }}"
       dest: "coredumps"
+    -
+      src: "/var/log/ovirt-imageio-daemon"
+      dest: "ovirt-imageio-daemon-logs"
   ignore_errors: true
 
 - name: Dump mount
