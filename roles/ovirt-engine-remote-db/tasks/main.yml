@@ -395,8 +395,10 @@
   become: true
   become_user: postgres
   postgresql_ext:
-    name: uuid-ossp
+    name: 'uuid-ossp'
     db: "{{ ovirt_engine_db_name }}"
+  when:
+    - ovirt_engine_version >= '4.2'
 
 - name: check PostgreSQL service
   service:
