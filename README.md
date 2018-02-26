@@ -48,6 +48,7 @@ This host group is meant for virtual machines hosted by oVirt Engine.
 * [ovirt-guest-agent]
 * [ovirt-iso-uploader-conf]
 * [ovirt-engine-rename]
+* [ovirt-engine-remote-dwh]
 
 ## Test
 
@@ -89,3 +90,4 @@ under ``Dockerfiles`` directory.
 [provision_docker]: https://github.com/chrismeyersfsu/provision_docker/
 [ovirt-iso-uploader-conf]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-iso-uploader-conf/README.md
 [ovirt-engine-rename]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-rename/README.md
+[ovirt-engine-remote-dwh]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-dwh/README.md
