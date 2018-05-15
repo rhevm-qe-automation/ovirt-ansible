@@ -25,6 +25,14 @@
     name: "python-psycopg2"
     state: "present"
 
+- name: Install PostgreSQL uuid-ossp extension
+  yum:
+    name: "rh-postgresql95-postgresql-contrib"
+    state: "present"
+  when:
+    - ovirt_engine_version >= '4.2'
+    - ansible_distribution in ('CentOS', 'RedHat')
+
 - name: check PostgreSQL service
   service:
     name: "{{ postgres_service_name }}"
@@ -38,6 +46,11 @@
     state: installed
     update_cache: yes
   when: postgresql_status|failed
+
+- name: install sudo package
+  yum:
+    name: sudo
+    state: present
 
 - name: enable sudo without tty
   lineinfile:
@@ -375,6 +388,15 @@
     - ovirt_engine_remote_db_dwh_dump is defined
     - ovirt_engine_dwh_remote_db == True
 # drop/create db users and databases - end
+
+- name: Enable PostgreSQL uuid-ossp extension
+  become: true
+  become_user: postgres
+  postgresql_ext:
+    name: 'uuid-ossp'
+    db: "{{ ovirt_engine_db_name }}"
+  when:
+    - ovirt_engine_version >= '4.2'
 
 - name: check PostgreSQL service
   service:

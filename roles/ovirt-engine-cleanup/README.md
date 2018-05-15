@@ -29,7 +29,7 @@ ovirt_engine_dwh_db_password: password for user of ovirt-engine DB
 Dependencies
 ------------
 
-* ovirt-engine-setup
+* [oVirt.engine-setup](https://galaxy.ansible.com/oVirt/engine-setup/)
 
 Example Playbook
 ----------------

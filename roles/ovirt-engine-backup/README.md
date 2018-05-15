@@ -31,7 +31,7 @@ ovirt_backup_scope: all|files|db|dwhdb|reportsdb
 Dependencies
 ------------
 
-* ovirt-engine-setup
+* [oVirt.engine-setup](https://galaxy.ansible.com/oVirt/engine-setup/)
 
 Example Playbook
 ----------------
