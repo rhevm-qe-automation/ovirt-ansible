@@ -11,9 +11,8 @@ env:
   global:
     - ANSIBLE_HOST_KEY_CHECKING="False"
   matrix:
-#    - TEST_NAME=3.6
-#    - TEST_NAME=4.0
-    - TEST_NAME=4.1
+    # We don't support older versions here. Also upstream doesn't support 4.1
+    # when 4.2 is out. https://bugzilla.redhat.com/show_bug.cgi?id=1583222
     - TEST_NAME=4.2
 
 # Install python-pip
