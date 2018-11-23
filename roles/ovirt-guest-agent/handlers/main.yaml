@@ -1,7 +1,8 @@
 ---
 - name: enable and start guest-agent service
   service:
-    # Name of service is same for both packages (ovirt/rhevm)
-    name: "ovirt-guest-agent"
+    # Name of service is same for both packages (ovirt/rhevm) but for RHEL 8
+    # it's qemu
+    name: "{{ 'qemu' if ovirt_guest_agent_pkg_prefix == 'qemu' else 'ovirt' }}-guest-agent"
     state: started
     enabled: yes
