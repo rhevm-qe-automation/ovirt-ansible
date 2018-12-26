@@ -2,8 +2,7 @@
 
 - name: Prepare directory structure
   file:
-    src: "{{ item }}"
-    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item }}"
+    path: "{{ ovirt_collect_logs_tmp_dir }}/{{ item }}"
     state: directory
   with_items:
     - "etc"
@@ -45,6 +44,9 @@
     -
       src: "/var/log/ovirt-imageio-daemon"
       dest: "ovirt-imageio-daemon-logs"
+    -
+      src: "/var/log/sanlock.log"
+      dest: "sanlock.log"
   ignore_errors: true
 
 - name: Dump mount

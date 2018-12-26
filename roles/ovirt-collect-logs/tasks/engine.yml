@@ -2,8 +2,7 @@
 
 - name: Prepare directory structure
   file:
-    src: "{{ item }}"
-    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item }}"
+    path: "{{ ovirt_collect_logs_tmp_dir }}/{{ item }}"
     state: directory
   with_items:
     - "etc"
