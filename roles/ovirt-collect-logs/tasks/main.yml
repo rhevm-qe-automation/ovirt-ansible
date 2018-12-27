@@ -4,11 +4,8 @@
 
 - name: Ensure required archive tools
   yum:
-    name: "{{ item }}"
+    name: ['gzip', 'tar']
     state: "present"
-  with_items:
-    - gzip
-    - tar
 
 # Prepare place to store data
 
