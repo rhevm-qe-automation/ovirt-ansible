@@ -1,0 +1,11 @@
+[engine:vars]
+
+#### Type flag ####
+# flag that it is engine machine
+  ovirt_type=engine
+
+[database:vars]
+
+#### Type flag ####
+# flag that it is engine machine
+  ovirt_type=remote_db

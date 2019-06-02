@@ -5,8 +5,8 @@
     ovirt_engine_type: "ovirt-engine"
     ovirt_engine_version: "{{ ovirt_engine_version }}"
     ovirt_engine_hostname: "localhost"
-    ovirt_engine_db_host: "{{ hostvars['remote_db_centos7']['ansible_default_ipv4']['address'] }}"
+    ovirt_engine_db_host: "{{ engine_db_host | default(hostvars['remote_db_centos7']['ansible_default_ipv4']['address']) }}"
     ovirt_engine_dwh: true
-    ovirt_engine_dwh_db_host: "{{ hostvars['remote_db_centos7']['ansible_default_ipv4']['address'] }}"
+    ovirt_engine_dwh_db_host: "{{ engine_dwh_db_host | default(hostvars['remote_db_centos7']['ansible_default_ipv4']['address']) }}"
   roles:
     - role: ovirt-engine-cleanup  # This role must be last

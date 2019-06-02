@@ -1,0 +1,7 @@
+---
+# in inventory file engine has ovirt_type=engine, database has ovirt_type=remote_db
+- hosts: engine database
+  vars:
+    ovirt_engine_dwh_to_remote_db: True
+  roles:
+    - ovirt-engine-local-to-remote-db

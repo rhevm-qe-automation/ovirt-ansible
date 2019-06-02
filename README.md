@@ -44,6 +44,7 @@ This host group is meant for virtual machines hosted by oVirt Engine.
 * [ovirt-engine-cleanup]
 * [ovirt-engine-config]
 * [ovirt-engine-db-dump]
+* [ovirt-engine-local-to-remote-db]
 * [ovirt-engine-remote-db]
 * [ovirt-guest-agent]
 * [ovirt-iso-uploader-conf]
@@ -64,6 +65,7 @@ Under ``tests`` directory, there are playbooks for different oVirt versions
 * tests/test-4.0.yml  (Disabled because of #155)
 * tests/test-4.1.yml
 * tests/test-4.2.yml
+* tests/test-promote-db-local-to-remote.yml
 
 ```sh
 # Install ansible and docker-py
@@ -84,6 +86,7 @@ under ``Dockerfiles`` directory.
 [ovirt-engine-cleanup]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-cleanup/README.md
 [ovirt-engine-config]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-config/README.md
 [ovirt-engine-db-dump]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-db-dump/README.md
+[ovirt-engine-local-to-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-local-to-remote-db/README.md
 [ovirt-engine-remote-db]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-db/README.md
 [ovirt-engine-remote-dwh]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-engine-remote-dwh/README.md
 [ovirt-guest-agent]: https://github.com/rhevm-qe-automation/ovirt-ansible/blob/master/roles/ovirt-guest-agent/README.md

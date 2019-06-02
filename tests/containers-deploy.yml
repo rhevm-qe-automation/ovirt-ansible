@@ -9,8 +9,10 @@
       provision_docker_inventory_group: "{{ groups['engine'] }}"
 
 - name: "Update python because of ovirt-imageio-proxy"
-  hosts: engine
+  hosts: engine remote-db
   tasks:
+    - setup: !!map {}  # NOTE: executed in order to load facts about containers
+                       # important for test-promote-db-local-to-remote.yml
     - name: Update python
       yum:
         name: python-libs
