@@ -19,11 +19,19 @@
   with_items:
     - libselinux-python
     - policycoreutils-python
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
 
 - name: install psycopg2 requirements to run ansible modules managing postgres.
   yum:
     name: "python-psycopg2"
     state: "present"
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
 
 - name: Install PostgreSQL uuid-ossp extension
   yum:
@@ -32,6 +40,10 @@
   when:
     - ovirt_engine_version >= '4.2'
     - ansible_distribution in ('CentOS', 'RedHat')
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
 
 - name: check PostgreSQL service
   service:
@@ -46,11 +58,19 @@
     state: installed
     update_cache: yes
   when: postgresql_status|failed
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
 
 - name: install sudo package
   yum:
     name: sudo
     state: present
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
 
 - name: enable sudo without tty
   lineinfile:

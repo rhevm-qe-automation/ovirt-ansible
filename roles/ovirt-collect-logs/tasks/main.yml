@@ -6,6 +6,10 @@
   yum:
     name: ['gzip', 'tar']
     state: "present"
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
 
 # Prepare place to store data
 
