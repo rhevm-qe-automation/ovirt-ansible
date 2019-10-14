@@ -11,11 +11,11 @@
   fetch:
     src: "{{ovirt_backup_archive}}"
     dest: "{{ovirt_backup_archive}}"
-  when: ovirt_backup_status|succeeded
+  when: ovirt_backup_status is succeeded
 
 # download log file to ansible-client node
 - name: download log file
   fetch:
     src: "{{ovirt_log_file}}"
     dest: "{{ovirt_log_file}}"
-  when: ovirt_backup_status|failed
+  when: ovirt_backup_status is failed
