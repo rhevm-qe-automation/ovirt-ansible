@@ -12,4 +12,4 @@
   register: health_page
   retries: 12
   delay: 10
-  until: health_page|success
+  until: health_page is success

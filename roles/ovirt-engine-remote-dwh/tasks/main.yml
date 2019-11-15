@@ -7,7 +7,7 @@
   register: ovirt_engine_status
   retries: 2
   delay: 5
-  until: ovirt_engine_status|success
+  until: ovirt_engine_status is success
   ignore_errors: True
 
 # copy dwh on dwh answer file
@@ -52,7 +52,7 @@
   register: ovirt_engine_status
   retries: 12
   delay: 5
-  until: ovirt_engine_status|success
+  until: ovirt_engine_status is success
   ignore_errors: True
 
 - name: Restart `ovirt-engine-dwhd` service

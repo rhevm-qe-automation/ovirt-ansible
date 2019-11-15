@@ -152,7 +152,7 @@
 # daemon reload - service file was changed
 - name: systemctl daemon-reload (el7)
   shell: 'systemctl daemon-reload'
-  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432 and port_update|success
+  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432 and port_update is success
   tags:
     - skip_ansible_lint
 
