@@ -57,7 +57,7 @@
     name: "{{ postgres_server }}"
     state: installed
     update_cache: yes
-  when: postgresql_status|failed
+  when: postgresql_status is failed
   register: yum_result
   until: yum_result is success
   retries: 3
@@ -78,12 +78,12 @@
     state: present
     regexp: '^Defaults *requiretty$'
     line: 'Defaults    !requiretty'
-  when: postgresql_status|failed
+  when: postgresql_status is is failed
 
 - name: scl enable
   shell: 'scl enable rh-postgresql95 bash'
   when:
-    - postgresql_status|failed
+    - postgresql_status is failed
     - ovirt_engine_version >= '4.2'
     - ansible_distribution in ('CentOS', 'RedHat')
   tags:
@@ -143,7 +143,7 @@
     regexp: "^listen_addresses *=.*$"
     line: "listen_addresses='{{ovirt_engine_remote_db_listen_address}}'"
     insertafter: EOF
-  when: postgresql_status|failed
+  when: postgresql_status is failed
 
 # listen on specific port
 - name: update postgresql.conf -> port number
@@ -152,7 +152,7 @@
     regexp: "^port *=.*$"
     line: "port={{ ovirt_engine_remote_db_port }}"
     insertafter: EOF
-  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432
+  when: postgresql_status is failed and ovirt_engine_remote_db_port != 5432
 
 # postgresql.conf: (el7)
 # Note: In RHEL/Fedora installations, you can't set the port number here;
@@ -166,13 +166,13 @@
     regexp: "^Environment=PGPORT *=.*$"
     line: "Environment=PGPORT={{ ovirt_engine_remote_db_port }}"
   register: port_update
-  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432
+  when: postgresql_status is failed and ovirt_engine_remote_db_port != 5432
   ignore_errors: True
 
 # daemon reload - service file was changed
 - name: systemctl daemon-reload (el7)
   shell: 'systemctl daemon-reload'
-  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432 and port_update is success
+  when: postgresql_status is failed and ovirt_engine_remote_db_port != 5432 and port_update is success
   tags:
     - skip_ansible_lint
 
@@ -183,7 +183,7 @@
     backrefs: yes
     regexp: "^PGPORT *=.*$"
     line: "PGPORT={{ ovirt_engine_remote_db_port }}"
-  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432 and port_update|failed
+  when: postgresql_status is failed and ovirt_engine_remote_db_port != 5432 and port_update is failed
   ignore_errors: True
 
 # Required for vacuum feature
@@ -203,7 +203,7 @@
     proto: "tcp"
     setype: "postgresql_port_t"
     state: present
-  when: postgresql_status|failed and ovirt_engine_remote_db_port != 5432
+  when: postgresql_status is failed and ovirt_engine_remote_db_port != 5432
   ignore_errors: True
 
 # first check of PostgreSQL - if fail, setup
@@ -217,22 +217,22 @@
     name: iptables
     state: started
   register: iptables_status
-  when: postgresql_status|failed
+  when: postgresql_status is failed
   ignore_errors: True
 
 - name: open port for PostgreSQL in iptables
   shell: "iptables -I INPUT -s {{ item.address }} -p tcp -m state --state NEW -m tcp --dport {{ovirt_engine_remote_db_port}} -j ACCEPT"
   with_items: "{{ ovirt_engine_remote_db_access | list }}"
   when:
-    - postgresql_status|failed
-    - not iptables_status|failed
+    - postgresql_status is failed
+    - not iptables_status is failed
     - item.address is defined
   tags:
     - skip_ansible_lint
 
 - name: save iptables rules
   shell: "/sbin/iptables-save"
-  when: postgresql_status|failed and not iptables_status|failed
+  when: postgresql_status is failed and not iptables_status is failed
   tags:
     - skip_ansible_lint
 
@@ -241,7 +241,7 @@
     name: firewalld
     state: started
   register: firewalld_status
-  when: postgresql_status|failed
+  when: postgresql_status is failed
   ignore_errors: True
 
 - name: open port for PostgreSQL in firewalld
@@ -252,13 +252,13 @@
     state: enabled
   with_items: "{{ ovirt_engine_remote_db_access | list }}"
   when:
-    - postgresql_status|failed
-    - not firewalld_status|failed
+    - postgresql_status is failed
+    - not firewalld_status is failed
     - item.address is defined
 
 - name: reload firewalld
   shell: "firewall-cmd --reload"
-  when: postgresql_status|failed and not firewalld_status|failed
+  when: postgresql_status is failed and not firewalld_status is failed
   tags:
     - skip_ansible_lint
 
