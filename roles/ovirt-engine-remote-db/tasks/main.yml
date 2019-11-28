@@ -78,7 +78,7 @@
     state: present
     regexp: '^Defaults *requiretty$'
     line: 'Defaults    !requiretty'
-  when: postgresql_status is is failed
+  when: postgresql_status is failed
 
 - name: scl enable
   shell: 'scl enable rh-postgresql95 bash'
