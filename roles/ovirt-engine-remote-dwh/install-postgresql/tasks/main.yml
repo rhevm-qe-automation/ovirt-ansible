@@ -11,7 +11,7 @@
     name: postgresql-server
     state: installed
     update_cache: yes
-  when: postgresql_status|failed
+  when: postgresql_status is failed
   register: yum_result
   until: yum_result is success
   retries: 3
@@ -24,13 +24,13 @@
 
 - name: Initialize the postgresql db
   command: su -l postgres -c "/usr/bin/initdb --locale=en_US.UTF8 --auth='ident' --pgdata=/var/lib/pgsql/data/"
-  when: postgresql_status|failed
+  when: postgresql_status is failed
 
 - name: Start postgresql.service
   systemd:
     state: started
     name: postgresql
-  when: postgresql_status|failed
+  when: postgresql_status is failed
 
 - name: creating directory for sql scripts in /tmp/ansible-sql
   file:
