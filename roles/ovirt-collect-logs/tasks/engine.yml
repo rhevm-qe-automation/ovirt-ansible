@@ -9,7 +9,7 @@
     - "httpd"
 
 - name: ovirt-requests-logs files
-  shell: ls /var/log/httpd/ovirt-requests-log*
+  shell: ls /var/log/httpd/ovirt-requests-log* # noqa 301
   register: ovirt_requests_logs
   ignore_errors: yes
 
