@@ -122,7 +122,7 @@
       {{ item.address | default(' ') }} {{ item.method }}
     insertafter: EOF
   with_items: "{{ ovirt_engine_remote_db_access | list }}"
-  when: ovirt_engine_remote_db == True
+  when: ovirt_engine_remote_db
 
 # allow access engine dwh database access from outside
 - name: "update pg_hba.conf to allow connection for ovirt_engine_dwh_remote_db"
@@ -134,14 +134,14 @@
       {{ item.method }}
     insertafter: EOF
   with_items: "{{ ovirt_engine_remote_db_access | list }}"
-  when: ovirt_engine_dwh_remote_db == True
+  when: ovirt_engine_dwh_remote_db
 
 # listen on specific address
 - name: update postgresql.conf -> listen_addresses='*'
   lineinfile:
     dest: "{{ postgres_config_file }}"
     regexp: "^listen_addresses *=.*$"
-    line: "listen_addresses='{{ovirt_engine_remote_db_listen_address}}'"
+    line: "listen_addresses='{{ ovirt_engine_remote_db_listen_address }}'"
     insertafter: EOF
   when: postgresql_status is failed
 
@@ -221,7 +221,7 @@
   ignore_errors: True
 
 - name: open port for PostgreSQL in iptables
-  shell: "iptables -I INPUT -s {{ item.address }} -p tcp -m state --state NEW -m tcp --dport {{ovirt_engine_remote_db_port}} -j ACCEPT"
+  shell: "iptables -I INPUT -s {{ item.address }} -p tcp -m state --state NEW -m tcp --dport {{ ovirt_engine_remote_db_port }} -j ACCEPT"
   with_items: "{{ ovirt_engine_remote_db_access | list }}"
   when:
     - postgresql_status is failed
@@ -247,7 +247,7 @@
 - name: open port for PostgreSQL in firewalld
   firewalld:
     source: "{{ item.address }}"
-    port: "{{ovirt_engine_remote_db_port|int}}/tcp"
+    port: "{{ ovirt_engine_remote_db_port|int }}/tcp"
     permanent: True
     state: enabled
   with_items: "{{ ovirt_engine_remote_db_access | list }}"
@@ -283,7 +283,7 @@
     dest: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dump | basename }}"
   when:
     - ovirt_engine_remote_db_dump is defined
-    - ovirt_engine_remote_db == True
+    - ovirt_engine_remote_db
 
 - name: get DWH dump
   copy:
@@ -291,7 +291,7 @@
     dest: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dwh_dump | basename }}"
   when:
     - ovirt_engine_remote_db_dwh_dump is defined
-    - ovirt_engine_dwh_remote_db == True
+    - ovirt_engine_dwh_remote_db
 
 # drop/create db users and databases
 - name: drop engine DB user
@@ -301,8 +301,8 @@
     name: "{{ ovirt_engine_db_user }}"
     state: absent
   when:
-    - ovirt_engine_remote_db == True
-    - ovirt_engine_remote_db_force == True
+    - ovirt_engine_remote_db
+    - ovirt_engine_remote_db_force
 
 - name: create engine DB user
   become: true
@@ -310,7 +310,7 @@
   postgresql_user:
     name: "{{ ovirt_engine_db_user }}"
     password: "{{ ovirt_engine_db_password }}"
-  when: ovirt_engine_remote_db == True
+  when: ovirt_engine_remote_db
 
 - name: drop DWH DB user
   become: true
@@ -319,8 +319,8 @@
     name: "{{ ovirt_engine_dwh_db_user }}"
     state: absent
   when:
-    - ovirt_engine_dwh_remote_db == True
-    - ovirt_engine_remote_db_force == True
+    - ovirt_engine_dwh_remote_db
+    - ovirt_engine_remote_db_force
 
 - name: create DWH DB user
   become: true
@@ -328,7 +328,7 @@
   postgresql_user:
     name: "{{ ovirt_engine_dwh_db_user }}"
     password: "{{ ovirt_engine_dwh_db_password }}"
-  when: ovirt_engine_dwh_remote_db == True
+  when: ovirt_engine_dwh_remote_db
 
 - name: drop engine DB
   become: true
@@ -337,8 +337,8 @@
     name: "{{ ovirt_engine_db_name }}"
     state: absent
   when:
-    - ovirt_engine_remote_db == True
-    - ovirt_engine_remote_db_force == True
+    - ovirt_engine_remote_db
+    - ovirt_engine_remote_db_force
 
 - name: create engine DB without data
   become: true
@@ -352,7 +352,7 @@
     template: template0
   when:
     - ovirt_engine_remote_db_dump is not defined
-    - ovirt_engine_remote_db == True
+    - ovirt_engine_remote_db
 
 - name: create engine DB with data
   become: true
@@ -368,7 +368,7 @@
     target: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dump | basename }}"
   when:
     - ovirt_engine_remote_db_dump is defined
-    - ovirt_engine_remote_db == True
+    - ovirt_engine_remote_db
 
 - name: drop DWH DB
   become: true
@@ -377,8 +377,8 @@
     name: "{{ ovirt_engine_dwh_db_name }}"
     state: absent
   when:
-    - ovirt_engine_dwh_remote_db == True
-    - ovirt_engine_remote_db_force == True
+    - ovirt_engine_dwh_remote_db
+    - ovirt_engine_remote_db_force
 
 - name: create DWH DB without data
   become: true
@@ -392,7 +392,7 @@
     template: template0
   when:
     - ovirt_engine_remote_db_dwh_dump is not defined
-    - ovirt_engine_dwh_remote_db == True
+    - ovirt_engine_dwh_remote_db
 
 - name: create DWH DB with data
   become: true
@@ -408,7 +408,7 @@
     target: "{{ pgpath.stdout }}/ansible-dump/{{ ovirt_engine_remote_db_dwh_dump | basename }}"
   when:
     - ovirt_engine_remote_db_dwh_dump is defined
-    - ovirt_engine_dwh_remote_db == True
+    - ovirt_engine_dwh_remote_db
 # drop/create db users and databases - end
 
 - name: Enable PostgreSQL uuid-ossp extension

@@ -31,14 +31,14 @@
   failed_when: "grep_diff.rc == 2"
   ignore_errors: yes
 
-- name: Running engine-rename command (if the engine-name diff stdout != "")
+- name: Running engine-rename command (if the engine-name diff stdout is not empty)
   shell: |
     /usr/share/ovirt-engine/setup/bin/ovirt-engine-rename \
     --newname={{ ovirt_engine_rename_new_fqdn }} \
     --otopi-environment="OSETUP_RENAME/forceIgnoreAIAInCA=bool:'True' \
     OVESETUP_CORE/engineStop=bool:'True' \
     OSETUP_RENAME/confirmForceOverwrite=bool:'False'"
-  when: grep_diff.stdout != ""
+  when: grep_diff.stdout
   # ^ i.e skip when engine-name is already at the state we want it to be
   tags:
     - skip_ansible_lint

@@ -40,7 +40,7 @@
     -
       src: "/var/log/ovirt-provider-ovn.log"
       dest: "ovirt-provider-ovn.log"
-    - 
+    -
       src: "/var/log/ovirt-imageio-proxy"
       dest: "ovirt-imageio-proxy"
   ignore_errors: true
@@ -48,7 +48,7 @@
 - name: Link ovirt-requests logs
   file:
     src: "{{ item }}"
-    dest: "{{ ovirt_collect_logs_tmp_dir }}/httpd/{{ item|replace('/var/log/httpd/', '')}}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}/httpd/{{ item|replace('/var/log/httpd/', '') }}"
     state: link
   with_items: "{{ ovirt_requests_logs.stdout_lines }}"
   ignore_errors: true

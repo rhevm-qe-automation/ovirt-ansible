@@ -25,7 +25,7 @@
 - name: grep dwh variables
   shell: grep "^DWH_DB" {{ ovirt_engine_etc_conf_path }}/10-setup-dwh-database.conf
   register: cmd
-  when: ovirt_engine_db_dump_dwh == True
+  when: ovirt_engine_db_dump_dwh
   tags:
     - skip_ansible_lint
 
@@ -39,7 +39,7 @@
         )
       }}
   with_items: "{{ cmd.stdout_lines|list }}"
-  when: ovirt_engine_db_dump_dwh == True
+  when: ovirt_engine_db_dump_dwh
 
 # stop engine and dwh services that it won't generate more data to database
 - name: stop necessary service
@@ -52,8 +52,8 @@
 
 # get engine and dwh database dumps
 - name: create local dir
-  local_action:
-    file path={{ playbook_dir }}/engine_dump state=directory
+  file: path={{ playbook_dir }}/engine_dump state=directory
+  delegate_to: localhost
 
 - name: get dump of engine database
   become: yes
@@ -66,19 +66,19 @@
   become: yes
   become_user: postgres
   shell: pg_dump -F c {{ ovirt_engine_db_dump_dwh_db['DWH_DB_DATABASE'] }} -f dwh.sql
-  when: ovirt_engine_db_dump_dwh == True
+  when: ovirt_engine_db_dump_dwh
   tags:
     - skip_ansible_lint
 
 # print variables to file
 - name: print engine variables to file
-  local_action:
-        copy content="{{ ovirt_engine_db_dump_engine_db }}" dest="{{ playbook_dir }}/engine_dump/engine_variables.json"
+  copy: content="{{ ovirt_engine_db_dump_engine_db }}" dest="{{ playbook_dir }}/engine_dump/engine_variables.json"
+  delagate_to: localhost
 
 - name: print DWH variables to file
-  local_action:
-        copy content="{{ ovirt_engine_db_dump_dwh_db }}" dest="{{ playbook_dir }}/engine_dump/dwh_variables.json"
-  when: ovirt_engine_db_dump_dwh == True
+  copy: content="{{ ovirt_engine_db_dump_dwh_db }}" dest="{{ playbook_dir }}/engine_dump/dwh_variables.json"
+  delagate_to: localhost
+  when: ovirt_engine_db_dump_dwh
 
 # copy files to localhost
 - name: get postgres path
@@ -102,7 +102,7 @@
     src: "{{ pgpath.stdout }}/dwh.sql"
     dest: "{{ playbook_dir }}/engine_dump/dwh.sql"
     flat: yes
-  when: ovirt_engine_db_dump_dwh == True
+  when: ovirt_engine_db_dump_dwh
 
 # start needed services
 - name: start necessary service
@@ -112,7 +112,7 @@
   with_items:
     - ovirt-engine
     - ovirt-engine-dwhd
-  when: ovirt_engine_db_dump_start_services == True
+  when: ovirt_engine_db_dump_start_services
 
 # clean
 - name: remove dumps from engine
