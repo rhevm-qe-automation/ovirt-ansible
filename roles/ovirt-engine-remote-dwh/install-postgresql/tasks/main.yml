@@ -7,26 +7,30 @@
   ignore_errors: True
 
 - name: install postgresql
-  yum: 
+  yum:
     name: postgresql-server
     state: installed
     update_cache: yes
-  when: postgresql_status|failed
+  when: postgresql_status is failed
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
 
-- name: Check if the db is initialized 
+- name: Check if the db is initialized
   stat:
     path: /var/lib/pgsql/data
   register: db_initialised
 
 - name: Initialize the postgresql db
   command: su -l postgres -c "/usr/bin/initdb --locale=en_US.UTF8 --auth='ident' --pgdata=/var/lib/pgsql/data/"
-  when: postgresql_status|failed
+  when: postgresql_status is failed
 
 - name: Start postgresql.service
   systemd:
     state: started
     name: postgresql
-  when: postgresql_status|failed
+  when: postgresql_status is failed
 
 - name: creating directory for sql scripts in /tmp/ansible-sql
   file:
@@ -50,7 +54,7 @@
   command: psql -p {{ ovirt_engine_dwh_db_port }} -a -f /tmp/ansible-sql/'{{ item }}'
   with_items:
     - "ovirt-engine-dwh-db-user-create.sql"
-    - "ovirt-engine-dwh-db-create.sql"      
+    - "ovirt-engine-dwh-db-create.sql"
 
 - name: Adding engine and dwhservice vm IP's in the dwhdb conf to be acessed remotely
   lineinfile:
@@ -72,12 +76,12 @@
     - systemctl start firewalld
     - firewall-cmd --zone=public --add-port=5432/tcp --permanent
     - firewall-cmd --reload
-  
+
 - name: Restart postgresql for the loading the newer configs
   systemd:
     state: restarted
     name: postgresql
-    
+
 - name: check PostgreSQL service
   service:
     name: postgresql

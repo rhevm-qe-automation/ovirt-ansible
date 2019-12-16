@@ -1,7 +1,7 @@
 ---
 # engine-backup
 - name: run engine-backup
-  shell: 'engine-backup --mode={{ovirt_backup_mode}} --file={{ovirt_backup_archive}} --log={{ovirt_backup_log_file}} --scope={{ovirt_backup_scope}}'
+  shell: 'engine-backup --mode={{ ovirt_backup_mode }} --file={{ ovirt_backup_archive }} --log={{ ovirt_backup_log_file }} --scope={{ ovirt_backup_scope }}'
   tags:
     - skip_ansible_lint
   register: ovirt_backup_status
@@ -9,13 +9,13 @@
 # download backup file to ansible-client node
 - name: download engine backup file
   fetch:
-    src: "{{ovirt_backup_archive}}"
-    dest: "{{ovirt_backup_archive}}"
-  when: ovirt_backup_status|succeeded
+    src: "{{ ovirt_backup_archive }}"
+    dest: "{{ ovirt_backup_archive }}"
+  when: ovirt_backup_status is succeeded
 
 # download log file to ansible-client node
 - name: download log file
   fetch:
-    src: "{{ovirt_log_file}}"
-    dest: "{{ovirt_log_file}}"
-  when: ovirt_backup_status|failed
+    src: "{{ ovirt_log_file }}"
+    dest: "{{ ovirt_log_file }}"
+  when: ovirt_backup_status is failed

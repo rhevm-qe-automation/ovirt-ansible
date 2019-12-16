@@ -7,7 +7,7 @@
   register: ovirt_engine_status
   retries: 2
   delay: 5
-  until: ovirt_engine_status|success
+  until: ovirt_engine_status is success
   ignore_errors: True
 
 # copy dwh on dwh answer file
@@ -21,7 +21,7 @@
     mode: 0644
     owner: root
     group: root
-  when: ovirt_engine_history_db_on_dwhservice_host == True
+  when: ovirt_engine_history_db_on_dwhservice_host
 
 # - case where the database of dwh on 3rd machine
 - name: copy answerfile for `ovirt_engine_history` db to be on remote VM and not on dwhservice VM
@@ -31,7 +31,7 @@
     mode: 0644
     owner: root
     group: root
-  when: ovirt_engine_history_db_on_dwhservice_host == False
+  when: ovirt_engine_history_db_on_dwhservice_host
 
 - name: run engine-setup with answerfile
   shell: 'engine-setup --config-append=/tmp/answerfile.txt'
@@ -42,7 +42,7 @@
   service:
     name: postgresql
     state: started
-  when: (ovirt_engine_dwh_db_host == 'localhost' and ovirt_engine_dwh == True) or ovirt_engine_db_host == 'localhost'
+  when: (ovirt_engine_dwh_db_host == 'localhost' and ovirt_engine_dwh) or ovirt_engine_db_host == 'localhost'
 
 # health page
 - name: check if ovirt-engine running (health page)
@@ -52,7 +52,7 @@
   register: ovirt_engine_status
   retries: 12
   delay: 5
-  until: ovirt_engine_status|success
+  until: ovirt_engine_status is success
   ignore_errors: True
 
 - name: Restart `ovirt-engine-dwhd` service

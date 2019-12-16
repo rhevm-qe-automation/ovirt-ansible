@@ -8,7 +8,7 @@
     - "etc"
 
 - name: Register coredump path
-  shell: "cat /proc/sys/kernel/core_pattern | xargs dirname | head -n 1"
+  shell: "cat /proc/sys/kernel/core_pattern | xargs dirname | head -n 1" # noqa 301 306
   register: coredumpdir
 
 - name: Link vdsm and libvirt logs
@@ -50,13 +50,13 @@
   ignore_errors: true
 
 - name: Dump mount
-  shell: "mount &> {{ ovirt_collect_logs_tmp_dir }}/mount.txt"
+  shell: "mount &> {{ ovirt_collect_logs_tmp_dir }}/mount.txt" # noqa 301 303
   ignore_errors: true
 
 - name: Dump multipath
-  shell: "multipath -ll &> {{ ovirt_collect_logs_tmp_dir }}/multipath.txt"
+  shell: "multipath -ll &> {{ ovirt_collect_logs_tmp_dir }}/multipath.txt" # noqa 301
   ignore_errors: true
 
 - name: Dump lvm
-  shell: "(vgs; pvs; lvs) &> {{ ovirt_collect_logs_tmp_dir }}/lvm.txt"
+  shell: "(vgs; pvs; lvs) &> {{ ovirt_collect_logs_tmp_dir }}/lvm.txt" # noqa 301
   ignore_errors: true

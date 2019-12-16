@@ -11,7 +11,7 @@
   ignore_errors: true
 
 - name: Dump DWH database
-  shell: "pg_dump ovirt_engine_history > {{ ovirt_collect_logs_tmp_dir }}/dwh_db.sql"
+  shell: "pg_dump ovirt_engine_history > {{ ovirt_collect_logs_tmp_dir }}/dwh_db.sql" # noqa 301
   become: true
   become_method: su
   become_user: postgres

@@ -6,6 +6,10 @@
   yum:
     name: ['gzip', 'tar']
     state: "present"
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
 
 # Prepare place to store data
 
@@ -54,7 +58,7 @@
 
 # Fetch stuff to local system
 - name: Archive logs
-  shell: "tar {{ ovirt_collect_logs_tar_optional_params}}
+  shell: "tar {{ ovirt_collect_logs_tar_optional_params }}
             -hczf {{ ovirt_collect_logs_archive }}
             {{ ovirt_collect_logs_tmp_dir }}"
   ignore_errors: true

@@ -11,7 +11,7 @@
     regexp: "^{{ item.key }} *=.*$"
     insertafter: EOF
   when:
-    item.val != ""
+    item.val
   with_items:
     - { key: "user", val: "{{ ovirt_iso_uploader_user }}" }
     - { key: "passwd", val: "{{ ovirt_iso_uploader_password }}" }
