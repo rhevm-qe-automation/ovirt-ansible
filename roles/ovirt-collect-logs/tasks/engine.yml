@@ -45,7 +45,7 @@
       dest: "ovirt-imageio-proxy"
     -
       src: "/var/log/ovirt-imageio"
-      dest: "ovirt-imageio-logs"
+      dest: "ovirt-imageio-logsa"
   ignore_errors: true
 
 - name: Link ovirt-requests logs
