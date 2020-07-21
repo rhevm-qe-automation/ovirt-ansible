@@ -45,6 +45,9 @@
       src: "/var/log/ovirt-imageio-daemon"
       dest: "ovirt-imageio-daemon-logs"
     -
+      src: "/var/log/ovirt-imageio"
+      dest: "ovirt-imageio-logs"
+    -
       src: "/var/log/sanlock.log"
       dest: "sanlock.log"
   ignore_errors: true
