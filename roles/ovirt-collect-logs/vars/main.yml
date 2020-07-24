@@ -14,3 +14,4 @@ ovirt_collect_logs_shell_commands:
   lsmod: "lsmod"
   lspci: "lspci"
   memory_usage: "ps -e -orss=,args= | sort  -b -k1,1n | tac"
+  journalctl: "journalctl -xb"
