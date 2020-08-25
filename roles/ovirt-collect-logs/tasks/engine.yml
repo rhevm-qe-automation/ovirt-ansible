@@ -46,6 +46,13 @@
     -
       src: "/var/log/ovirt-imageio"
       dest: "ovirt-imageio-logs"
+    -
+      src: "/var/log/ovirt-guest-agent/ovirt-guest-agent.log"
+      dest: "ovirt-guest-agent.log"
+    -
+      src: "/var/log/openvswitch/ovsdb-server-nb.log"
+      dest: "ovsdb-server-nb.log"
+
   ignore_errors: true
 
 - name: Link ovirt-requests logs

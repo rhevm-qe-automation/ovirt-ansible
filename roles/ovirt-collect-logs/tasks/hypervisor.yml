@@ -50,6 +50,10 @@
     -
       src: "/var/log/sanlock.log"
       dest: "sanlock.log"
+    -
+      src: "/var/log/openvswitch/ovsdb-server.log"
+      dest: "ovsdb-server.log"
+
   ignore_errors: true
 
 - name: Dump mount
