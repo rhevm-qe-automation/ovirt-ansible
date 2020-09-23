@@ -1,2 +1,2 @@
 ---
-ovirt_guest_agent_pkg_prefix: ovirt
+ovirt_guest_agent_pkg_prefix: "{{ 'ovirt' if ansible_distribution_major_version < '8' else 'qemu' }}"

@@ -1,9 +1,7 @@
 - name: Install latest {{ ovirt_guest_agent_pkg_prefix }}-guest-agent
   yum:
-    name: "{{ item }}"
+    name: "{{ ovirt_guest_agent_pkg_prefix }}-guest-agent"
     state: latest
-  with_items:
-    - "{{ ovirt_guest_agent_pkg_prefix }}-guest-agent"
   register: yum_result
   until: yum_result is success
   retries: 3
