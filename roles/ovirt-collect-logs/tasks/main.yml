@@ -41,7 +41,7 @@
 
 - name: Copy journalctl output if /var/log/messages is missing
   shell: journalctl > "/var/log/messages"
-  when: not message_file.stat.exists
+  when: not message_file.stat.exists or message_file.stat.size == 0
 
 - name: Link common logs
   file:
