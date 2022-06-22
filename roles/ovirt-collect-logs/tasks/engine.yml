@@ -55,6 +55,21 @@
 
   ignore_errors: true
 
+- name: Link ovn and openvswitch logs
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ ovirt_collect_logs_tmp_dir }}/{{ item.dest }}"
+    state: link
+  with_items:
+    -
+      src: "/var/log/ovn"
+      dest: "ovn-logs"
+    -
+      src: "/var/log/openvswitch"
+      dest: "ovs-logs"
+
+  ignore_errors: true
+
 - name: Link ovirt-requests logs
   file:
     src: "{{ item }}"
