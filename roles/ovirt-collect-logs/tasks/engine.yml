@@ -55,8 +55,9 @@
 
     - src: "/var/log/ovn"
       dest: "ovn-logs"
-        - src: "/var/log/openvswitch"
-          dest: "ovs-logs"
+
+    - src: "/var/log/openvswitch"
+      dest: "ovs-logs"
 
   ignore_errors: true
 
