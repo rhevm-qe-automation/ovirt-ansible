@@ -53,6 +53,12 @@
       src: "/var/log/openvswitch/ovsdb-server-nb.log"
       dest: "ovsdb-server-nb.log"
 
+    - src: "/var/log/ovn"
+      dest: "ovn-logs"
+
+    - src: "/var/log/openvswitch"
+      dest: "openvswitch-logs"
+
   ignore_errors: true
 
 - name: Link ovirt-requests logs

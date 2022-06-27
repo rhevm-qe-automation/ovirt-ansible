@@ -54,6 +54,12 @@
       src: "/var/log/openvswitch/ovsdb-server.log"
       dest: "ovsdb-server.log"
 
+    - src: "/var/log/ovn"
+      dest: "ovn-logs"
+
+    - src: "/var/log/openvswitch"
+      dest: "openvswitch-logs"
+
   ignore_errors: true
 
 - name: Dump mount
